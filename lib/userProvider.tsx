@@ -1,11 +1,6 @@
 import { useQuery } from '@apollo/client';
 import { useLocalStorage } from '@mantine/hooks';
-import React, {
-  createContext,
-  PropsWithChildren,
-  useContext,
-  useEffect
-} from 'react';
+import React, { createContext, PropsWithChildren, useContext } from 'react';
 import viewerQuery, {
   Viewer,
   ViewerQueryData
@@ -32,10 +27,6 @@ const UserProvider: React.FC<PropsWithChildren<unknown>> = ({ children }) => {
     defaultValue: undefined,
     getInitialValueInEffect: true
   });
-
-  useEffect(() => {
-    console.log(userToken);
-  }, [userToken]);
 
   const { data } = useQuery<ViewerQueryData>(viewerQuery, { skip: !userToken });
 

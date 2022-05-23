@@ -5,7 +5,6 @@ const viewerQuery = gql`
     Viewer {
       id
       name
-      siteUrl
       avatar {
         large
       }
@@ -22,7 +21,6 @@ export interface ViewerQueryData {
 export interface Viewer {
   id: number;
   name: string;
-  siteUrl: string;
   avatar: Avatar;
 }
 

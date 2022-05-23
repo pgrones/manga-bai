@@ -1,4 +1,4 @@
-import { AppShell, Container, Header } from '@mantine/core';
+import { AppShell, Container, Footer, Header } from '@mantine/core';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import React, { PropsWithChildren, useEffect } from 'react';
@@ -26,12 +26,33 @@ const Layout: React.FC<PropsWithChildren<unknown>> = ({ children }) => {
 
       <AppShell
         header={
-          <Header height={60} p="xs">
+          <Header
+            height={60}
+            py="xs"
+            sx={{ paddingRight: 'var(--removed-scroll-width, 0px)' }}
+          >
             <Appheader />
           </Header>
         }
+        footer={
+          <Footer height={180} sx={{ zIndex: 0 }}>
+            <Container size="xl">Test</Container>
+          </Footer>
+        }
+        styles={theme => ({
+          main: {
+            zIndex: 1,
+            marginBottom: 180,
+            paddingBottom: theme.spacing.md,
+            backgroundColor:
+              theme.colorScheme === 'dark'
+                ? theme.colors.dark[8]
+                : theme.colors.gray[0]
+          }
+        })}
+        fixed
       >
-        <Container>{children}</Container>
+        <Container size="xl">{children}</Container>
       </AppShell>
     </>
   );

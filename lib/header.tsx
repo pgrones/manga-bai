@@ -1,40 +1,20 @@
-import {
-  ActionIcon,
-  Avatar,
-  Button,
-  Container,
-  Group,
-  Title,
-  useMantineColorScheme
-} from '@mantine/core';
-import { IoMoonOutline, IoSunnyOutline } from 'react-icons/io5';
-import { useUser } from './userProvider';
+import { Container, Group, Title } from '@mantine/core';
+import Link from 'next/link';
+import Search from '../components/search';
+import ThemeToggle from '../components/themeToggle';
+import User from '../components/user';
 
 const Header = () => {
-  const { colorScheme, toggleColorScheme } = useMantineColorScheme();
-  const [user, logout] = useUser();
-
   return (
-    <Container>
+    <Container size="xl">
       <Group position="apart">
-        <Title order={3}>Manga Bai</Title>
+        <Link href="/">
+          <Title order={3}>Manga Bai</Title>
+        </Link>
         <Group>
-          <ActionIcon
-            title={colorScheme === 'dark' ? 'Light mode' : 'Dark mode'}
-            onClick={() => toggleColorScheme()}
-          >
-            {colorScheme === 'dark' ? (
-              <IoSunnyOutline size={24} />
-            ) : (
-              <IoMoonOutline size={24} />
-            )}
-          </ActionIcon>
-          {user && (
-            <>
-              <Avatar src={user.avatar.large} />
-              <Button onClick={logout}>Logout</Button>
-            </>
-          )}
+          <Search />
+          <ThemeToggle />
+          <User />
         </Group>
       </Group>
     </Container>

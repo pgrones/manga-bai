@@ -48,6 +48,7 @@ module.exports = {
     'react/react-in-jsx-scope': 'off',
     'react/self-closing-comp': 'error',
     'react/display-name': 'off',
+    'react-hooks/exhaustive-deps': 'off',
     '@typescript-eslint/no-unused-vars': ['error'],
     '@typescript-eslint/explicit-function-return-type': 'off'
   }
