@@ -1,34 +1,31 @@
 import { useQuery } from '@apollo/client';
 import { useLocalStorage } from '@mantine/hooks';
 import React, { createContext, PropsWithChildren, useContext } from 'react';
-import viewerQuery, {
-  Viewer,
-  ViewerQueryData
-} from '../apollo/queries/viewQuery';
+import userQuery, { User, UserQueryData } from '../apollo/queries/userQuery';
 
-const UserContext = createContext<Viewer | undefined>(undefined);
+const UserContext = createContext<User | undefined>(undefined);
 
 export const useUser = () => {
   const [, setUserToken] = useLocalStorage<string>({
-    key: 'user-token',
+    key: 'access_token',
     defaultValue: undefined,
     getInitialValueInEffect: true
   });
 
   return [useContext(UserContext), () => setUserToken('')] as [
-    Viewer | undefined,
+    User | undefined,
     () => void
   ];
 };
 
 const UserProvider: React.FC<PropsWithChildren<unknown>> = ({ children }) => {
   const [userToken] = useLocalStorage<string>({
-    key: 'user-token',
+    key: 'access_token',
     defaultValue: undefined,
     getInitialValueInEffect: true
   });
 
-  const { data } = useQuery<ViewerQueryData>(viewerQuery, { skip: !userToken });
+  const { data } = useQuery<UserQueryData>(userQuery, { skip: !userToken });
 
   return (
     <UserContext.Provider value={!userToken ? undefined : data?.Viewer}>

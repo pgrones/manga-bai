@@ -38,7 +38,7 @@ export default function App(props: AppProps & { colorScheme: ColorScheme }) {
           name="viewport"
           content="minimum-scale=1, initial-scale=1, width=device-width"
         />
-        <link rel="shortcut icon" href="/favicon.svg" />
+        <link rel="icon" href="/favicon.ico" />
       </Head>
 
       <ApolloProvider client={apolloClient}>
@@ -48,7 +48,7 @@ export default function App(props: AppProps & { colorScheme: ColorScheme }) {
             toggleColorScheme={toggleColorScheme}
           >
             <MantineProvider
-              theme={{ colorScheme }}
+              theme={{ primaryColor: 'indigo', colorScheme }}
               withGlobalStyles
               withNormalizeCSS
             >

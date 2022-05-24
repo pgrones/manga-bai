@@ -1,6 +1,6 @@
 import { gql } from '@apollo/client';
 
-const viewerQuery = gql`
+const userQuery = gql`
   query {
     Viewer {
       id
@@ -12,13 +12,13 @@ const viewerQuery = gql`
   }
 `;
 
-export default viewerQuery;
+export default userQuery;
 
-export interface ViewerQueryData {
-  Viewer: Viewer;
+export interface UserQueryData {
+  Viewer: User;
 }
 
-export interface Viewer {
+export interface User {
   id: number;
   name: string;
   avatar: Avatar;

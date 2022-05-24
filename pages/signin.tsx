@@ -1,36 +1,52 @@
-import { Button, Center } from '@mantine/core';
+import { Center, Loader, Stack, Title } from '@mantine/core';
 import { NextPage } from 'next';
+import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
-import Layout from '../lib/layout';
 
-const SignIn: NextPage = () => {
+const Signin: NextPage = () => {
   const router = useRouter();
-  const { asPath } = useRouter();
+  const { asPath } = router;
 
   useEffect(() => {
+    // if (
+    //   !asPath.includes('access_token') &&
+    //   localStorage.getItem('access_token')
+    // ) {
+    //   router.push('/home');
+    //   window.close();
+    //   return;
+    // }
+
     if (asPath.includes('access_token')) {
-      localStorage.setItem(
-        'user-token',
-        asPath.substring(asPath.indexOf('=') + 1, asPath.indexOf('&'))
-      );
-      router.push('/');
+      const token = new URLSearchParams(
+        asPath.substring(asPath.indexOf('#') + 1)
+      ).get('access_token');
+      if (token) {
+        localStorage.setItem('access_token', token);
+        window.close();
+      }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
+    router.push(
+      'https://anilist.co/api/v2/oauth/authorize?client_id=8372&response_type=token'
+    );
   }, [asPath]);
 
   return (
-    <Layout>
-      <Center>
-        <Button
-          component="a"
-          href="https://anilist.co/api/v2/oauth/authorize?client_id=8372&response_type=token"
-        >
-          Login with AniList
-        </Button>
+    <>
+      <Head>
+        <title>Login with AniList</title>
+      </Head>
+
+      <Center style={{ height: '100vh' }}>
+        <Stack align="center">
+          <Title order={4}>Connecting to AniList</Title>
+          <Loader variant="bars" />
+        </Stack>
       </Center>
-    </Layout>
+    </>
   );
 };
 
-export default SignIn;
+export default Signin;

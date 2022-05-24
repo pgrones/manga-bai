@@ -1,6 +1,5 @@
 import { ActionIcon, useMantineColorScheme } from '@mantine/core';
-import React from 'react';
-import { IoSunnyOutline, IoMoonOutline } from 'react-icons/io5';
+import { IoMoonOutline, IoSunnyOutline } from 'react-icons/io5';
 
 const ThemeToggle = () => {
   const { colorScheme, toggleColorScheme } = useMantineColorScheme();
@@ -9,7 +8,7 @@ const ThemeToggle = () => {
     <ActionIcon
       title={colorScheme === 'dark' ? 'Light mode' : 'Dark mode'}
       onClick={() => toggleColorScheme()}
-      size="lg"
+      size={36}
       variant="default"
       sx={theme => ({
         color:
@@ -19,9 +18,9 @@ const ThemeToggle = () => {
       })}
     >
       {colorScheme === 'dark' ? (
-        <IoSunnyOutline size={24} />
+        <IoSunnyOutline size={26} />
       ) : (
-        <IoMoonOutline size={24} />
+        <IoMoonOutline size={26} />
       )}
     </ActionIcon>
   );

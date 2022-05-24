@@ -1,37 +1,33 @@
-import { useQuery } from '@apollo/client';
-import { Grid } from '@mantine/core';
-import type { NextPage } from 'next';
-import listQuery, { ListQueryData } from '../apollo/queries/listQuery';
-import Manga from '../components/manga';
+import { Button, Center } from '@mantine/core';
+import { NextPage } from 'next';
+import { useRouter } from 'next/router';
+import { useEffect } from 'react';
 import Layout from '../lib/layout';
 import { useUser } from '../lib/userProvider';
 
-const Home: NextPage = () => {
+const LandingPage: NextPage = () => {
   const [user] = useUser();
-  const { data } = useQuery<ListQueryData>(listQuery, {
-    variables: { userId: user?.id },
-    skip: !user
-  });
+  const router = useRouter();
 
-  const current = data?.Page.mediaList.filter(m => m.status === 'CURRENT');
-  const paused = data?.Page.mediaList.filter(m => m.status === 'PAUSED');
+  useEffect(() => {
+    if (user) {
+      router.push('/home');
+    }
+  }, [user]);
 
   return (
     <Layout>
-      <Grid>
-        {current?.map(c => (
-          <Grid.Col xs={12} sm={6} md={4} key={c.mediaId}>
-            <Manga {...c} />
-          </Grid.Col>
-        ))}
-        {paused?.map(p => (
-          <Grid.Col xs={12} sm={6} md={4} key={p.mediaId}>
-            <Manga {...p} />
-          </Grid.Col>
-        ))}
-      </Grid>
+      <Center>
+        <Button
+          onClick={() =>
+            window.open('/signin', 'Login with AniList', 'height=500,width=500')
+          }
+        >
+          Login with AniList
+        </Button>
+      </Center>
     </Layout>
   );
 };
 
-export default Home;
+export default LandingPage;

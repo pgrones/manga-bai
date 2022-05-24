@@ -1,6 +1,6 @@
 import { gql } from '@apollo/client';
 
-const listQuery = gql`
+const mediaQuery = gql`
   query ($userId: Int) {
     Page {
       pageInfo {
@@ -15,8 +15,11 @@ const listQuery = gql`
         status
         mediaId
         progressVolumes
+        progress
+        customLists
         media {
           siteUrl
+          bannerImage
           coverImage {
             large
           }
@@ -29,9 +32,9 @@ const listQuery = gql`
   }
 `;
 
-export default listQuery;
+export default mediaQuery;
 
-export interface ListQueryData {
+export interface MediaQueryData {
   Page: Page;
 }
 
@@ -44,21 +47,28 @@ export interface MediaList {
   status: Status;
   mediaId: number;
   progressVolumes: number;
+  progress: number;
+  customLists: CustomLists;
   media: Media;
 }
 
 export interface Media {
   siteUrl: string;
-  coverImage: CoverImage;
+  coverImage: Image;
+  bannerImage: string;
   title: Title;
 }
 
-export interface CoverImage {
+export interface Image {
   large: string;
 }
 
 export interface Title {
   userPreferred: string;
+}
+
+export interface CustomLists {
+  [key: string]: boolean;
 }
 
 export type Status = 'CURRENT' | 'PAUSED';
