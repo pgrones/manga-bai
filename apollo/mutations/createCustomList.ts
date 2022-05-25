@@ -1,6 +1,6 @@
 import { gql } from '@apollo/client';
 
-const customListMutation = gql`
+const createCustomList = gql`
   mutation ($customLists: [String]) {
     UpdateUser(mangaListOptions: { customLists: $customLists }) {
       id
@@ -8,4 +8,8 @@ const customListMutation = gql`
   }
 `;
 
-export default customListMutation;
+export default createCustomList;
+
+export interface CreateCustomListVariables {
+  customLists: string[];
+}

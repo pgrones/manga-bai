@@ -2,20 +2,25 @@ import { Button, Card, Modal } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import React from 'react';
 import { MediaList } from '../../apollo/queries/mediaQuery';
+import { UpdatedValues } from '../manga';
 import Form from './form';
 import Header from './header';
 
-const EditModal: React.FC<MediaList> = props => {
-  const [opened, { toggle }] = useDisclosure(false);
+const EditModal: React.FC<
+  MediaList & {
+    updateData: (values: UpdatedValues) => void;
+  }
+> = props => {
+  const [opened, { close, open }] = useDisclosure(false);
 
   return (
     <>
-      <Button variant="light" onClick={toggle}>
+      <Button variant="light" onClick={open}>
         Edit
       </Button>
       <Modal
         opened={opened}
-        onClose={toggle}
+        onClose={close}
         centered
         withCloseButton={false}
         padding={0}
@@ -33,9 +38,9 @@ const EditModal: React.FC<MediaList> = props => {
               position: 'relative'
             })}
           >
-            <Header {...props.media} />
+            <Header {...props.media} close={close} />
           </Card.Section>
-          <Form {...props} />
+          <Form {...props} close={close} />
         </Card>
       </Modal>
     </>

@@ -1,4 +1,5 @@
 import { Center, Loader, Stack, Title } from '@mantine/core';
+import axios from 'axios';
 import { NextPage } from 'next';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
@@ -9,12 +10,9 @@ const Signin: NextPage = () => {
   const { asPath } = router;
 
   useEffect(() => {
-    // if (
-    //   !asPath.includes('access_token') &&
-    //   localStorage.getItem('access_token')
-    // ) {
-    //   router.push('/home');
+    // if (localStorage.getItem('access_token')) {
     //   window.close();
+    //   router.push('/home');
     //   return;
     // }
 
@@ -23,8 +21,10 @@ const Signin: NextPage = () => {
         asPath.substring(asPath.indexOf('#') + 1)
       ).get('access_token');
       if (token) {
-        localStorage.setItem('access_token', token);
-        window.close();
+        debugger;
+        axios.post(`/api/user`, { accessToken: token });
+        // localStorage.setItem('access_token', token);
+        // window.close();
       }
     }
 

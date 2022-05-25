@@ -1,4 +1,3 @@
-import { useMemo } from 'react';
 import {
   ApolloClient,
   createHttpLink,
@@ -6,6 +5,7 @@ import {
   NormalizedCacheObject
 } from '@apollo/client';
 import { setContext } from '@apollo/client/link/context';
+import { useMemo } from 'react';
 
 let apolloClient: ApolloClient<NormalizedCacheObject>;
 
@@ -27,15 +27,15 @@ const authLink = setContext((_, { headers }) => {
   };
 });
 
-function createApolloClient() {
+const createApolloClient = () => {
   return new ApolloClient({
     ssrMode: typeof window === 'undefined',
     link: authLink.concat(httpLink),
     cache: new InMemoryCache()
   });
-}
+};
 
-export function initializeApollo(initialState = null) {
+export const initializeApollo = (initialState = null) => {
   const _apolloClient = apolloClient ?? createApolloClient();
 
   // If your page has Next.js data fetching methods that use Apollo Client, the initial state
@@ -49,9 +49,9 @@ export function initializeApollo(initialState = null) {
   if (!apolloClient) apolloClient = _apolloClient;
 
   return _apolloClient;
-}
+};
 
-export function useApollo(initialState: any) {
+export const useApollo = (initialState: any) => {
   const store = useMemo(() => initializeApollo(initialState), [initialState]);
   return store;
-}
+};

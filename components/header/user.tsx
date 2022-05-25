@@ -1,7 +1,7 @@
 import { Avatar, Button, Popover } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { IoChevronDownOutline, IoLogOutOutline } from 'react-icons/io5';
-import { useUser } from '../../lib/userProvider';
+import { useUser } from '../../lib/hooks/userProvider';
 
 const User = () => {
   const [user, logout] = useUser();

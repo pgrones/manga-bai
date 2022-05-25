@@ -1,7 +1,14 @@
 import { useQuery } from '@apollo/client';
 import { useLocalStorage } from '@mantine/hooks';
-import React, { createContext, PropsWithChildren, useContext } from 'react';
-import userQuery, { User, UserQueryData } from '../apollo/queries/userQuery';
+import axios from 'axios';
+import React, {
+  createContext,
+  PropsWithChildren,
+  useContext,
+  useEffect,
+  useState
+} from 'react';
+import userQuery, { User, UserQueryData } from '../../apollo/queries/userQuery';
 
 const UserContext = createContext<User | undefined>(undefined);
 
@@ -19,6 +26,7 @@ export const useUser = () => {
 };
 
 const UserProvider: React.FC<PropsWithChildren<unknown>> = ({ children }) => {
+  const [user, setUser] = useState();
   const [userToken] = useLocalStorage<string>({
     key: 'access_token',
     defaultValue: undefined,
@@ -26,6 +34,12 @@ const UserProvider: React.FC<PropsWithChildren<unknown>> = ({ children }) => {
   });
 
   const { data } = useQuery<UserQueryData>(userQuery, { skip: !userToken });
+
+  useEffect(() => {
+    if (data) {
+      axios.get(`/api/user/${data.Viewer.id}`);
+    }
+  }, [data]);
 
   return (
     <UserContext.Provider value={!userToken ? undefined : data?.Viewer}>

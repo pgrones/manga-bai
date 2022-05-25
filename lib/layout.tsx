@@ -2,7 +2,7 @@ import { AppShell, Container, Footer, Header } from '@mantine/core';
 import { useRouter } from 'next/router';
 import React, { PropsWithChildren, useEffect } from 'react';
 import Appheader from '../components/header/header';
-import { useUser } from './userProvider';
+import { useUser } from './hooks/userProvider';
 
 const Layout: React.FC<PropsWithChildren<unknown>> = ({ children }) => {
   const [user] = useUser();
@@ -26,7 +26,9 @@ const Layout: React.FC<PropsWithChildren<unknown>> = ({ children }) => {
       }
       footer={
         <Footer height={180} sx={{ zIndex: 0 }}>
-          <Container size="xl">Test</Container>
+          <Container size="xl">
+            As an Amazon Associate I earn from qualifying purchases.
+          </Container>
         </Footer>
       }
       styles={theme => ({

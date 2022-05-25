@@ -14,7 +14,9 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "tunnel": "cd /d G:\\Programs\\Cloudflare && cloudflared tunnel --url http://localhost:3000"
+    "tunnel": "cd /d G:\\Programs\\Cloudflare && cloudflared tunnel --url http://localhost:3000",
+    "firebase:emulators": "firebase emulators:start",
+    "firebase:kill": "npx kill-port 9000,6000,4000,9099"
   },
   "dependencies": {
     "@apollo/client": "^3.6.4",
@@ -25,6 +27,7 @@
     "@mantine/notifications": "^4.2.6",
     "@mantine/spotlight": "^4.2.6",
     "@mantine/styles": "^4.2.6",
+    "axios": "^0.27.2",
     "cookies-next": "^2.0.4",
     "firebase": "^9.8.1",
     "graphql": "^16.5.0",

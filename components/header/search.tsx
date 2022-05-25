@@ -1,7 +1,7 @@
 import { Box, Button, MediaQuery, Text } from '@mantine/core';
 import { useOs } from '@mantine/hooks';
 import { IoSearchOutline } from 'react-icons/io5';
-import { useUser } from '../../lib/userProvider';
+import { useUser } from '../../lib/hooks/userProvider';
 
 const Search = () => {
   const [user] = useUser();

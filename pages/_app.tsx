@@ -10,9 +10,10 @@ import {
 } from '@mantine/core';
 import { NotificationsProvider } from '@mantine/notifications';
 import { useApollo } from '../apollo/client';
-import UserProvider from '../lib/userProvider';
+import UserProvider from '../lib/hooks/userProvider';
 import { ApolloProvider } from '@apollo/client';
 import { SpotlightProvider } from '@mantine/spotlight';
+import '../styles/globalStyles.css';
 
 export default function App(props: AppProps & { colorScheme: ColorScheme }) {
   const { Component, pageProps } = props;

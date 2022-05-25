@@ -3,7 +3,7 @@ import { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import Layout from '../lib/layout';
-import { useUser } from '../lib/userProvider';
+import { useUser } from '../lib/hooks/userProvider';
 
 const LandingPage: NextPage = () => {
   const [user] = useUser();

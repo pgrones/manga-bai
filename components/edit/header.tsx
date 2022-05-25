@@ -2,7 +2,12 @@ import { Button, CloseButton, Group, Image, Title } from '@mantine/core';
 import React from 'react';
 import { Media } from '../../apollo/queries/mediaQuery';
 
-const Header: React.FC<Media> = ({ bannerImage, coverImage, title }) => {
+const Header: React.FC<Media & { close: () => void }> = ({
+  bannerImage,
+  coverImage,
+  title,
+  close
+}) => {
   return (
     <>
       <Image
@@ -42,6 +47,7 @@ const Header: React.FC<Media> = ({ bannerImage, coverImage, title }) => {
           'top': theme.spacing.xs,
           'right': theme.spacing.xs
         })}
+        onClick={close}
       />
     </>
   );
