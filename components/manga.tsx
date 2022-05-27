@@ -19,7 +19,6 @@ import updateMangaEntry, {
   UpdateMangaEntryVariables
 } from '../apollo/mutations/updateMangaEntry';
 import { MediaList, Status } from '../apollo/queries/mediaQuery';
-import { db } from '../firebase/firebaseConfig';
 import useNotification from '../lib/hooks/useNotification';
 import EditModal from './edit/modal';
 import Progress from './edit/progress';
@@ -54,8 +53,6 @@ const Manga: React.FC<MediaList> = props => {
     });
 
     if (!Object.keys(values).length) return;
-    const a = db;
-    debugger;
 
     const { data } = await updateEntry({
       variables: { ...values, mediaId }

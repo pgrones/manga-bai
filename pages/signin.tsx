@@ -1,37 +1,48 @@
 import { Center, Loader, Stack, Title } from '@mantine/core';
-import axios from 'axios';
+import { signInAnonymously } from 'firebase/auth';
 import { NextPage } from 'next';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
+import { auth } from '../lib/firebase/firebase';
+import { useUser } from '../lib/hooks/userProvider';
 
-const Signin: NextPage = () => {
+const SigninPage: NextPage = () => {
+  const { fullyAuthenticated } = useUser();
   const router = useRouter();
   const { asPath } = router;
 
   useEffect(() => {
-    // if (localStorage.getItem('access_token')) {
-    //   window.close();
-    //   router.push('/home');
-    //   return;
-    // }
+    if (fullyAuthenticated === true) {
+      window.close();
+      router.push('/home');
+      return;
+    }
 
     if (asPath.includes('access_token')) {
-      const token = new URLSearchParams(
-        asPath.substring(asPath.indexOf('#') + 1)
-      ).get('access_token');
+      const token = new URLSearchParams(asPath.split('#')[1]).get(
+        'access_token'
+      );
+
       if (token) {
-        debugger;
-        axios.post(`/api/user`, { accessToken: token });
-        // localStorage.setItem('access_token', token);
-        // window.close();
+        (async () => {
+          try {
+            await signInAnonymously(auth);
+            localStorage.setItem('access_token', token);
+            window.close();
+          } catch (error) {
+            console.log(error);
+          }
+        })();
+
+        return;
       }
     }
 
     router.push(
       'https://anilist.co/api/v2/oauth/authorize?client_id=8372&response_type=token'
     );
-  }, [asPath]);
+  }, [asPath, fullyAuthenticated]);
 
   return (
     <>
@@ -49,4 +60,4 @@ const Signin: NextPage = () => {
   );
 };
 
-export default Signin;
+export default SigninPage;

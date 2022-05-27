@@ -1,14 +1,12 @@
 import { Box, Button, MediaQuery, Text } from '@mantine/core';
 import { useOs } from '@mantine/hooks';
 import { IoSearchOutline } from 'react-icons/io5';
-import { useUser } from '../../lib/hooks/userProvider';
 
 const Search = () => {
-  const [user] = useUser();
   const os = useOs();
   const phone = ['ios', 'android', 'undetermined'].includes(os);
 
-  return user ? (
+  return (
     <MediaQuery smallerThan="sm" styles={{ width: 180 + 'px !important' }}>
       <Button
         style={{ width: 250 }}
@@ -43,7 +41,7 @@ const Search = () => {
         </Text>
       </Button>
     </MediaQuery>
-  ) : null;
+  );
 };
 
 export default Search;

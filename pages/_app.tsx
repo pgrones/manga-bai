@@ -1,18 +1,18 @@
-import { GetServerSidePropsContext } from 'next';
-import { useState } from 'react';
-import { AppProps } from 'next/app';
-import { getCookie, setCookies } from 'cookies-next';
-import Head from 'next/head';
+import { ApolloProvider } from '@apollo/client';
 import {
-  MantineProvider,
   ColorScheme,
-  ColorSchemeProvider
+  ColorSchemeProvider,
+  MantineProvider
 } from '@mantine/core';
 import { NotificationsProvider } from '@mantine/notifications';
+import { SpotlightProvider } from '@mantine/spotlight';
+import { getCookie, setCookies } from 'cookies-next';
+import { GetServerSidePropsContext } from 'next';
+import { AppProps } from 'next/app';
+import Head from 'next/head';
+import { useState } from 'react';
 import { useApollo } from '../apollo/client';
 import UserProvider from '../lib/hooks/userProvider';
-import { ApolloProvider } from '@apollo/client';
-import { SpotlightProvider } from '@mantine/spotlight';
 import '../styles/globalStyles.css';
 
 export default function App(props: AppProps & { colorScheme: ColorScheme }) {
@@ -29,6 +29,7 @@ export default function App(props: AppProps & { colorScheme: ColorScheme }) {
     setCookies('mantine-color-scheme', nextColorScheme, {
       maxAge: 60 * 60 * 24 * 30
     });
+    document.documentElement.style.colorScheme = nextColorScheme;
   };
 
   return (
@@ -42,26 +43,26 @@ export default function App(props: AppProps & { colorScheme: ColorScheme }) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <ApolloProvider client={apolloClient}>
-        <UserProvider>
-          <ColorSchemeProvider
-            colorScheme={colorScheme}
-            toggleColorScheme={toggleColorScheme}
-          >
-            <MantineProvider
-              theme={{ primaryColor: 'indigo', colorScheme }}
-              withGlobalStyles
-              withNormalizeCSS
-            >
-              <SpotlightProvider actions={[]}>
-                <NotificationsProvider>
+      <ColorSchemeProvider
+        colorScheme={colorScheme}
+        toggleColorScheme={toggleColorScheme}
+      >
+        <MantineProvider
+          theme={{ primaryColor: 'indigo', colorScheme }}
+          withGlobalStyles
+          withNormalizeCSS
+        >
+          <SpotlightProvider actions={[]}>
+            <NotificationsProvider>
+              <ApolloProvider client={apolloClient}>
+                <UserProvider>
                   <Component {...pageProps} />
-                </NotificationsProvider>
-              </SpotlightProvider>
-            </MantineProvider>
-          </ColorSchemeProvider>
-        </UserProvider>
-      </ApolloProvider>
+                </UserProvider>
+              </ApolloProvider>
+            </NotificationsProvider>
+          </SpotlightProvider>
+        </MantineProvider>
+      </ColorSchemeProvider>
     </>
   );
 }

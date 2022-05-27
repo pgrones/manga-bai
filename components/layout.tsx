@@ -1,19 +1,11 @@
 import { AppShell, Container, Footer, Header } from '@mantine/core';
-import { useRouter } from 'next/router';
-import React, { PropsWithChildren, useEffect } from 'react';
-import Appheader from '../components/header/header';
-import { useUser } from './hooks/userProvider';
+import React, { PropsWithChildren } from 'react';
+import Appheader from './header/header';
 
-const Layout: React.FC<PropsWithChildren<unknown>> = ({ children }) => {
-  const [user] = useUser();
-  const router = useRouter();
-
-  useEffect(() => {
-    if (!user) {
-      router.push('/');
-    }
-  }, [user]);
-
+const Layout: React.FC<PropsWithChildren<{ is404?: boolean }>> = ({
+  children,
+  is404
+}) => {
   return (
     <AppShell
       header={
@@ -25,7 +17,13 @@ const Layout: React.FC<PropsWithChildren<unknown>> = ({ children }) => {
         </Header>
       }
       footer={
-        <Footer height={180} sx={{ zIndex: 0 }}>
+        <Footer
+          height={180}
+          sx={{
+            zIndex: is404 ? 1 : 0,
+            paddingRight: 'var(--removed-scroll-width, 0px)'
+          }}
+        >
           <Container size="xl">
             As an Amazon Associate I earn from qualifying purchases.
           </Container>
@@ -33,8 +31,8 @@ const Layout: React.FC<PropsWithChildren<unknown>> = ({ children }) => {
       }
       styles={theme => ({
         main: {
-          zIndex: 1,
-          marginBottom: 180,
+          zIndex: is404 ? 0 : 1,
+          marginBottom: is404 ? 0 : 'var(--mantine-footer-height, 0px)',
           paddingBottom: theme.spacing.md,
           backgroundColor:
             theme.colorScheme === 'dark'

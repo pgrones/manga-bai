@@ -1,10 +1,9 @@
 import { Container, Group, MediaQuery, Text, Title } from '@mantine/core';
 import Link from 'next/link';
-import Search from './search';
+import { CSSProperties } from 'react';
+import Logo from '../../public/logo.svg';
 import ThemeToggle from './themeToggle';
 import User from './user';
-import Logo from '../../public/logo.svg';
-import { CSSProperties } from 'react';
 
 const Header = () => {
   return (
@@ -36,7 +35,6 @@ const Header = () => {
           </Text>
         </Link>
         <Group>
-          <Search />
           <ThemeToggle />
           <User />
         </Group>

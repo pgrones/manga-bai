@@ -1,6 +1,6 @@
-import { useQuery } from '@apollo/client';
+import { useApolloClient, useQuery } from '@apollo/client';
 import { useLocalStorage } from '@mantine/hooks';
-import axios from 'axios';
+import { Unsubscribe, User } from 'firebase/auth';
 import React, {
   createContext,
   PropsWithChildren,
@@ -8,41 +8,88 @@ import React, {
   useEffect,
   useState
 } from 'react';
-import userQuery, { User, UserQueryData } from '../../apollo/queries/userQuery';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import userQuery, {
+  User as AnilistUser,
+  UserQueryData
+} from '../../apollo/queries/userQuery';
+import { getUserData } from '../firebase/db';
+import { auth } from '../firebase/firebase';
+import useNotification from './useNotification';
 
-const UserContext = createContext<User | undefined>(undefined);
+interface IUserContext {
+  fullyAuthenticated: boolean | 'loading';
+  aniListUser: AnilistUser | null;
+  firebaseUser: User | null;
+  userData: any;
+  signOut: () => void;
+}
 
-export const useUser = () => {
-  const [, setUserToken] = useLocalStorage<string>({
-    key: 'access_token',
-    defaultValue: undefined,
-    getInitialValueInEffect: true
-  });
+const UserContext = createContext<IUserContext>({
+  fullyAuthenticated: false,
+  aniListUser: null,
+  firebaseUser: null,
+  userData: null,
+  signOut: () => {}
+});
 
-  return [useContext(UserContext), () => setUserToken('')] as [
-    User | undefined,
-    () => void
-  ];
-};
+export const useUser = () => useContext(UserContext);
 
 const UserProvider: React.FC<PropsWithChildren<unknown>> = ({ children }) => {
-  const [user, setUser] = useState();
-  const [userToken] = useLocalStorage<string>({
+  const { showError } = useNotification();
+  const [hasError, setHasError] = useState<unknown>();
+  const apolloClient = useApolloClient();
+  const [user, firebaseLoading, firebaseError] = useAuthState(auth);
+  const [userData, setUserData] = useState<any>();
+  const [accessToken, setAccessToken] = useLocalStorage<string>({
     key: 'access_token',
     defaultValue: undefined,
     getInitialValueInEffect: true
   });
 
-  const { data } = useQuery<UserQueryData>(userQuery, { skip: !userToken });
+  const { data, error, loading } = useQuery<UserQueryData>(userQuery, {
+    skip: !accessToken
+  });
 
   useEffect(() => {
-    if (data) {
-      axios.get(`/api/user/${data.Viewer.id}`);
+    let unsubscribe: Unsubscribe | void;
+    if (user) {
+      try {
+        unsubscribe = getUserData(user.uid, data => {
+          setUserData(data?.accessToken);
+        });
+      } catch (error) {
+        setHasError(error);
+        console.log(error);
+      }
+    } else {
+      setUserData(null);
     }
-  }, [data]);
+
+    return unsubscribe;
+  }, [user]);
+
+  useEffect(() => {
+    if (error || hasError || firebaseError) showError();
+  }, [error, hasError, firebaseError]);
+
+  const fullyAuthenticated =
+    loading || firebaseLoading ? 'loading' : !!user && !!data?.Viewer;
 
   return (
-    <UserContext.Provider value={!userToken ? undefined : data?.Viewer}>
+    <UserContext.Provider
+      value={{
+        fullyAuthenticated,
+        aniListUser: data?.Viewer ?? null,
+        firebaseUser: user ?? null,
+        userData,
+        signOut: () => {
+          setAccessToken('');
+          auth.signOut();
+          apolloClient.resetStore();
+        }
+      }}
+    >
       {children}
     </UserContext.Provider>
   );

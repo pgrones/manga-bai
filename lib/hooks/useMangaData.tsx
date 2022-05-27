@@ -42,7 +42,7 @@ const createMangaLists = (
 
 const useMangaData = () => {
   const { showError } = useNotification();
-  const [user] = useUser();
+  const { aniListUser } = useUser();
   const [otherError, setOtherError] = useState(false);
   const [manga, setManga] = useState<MangaData>();
 
@@ -53,8 +53,8 @@ const useMangaData = () => {
     refetch
     //fetchMore
   } = useQuery<MediaQueryData>(mediaQuery, {
-    variables: { userId: user?.id },
-    skip: !user
+    variables: { userId: aniListUser?.id },
+    skip: !aniListUser
   });
 
   const {
@@ -62,8 +62,8 @@ const useMangaData = () => {
     loading: customListsLoading,
     error: customListsError
   } = useQuery<CustomListQueryData>(customListQuery, {
-    variables: { id: user?.id },
-    skip: !user
+    variables: { id: aniListUser?.id },
+    skip: !aniListUser
   });
 
   const [createList, { loading: createLoading, error: createError }] =

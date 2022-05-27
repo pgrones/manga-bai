@@ -4,10 +4,10 @@ import { IoChevronDownOutline, IoLogOutOutline } from 'react-icons/io5';
 import { useUser } from '../../lib/hooks/userProvider';
 
 const User = () => {
-  const [user, logout] = useUser();
+  const { fullyAuthenticated, aniListUser, signOut: singOut } = useUser();
   const [opened, { toggle }] = useDisclosure(false);
 
-  return user ? (
+  return fullyAuthenticated === true ? (
     <Popover
       opened={opened}
       onClose={toggle}
@@ -20,7 +20,7 @@ const User = () => {
           onClick={toggle}
           rightIcon={<IoChevronDownOutline size={18} />}
         >
-          <Avatar src={user.avatar.large} />
+          <Avatar src={aniListUser?.avatar.large} />
         </Button>
       }
       styles={{ inner: { padding: 5 } }}
@@ -31,12 +31,20 @@ const User = () => {
         variant="subtle"
         color="gray"
         leftIcon={<IoLogOutOutline size={16} />}
-        onClick={logout}
+        onClick={singOut}
       >
         Logout
       </Button>
     </Popover>
-  ) : null;
+  ) : (
+    <Button
+      onClick={() =>
+        window.open('/signin', 'Login with AniList', 'height=500,width=500')
+      }
+    >
+      Login with AniList
+    </Button>
+  );
 };
 
 export default User;

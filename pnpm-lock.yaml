@@ -28,6 +28,7 @@ specifiers:
   prettier: ^2.6.2
   react: 18.1.0
   react-dom: 18.1.0
+  react-firebase-hooks: ^5.0.3
   react-icons: ^4.3.1
   typescript: 4.6.4
 
@@ -47,6 +48,7 @@ dependencies:
   next: 12.1.6_ef5jwxihqo6n7gxfmzogljlgcm
   react: 18.1.0
   react-dom: 18.1.0_react@18.1.0
+  react-firebase-hooks: 5.0.3_frqpr37e45mgolaoyvhoxhbbpi
   react-icons: 4.3.1_react@18.1.0
 
 devDependencies:
@@ -4637,6 +4639,16 @@ packages:
 
   /react-fast-compare/3.2.0:
     resolution: {integrity: sha512-rtGImPZ0YyLrscKI9xTpV8psd6I8VAtjKCzQDlzyDvqJA8XOW78TXYQwNRNd8g8JZnDu8q9Fu/1v4HPAVwVdHA==}
+    dev: false
+
+  /react-firebase-hooks/5.0.3_frqpr37e45mgolaoyvhoxhbbpi:
+    resolution: {integrity: sha512-0+V2XwInZJNjW8B2cm+U21Hlv4xnp/1tJqIoDg2rjyWzKTQ9VoLPQ9PAt+fMqPumjLz5uCIREY7YqGSSjc439Q==}
+    peerDependencies:
+      firebase: '>= 9.0.0'
+      react: '>= 16.8.0 || 18'
+    dependencies:
+      firebase: 9.8.1
+      react: 18.1.0
     dev: false
 
   /react-icons/4.3.1_react@18.1.0:
