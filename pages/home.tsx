@@ -1,17 +1,34 @@
-import { Center, Grid, Loader } from '@mantine/core';
+import { Center, Loader, Image } from '@mantine/core';
 import type { NextPage } from 'next';
-import Manga from '../components/manga';
-import useMangaData from '../lib/hooks/useMangaData';
-import Layout from '../components/layout';
 import AuthCheck from '../components/authCheck';
+import List from '../components/home/list';
+import Layout from '../components/layout';
+import useMangaData from '../lib/hooks/useMangaData';
 
 const HomePage: NextPage = () => {
   return (
-    <Layout>
-      <AuthCheck>
-        <HomeComponent />
-      </AuthCheck>
-    </Layout>
+    <>
+      <Layout>
+        <AuthCheck>
+          <HomeComponent />
+        </AuthCheck>
+      </Layout>
+      {new Date().getDate() === 1 && (
+        <Image
+          src="https://cdn.discordapp.com/emojis/295269590219489290.png?v=1"
+          alt="Kanna"
+          height={80}
+          width="auto"
+          style={{
+            position: 'fixed',
+            top: 'calc(100vh - 80px)',
+            left: 10,
+            zIndex: 500,
+            transform: 'scaleX(-1)'
+          }}
+        />
+      )}
+    </>
   );
 };
 
@@ -30,17 +47,6 @@ const HomeComponent: React.FC = () => {
       <Loader variant="bars" />
     </Center>
   ) : (
-    <Grid>
-      {manga?.current?.map(c => (
-        <Grid.Col xs={12} md={6} lg={4} key={c.mediaId}>
-          <Manga {...c} />
-        </Grid.Col>
-      ))}
-      {manga?.waiting?.map(w => (
-        <Grid.Col xs={12} md={6} lg={4} key={w.mediaId}>
-          <Manga {...w} />
-        </Grid.Col>
-      ))}
-    </Grid>
+    <List {...manga!} />
   );
 };

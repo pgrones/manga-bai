@@ -2,7 +2,7 @@ import { Button, Card, Modal } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import React from 'react';
 import { MediaList } from '../../apollo/queries/mediaQuery';
-import { UpdatedValues } from '../manga';
+import { UpdatedValues } from '../home/manga';
 import Form from './form';
 import Header from './header';
 
@@ -15,7 +15,7 @@ const EditModal: React.FC<
 
   return (
     <>
-      <Button variant="light" onClick={open}>
+      <Button size="xs" variant="light" onClick={open}>
         Edit
       </Button>
       <Modal

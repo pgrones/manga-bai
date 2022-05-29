@@ -20,7 +20,7 @@ const User = () => {
           onClick={toggle}
           rightIcon={<IoChevronDownOutline size={18} />}
         >
-          <Avatar src={aniListUser?.avatar.large} />
+          <Avatar src={aniListUser?.avatar.large} style={{ height: 34 }} />
         </Button>
       }
       styles={{ inner: { padding: 5 } }}

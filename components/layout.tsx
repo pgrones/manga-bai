@@ -10,7 +10,7 @@ const Layout: React.FC<PropsWithChildren<{ is404?: boolean }>> = ({
     <AppShell
       header={
         <Header
-          height={60}
+          height={55}
           sx={{ paddingRight: 'var(--removed-scroll-width, 0px)' }}
         >
           <Appheader />

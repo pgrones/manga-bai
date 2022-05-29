@@ -15,8 +15,8 @@ const Header = () => {
               <Logo
                 style={
                   {
-                    height: 40,
-                    width: 40
+                    height: 35,
+                    width: 35
                   } as CSSProperties
                 }
               />
@@ -26,7 +26,7 @@ const Header = () => {
                     color:
                       theme.colorScheme === 'dark' ? theme.white : theme.black
                   })}
-                  order={2}
+                  order={3}
                 >
                   Manga Bai
                 </Title>

@@ -8,7 +8,7 @@ const AuthCheck: React.FC<PropsWithChildren<unknown>> = ({ children }) => {
   const router = useRouter();
 
   useEffect(() => {
-    if (!fullyAuthenticated) {
+    if (fullyAuthenticated !== true) {
       router.push('/');
     }
   }, [fullyAuthenticated]);

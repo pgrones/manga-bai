@@ -16,7 +16,7 @@ import mediaQuery, {
 import useNotification from './useNotification';
 import { useUser } from './userProvider';
 
-interface MangaData {
+export interface MangaData {
   current: MediaList[] | undefined;
   paused: MediaList[] | undefined;
   waiting: MediaList[] | undefined;

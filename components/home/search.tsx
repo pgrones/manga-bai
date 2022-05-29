@@ -1,14 +1,15 @@
-import { Box, Button, MediaQuery, Text } from '@mantine/core';
+import { Button, MediaQuery, Text } from '@mantine/core';
 import { useOs } from '@mantine/hooks';
 import { IoSearchOutline } from 'react-icons/io5';
 
 const Search = () => {
   const os = useOs();
-  const phone = ['ios', 'android', 'undetermined'].includes(os);
+  const phone = ['ios', 'android'].includes(os);
 
   return (
     <MediaQuery smallerThan="sm" styles={{ width: 180 + 'px !important' }}>
       <Button
+        size="xs"
         style={{ width: 250 }}
         styles={theme => ({
           root: {
@@ -20,23 +21,14 @@ const Search = () => {
         variant="default"
         rightIcon={
           !phone && (
-            <Box
-              p={5}
-              sx={theme => ({
-                borderRadius: 3,
-                backgroundColor:
-                  theme.colorScheme === 'dark'
-                    ? theme.colors.dark[6]
-                    : theme.colors.gray[1]
-              })}
-            >
+            <Text size="xs" color="dimmed" weight="normal">
               Ctrl + K
-            </Box>
+            </Text>
           )
         }
       >
-        <IoSearchOutline size={18} />
-        <Text pl="xs" color="dimmed" weight="normal">
+        <IoSearchOutline size={16} />
+        <Text pl="xs" size="xs" color="dimmed" weight="normal">
           Search
         </Text>
       </Button>

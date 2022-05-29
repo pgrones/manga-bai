@@ -9,7 +9,7 @@ import {
 } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { MediaList } from '../../apollo/queries/mediaQuery';
-import { UpdatedValues } from '../manga';
+import { UpdatedValues } from '../home/manga';
 
 const Form: React.FC<
   MediaList & {
@@ -36,8 +36,8 @@ const Form: React.FC<
 
   return (
     <form id="form" onSubmit={form.onSubmit(handleSubmit)}>
-      <Grid mt="md" mb={5} gutter="xl" align="flex-end">
-        <Grid.Col mt="xl" span={4}>
+      <Grid mt="xl" pt="md" mb={5} gutter="xl" align="flex-end">
+        <Grid.Col xs={6} sm={4}>
           <Select
             {...form.getInputProps('status')}
             variant="filled"
@@ -48,7 +48,7 @@ const Form: React.FC<
             ]}
           />
         </Grid.Col>
-        <Grid.Col mt="xl" span={4}>
+        <Grid.Col xs={6} sm={4}>
           <NumberInput
             {...form.getInputProps('progressVolumes')}
             min={0}
@@ -56,7 +56,7 @@ const Form: React.FC<
             label="Volume Progress"
           />
         </Grid.Col>
-        <Grid.Col mt="xl" span={4}>
+        <Grid.Col xs={6} sm={4}>
           <NumberInput
             {...form.getInputProps('progress')}
             min={0}
@@ -64,16 +64,16 @@ const Form: React.FC<
             label="Chapter Progress"
           />
         </Grid.Col>
-        <Grid.Col span={4}>
+        <Grid.Col xs={6} sm={4}>
           <NumberInput
             {...form.getInputProps('purchased')}
             min={0}
             variant="filled"
-            label="Purchased Up To"
-            description="Owned, purchased or preorderd"
+            label="Preordered Up To"
+            description="Preorderd, bought, or owned volumes"
           />
         </Grid.Col>
-        <Grid.Col span={4}>
+        <Grid.Col xs={6} sm={4}>
           <Textarea
             {...form.getInputProps('notes')}
             autosize
@@ -92,7 +92,7 @@ const Form: React.FC<
             placeholder="Links, Prices, etc."
           />
         </Grid.Col>
-        <Grid.Col span={4}>
+        <Grid.Col xs={6} sm={4}>
           <Group position="right">
             <Anchor
               href={media.siteUrl}

@@ -1,4 +1,4 @@
-import { Button, CloseButton, Group, Image, Title } from '@mantine/core';
+import { Button, CloseButton, Group, Image, Title, Text } from '@mantine/core';
 import React from 'react';
 import { Media } from '../../apollo/queries/mediaQuery';
 
@@ -20,6 +20,7 @@ const Header: React.FC<Media & { close: () => void }> = ({
       <Group
         px="md"
         style={{ position: 'absolute', bottom: -30, width: '100%' }}
+        noWrap
       >
         <Image
           radius="sm"
@@ -29,9 +30,16 @@ const Header: React.FC<Media & { close: () => void }> = ({
           width={100}
           withPlaceholder
         />
-        <Title order={5} mt="xl" sx={theme => ({ color: theme.white })}>
-          {title.userPreferred}
-        </Title>
+        <Text lineClamp={2} style={{ wordBreak: 'break-word' }}>
+          <Title
+            order={5}
+            mt="xl"
+            mr="md"
+            sx={theme => ({ color: theme.white })}
+          >
+            {title.userPreferred}
+          </Title>
+        </Text>
         <Button mt="xl" form="form" type="submit" ml="auto">
           Save
         </Button>
