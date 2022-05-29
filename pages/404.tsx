@@ -22,7 +22,7 @@ const NotFound: NextPage = () => {
         "┐('～`;)┌"
       ][Math.floor(Math.random() * 10)]
     );
-  });
+  }, []);
 
   return (
     <Layout is404>
@@ -37,7 +37,7 @@ const NotFound: NextPage = () => {
       >
         <Title>404 - {kaomoji}</Title>
         <Link href="/home" passHref>
-          <Button component="a">Let&apos;s get you home</Button>
+          <Button component="a">Let&apos;s get you back home</Button>
         </Link>
       </Stack>
     </Layout>

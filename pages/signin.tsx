@@ -30,6 +30,7 @@ const SigninPage: NextPage = () => {
             await signInAnonymously(auth);
             localStorage.setItem('access_token', token);
             window.close();
+            router.push('/home');
           } catch (error) {
             console.log(error);
           }

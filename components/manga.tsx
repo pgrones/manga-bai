@@ -74,11 +74,10 @@ const Manga: React.FC<MediaList> = props => {
   return (
     <Indicator
       size={newVolumeAvailable ? 18 : 0}
-      withBorder
       color="teal"
       title={newVolumeAvailable ? 'New Volume Available' : undefined}
     >
-      <Paper withBorder radius="sm">
+      <Paper radius="sm">
         <Group noWrap align="flex-start" spacing="sm">
           <Box style={{ position: 'relative' }}>
             <Image

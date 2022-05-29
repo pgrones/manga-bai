@@ -48,7 +48,16 @@ export default function App(props: AppProps & { colorScheme: ColorScheme }) {
         toggleColorScheme={toggleColorScheme}
       >
         <MantineProvider
-          theme={{ primaryColor: 'indigo', colorScheme }}
+          theme={{
+            primaryColor: 'indigo',
+            fontFamily:
+              "'Inter',-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji",
+            headings: {
+              fontFamily:
+                "'Inter',-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji"
+            },
+            colorScheme
+          }}
           withGlobalStyles
           withNormalizeCSS
         >
