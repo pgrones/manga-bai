@@ -2,7 +2,7 @@ import { Button, Stack, Title } from '@mantine/core';
 import { NextPage } from 'next';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
-import Layout from '../components/layout';
+import Layout from '../components/common/layout';
 
 const NotFound: NextPage = () => {
   const [kaomoji, setKaomoji] = useState<string>();

@@ -1,4 +1,12 @@
-import { Container, Group, MediaQuery, Text, Title } from '@mantine/core';
+import {
+  Anchor,
+  Container,
+  Group,
+  MediaQuery,
+  Stack,
+  Text,
+  Title
+} from '@mantine/core';
 import Link from 'next/link';
 import { CSSProperties } from 'react';
 import Logo from '../../public/logo.svg';
@@ -34,6 +42,32 @@ const Header = () => {
             </Group>
           </Text>
         </Link>
+        <Stack spacing={2} align="flex-end">
+          <Anchor
+            href="https://amzn.to/3lEKHwX"
+            target="_blank"
+            referrerPolicy="no-referrer"
+            style={{ lineHeight: 1 }}
+          >
+            Buy English manga on Amazon.com
+          </Anchor>
+          <Text size="xs" color="dimmed" style={{ lineHeight: 1 }}>
+            (affiliate link)
+          </Text>
+        </Stack>
+        <Stack spacing={2} align="flex-end">
+          <Anchor
+            href="https://amzn.to/3lEKHwX"
+            target="_blank"
+            referrerPolicy="no-referrer"
+            style={{ lineHeight: 1 }}
+          >
+            Buy Japanese manga on Amazon.co.jp
+          </Anchor>
+          <Text size="xs" color="dimmed" style={{ lineHeight: 1 }}>
+            (affiliate link)
+          </Text>
+        </Stack>
         <Group>
           <ThemeToggle />
           <User />

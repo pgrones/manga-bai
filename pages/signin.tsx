@@ -54,7 +54,7 @@ const SigninPage: NextPage = () => {
       <Center style={{ height: '100vh' }}>
         <Stack align="center">
           <Title order={4}>Connecting to AniList</Title>
-          <Loader variant="bars" />
+          <Loader />
         </Stack>
       </Center>
     </>

@@ -33,14 +33,12 @@ const Progress: React.FC<ProgressProps> = React.memo(
         <Text size="sm">
           {text} {progressLocal}
         </Text>
-        {buttonVisible && (
-          <ActionIcon
-            size="xs"
-            onClick={() => setProgressLocal(prev => prev + 1)}
-          >
-            <IoAddOutline size={20} />
-          </ActionIcon>
-        )}
+        <ActionIcon
+          size="xs"
+          onClick={() => setProgressLocal(prev => prev + 1)}
+        >
+          {buttonVisible && <IoAddOutline size={20} />}
+        </ActionIcon>
       </Group>
     );
   }

@@ -1,10 +1,18 @@
 import { Center, Group, SegmentedControl, Select, Title } from '@mantine/core';
+import React from 'react';
 import { IoGrid, IoList } from 'react-icons/io5';
 import Search from './search';
 
-const Toolbar = () => {
+const Toolbar: React.ForwardRefExoticComponent<
+  {
+    title: string;
+    layout: 'list' | 'grid';
+    setLayout: React.Dispatch<React.SetStateAction<'list' | 'grid'>>;
+  } & React.RefAttributes<HTMLDivElement>
+> = React.forwardRef(({ title, layout, setLayout }, ref) => {
   return (
     <Group
+      ref={ref}
       py="md"
       sx={theme => ({
         position: 'sticky',
@@ -18,7 +26,7 @@ const Toolbar = () => {
       })}
       position="apart"
     >
-      <Title order={4}>Waiting For New Volumes</Title>
+      <Title order={4}>{title}</Title>
       <Group>
         <Search />
         <Select
@@ -41,6 +49,8 @@ const Toolbar = () => {
               height: 31
             }
           })}
+          value={layout}
+          onChange={(value: 'list' | 'grid') => setLayout(value)}
           data={[
             {
               label: (
@@ -63,6 +73,6 @@ const Toolbar = () => {
       </Group>
     </Group>
   );
-};
+});
 
 export default Toolbar;

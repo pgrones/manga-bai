@@ -1,9 +1,11 @@
-import { Grid } from '@mantine/core';
+import { Center, Grid, Overlay, useMantineTheme } from '@mantine/core';
 import { IoBagCheck, IoColorPalette, IoNotifications } from 'react-icons/io5';
 import { SiAnilist } from 'react-icons/si';
 import Feature from './feature';
 
 const Features = () => {
+  const theme = useMantineTheme();
+
   return (
     <Grid gutter="xl">
       <Grid.Col sm={6}>
@@ -18,7 +20,22 @@ const Features = () => {
           icon={<IoNotifications size={24} />}
           title="Get notifications when new volumes are available"
           text="Manga Bai lets you know when a new volume of a series you're reading is on sale on Amazon. You can choose wether you prefer English or Japanese volumes."
-        />
+        >
+          <Overlay
+            opacity={0.9}
+            color={
+              theme.colorScheme === 'dark'
+                ? theme.colors.dark[9]
+                : theme.colors.gray[1]
+            }
+          >
+            <Center style={{ height: '100%' }}>
+              Available as soon as the site has access to the Amazon API.
+              <br />
+              Use the affiliate links at the top of the site make this possible.
+            </Center>
+          </Overlay>
+        </Feature>
       </Grid.Col>
       <Grid.Col sm={6}>
         <Feature

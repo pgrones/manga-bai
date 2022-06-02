@@ -10,3 +10,11 @@
   padding: 5px;
   border-radius: 0 0 4px 4px;
 }
+
+img {
+  text-indent: -10000px;
+}
+
+td {
+  border-bottom: none !important;
+}

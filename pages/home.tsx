@@ -1,8 +1,9 @@
-import { Center, Loader, Image } from '@mantine/core';
+import { Image } from '@mantine/core';
 import type { NextPage } from 'next';
-import AuthCheck from '../components/authCheck';
-import List from '../components/home/list';
-import Layout from '../components/layout';
+import AuthCheck from '../components/common/authCheck';
+import LoadingIndicator from '../components/common/loadingIndicator';
+import Manga from '../components/home/manga';
+import Layout from '../components/common/layout';
 import useMangaData from '../lib/hooks/useMangaData';
 
 const HomePage: NextPage = () => {
@@ -37,16 +38,5 @@ export default HomePage;
 const HomeComponent: React.FC = () => {
   const { manga, loading, error } = useMangaData();
 
-  return error ? null : loading ? (
-    <Center
-      style={{
-        height: 'calc(100vh - var(--mantine-header-height))',
-        marginTop: 'var(--mantine-header-height)'
-      }}
-    >
-      <Loader variant="bars" />
-    </Center>
-  ) : (
-    <List {...manga!} />
-  );
+  return error ? null : loading ? <LoadingIndicator /> : <Manga {...manga!} />;
 };

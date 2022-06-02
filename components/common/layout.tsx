@@ -1,6 +1,6 @@
 import { AppShell, Container, Footer, Header } from '@mantine/core';
 import React, { PropsWithChildren } from 'react';
-import Appheader from './header/header';
+import Appheader from '../header/header';
 
 const Layout: React.FC<PropsWithChildren<{ is404?: boolean }>> = ({
   children,

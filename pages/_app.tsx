@@ -4,13 +4,14 @@ import {
   ColorSchemeProvider,
   MantineProvider
 } from '@mantine/core';
+import { useColorScheme } from '@mantine/hooks';
 import { NotificationsProvider } from '@mantine/notifications';
 import { SpotlightProvider } from '@mantine/spotlight';
 import { getCookie, setCookies } from 'cookies-next';
 import { GetServerSidePropsContext } from 'next';
 import { AppProps } from 'next/app';
 import Head from 'next/head';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useApollo } from '../apollo/client';
 import UserProvider from '../lib/hooks/userProvider';
 import '../styles/globalStyles.css';
@@ -18,9 +19,19 @@ import '../styles/globalStyles.css';
 export default function App(props: AppProps & { colorScheme: ColorScheme }) {
   const { Component, pageProps } = props;
   const apolloClient = useApollo(pageProps?.initialApolloState);
+  const preferredColorScheme = useColorScheme();
   const [colorScheme, setColorScheme] = useState<ColorScheme>(
     props.colorScheme
   );
+
+  useEffect(() => {
+    if (
+      !getCookie('mantine-color-scheme') &&
+      preferredColorScheme !== 'light'
+    ) {
+      toggleColorScheme(preferredColorScheme);
+    }
+  }, [preferredColorScheme]);
 
   const toggleColorScheme = (value?: ColorScheme) => {
     const nextColorScheme =
@@ -56,6 +67,7 @@ export default function App(props: AppProps & { colorScheme: ColorScheme }) {
               fontFamily:
                 "'Inter',-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji"
             },
+            loader: 'bars',
             colorScheme
           }}
           withGlobalStyles
