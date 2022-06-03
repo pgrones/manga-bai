@@ -11,8 +11,30 @@
   border-radius: 0 0 4px 4px;
 }
 
-img {
-  text-indent: -10000px;
+.kanna {
+  position: fixed;
+  bottom: -7px;
+  left: 10px;
+  z-index: 500;
+  transform: scaleX(-1);
+}
+
+img[alt] {
+  font-size: 10px;
+}
+
+img[alt]:after {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 4px;
+  font-size: 16px;
+  content: '(×_×)';
 }
 
 td {

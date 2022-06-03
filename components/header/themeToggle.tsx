@@ -9,7 +9,7 @@ const ThemeToggle = () => {
       title={colorScheme === 'dark' ? 'Light mode' : 'Dark mode'}
       onClick={() => toggleColorScheme()}
       size={36}
-      variant="default"
+      variant="light"
       sx={theme => ({
         color:
           theme.colorScheme === 'dark'
@@ -18,9 +18,9 @@ const ThemeToggle = () => {
       })}
     >
       {colorScheme === 'dark' ? (
-        <IoSunnyOutline size={26} />
+        <IoSunnyOutline size={24} />
       ) : (
-        <IoMoonOutline size={26} />
+        <IoMoonOutline size={24} />
       )}
     </ActionIcon>
   );

@@ -15,6 +15,12 @@ import mediaQuery, {
 } from '../../apollo/queries/mediaQuery';
 import useNotification from './useNotification';
 import { useUser } from './userProvider';
+import test from '../../apollo/test.json';
+
+const testData = (test as any).data.MediaListCollection.lists.reduce(
+  (p: any, c: any) => [...p, ...c.entries],
+  []
+);
 
 export interface MangaData {
   current: MediaList[] | undefined;

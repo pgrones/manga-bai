@@ -1,5 +1,5 @@
-import { Button, Card, Modal } from '@mantine/core';
-import { useDisclosure } from '@mantine/hooks';
+import { Button, Card } from '@mantine/core';
+import { useModals } from '@mantine/modals';
 import React from 'react';
 import { MediaList } from '../../apollo/queries/mediaQuery';
 import { UpdatedValues } from '../home/manga';
@@ -11,21 +11,15 @@ const EditModal: React.FC<
     updateData: (values: UpdatedValues) => void;
   }
 > = props => {
-  const [opened, { close, open }] = useDisclosure(false);
+  const { openModal, closeModal } = useModals();
 
-  return (
-    <>
-      <Button size="xs" variant="light" onClick={open}>
-        Edit
-      </Button>
-      <Modal
-        opened={opened}
-        onClose={close}
-        centered
-        withCloseButton={false}
-        padding={0}
-        size="xl"
-      >
+  const openEditModal = () => {
+    const id = openModal({
+      centered: true,
+      withCloseButton: false,
+      padding: 0,
+      size: 'xl',
+      children: (
         <Card
           sx={theme => ({
             backgroundColor:
@@ -38,12 +32,18 @@ const EditModal: React.FC<
               position: 'relative'
             })}
           >
-            <Header {...props.media} close={close} />
+            <Header {...props.media} close={() => closeModal(id)} />
           </Card.Section>
-          <Form {...props} close={close} />
+          <Form {...props} close={() => closeModal(id)} />
         </Card>
-      </Modal>
-    </>
+      )
+    });
+  };
+
+  return (
+    <Button size="xs" variant="light" onClick={openEditModal}>
+      Edit
+    </Button>
   );
 };
 

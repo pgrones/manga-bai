@@ -42,32 +42,36 @@ const Header = () => {
             </Group>
           </Text>
         </Link>
-        <Stack spacing={2} align="flex-end">
-          <Anchor
-            href="https://amzn.to/3lEKHwX"
-            target="_blank"
-            referrerPolicy="no-referrer"
-            style={{ lineHeight: 1 }}
-          >
-            Buy English manga on Amazon.com
-          </Anchor>
-          <Text size="xs" color="dimmed" style={{ lineHeight: 1 }}>
-            (affiliate link)
-          </Text>
-        </Stack>
-        <Stack spacing={2} align="flex-end">
-          <Anchor
-            href="https://amzn.to/3lEKHwX"
-            target="_blank"
-            referrerPolicy="no-referrer"
-            style={{ lineHeight: 1 }}
-          >
-            Buy Japanese manga on Amazon.co.jp
-          </Anchor>
-          <Text size="xs" color="dimmed" style={{ lineHeight: 1 }}>
-            (affiliate link)
-          </Text>
-        </Stack>
+        <Group spacing="xl">
+          <Stack spacing={2} align="flex-end">
+            <Anchor
+              size="sm"
+              href="https://amzn.to/3lEKHwX"
+              target="_blank"
+              referrerPolicy="no-referrer"
+              style={{ lineHeight: 1 }}
+            >
+              Buy English manga on Amazon.com
+            </Anchor>
+            <Text size="xs" color="dimmed" style={{ lineHeight: 1 }}>
+              (affiliate link)
+            </Text>
+          </Stack>
+          <Stack spacing={2} align="flex-end">
+            <Anchor
+              size="sm"
+              href="https://amzn.to/3lEKHwX"
+              target="_blank"
+              referrerPolicy="no-referrer"
+              style={{ lineHeight: 1 }}
+            >
+              Buy Japanese manga on Amazon.co.jp
+            </Anchor>
+            <Text size="xs" color="dimmed" style={{ lineHeight: 1 }}>
+              (affiliate link)
+            </Text>
+          </Stack>
+        </Group>
         <Group>
           <ThemeToggle />
           <User />

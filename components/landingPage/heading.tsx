@@ -3,15 +3,21 @@ import {
   Group,
   Overlay,
   Title,
-  useMantineTheme,
-  Image
+  useMantineTheme
 } from '@mantine/core';
+import Image from 'next/image';
+import { getBorderRadius } from '../../lib/helper/radius';
 
 const useStyles = createStyles(theme => ({
   image: {
     aspectRatio: '200 / 300',
+    height: 300,
+    width: 200,
+    position: 'relative',
+    transformStyle: 'preserve-3d',
     [`@media (max-width: ${theme.breakpoints.lg}px)`]: {
-      height: 180 + 'px !important'
+      height: 180 + 'px !important',
+      width: 120 + 'px !important'
     }
   },
   heading: {
@@ -65,20 +71,19 @@ const Heading: React.FC<{
         Track your preordered, bought, and owned manga and light novels
       </Title>
       {manga?.map(m => (
-        <Image
+        <div
+          className={classes.image}
+          style={{ transform: m.transform, zIndex: m.zIndex }}
           key={m.id}
-          src={m.src}
-          alt={m.title}
-          radius="sm"
-          height={300}
-          width="auto"
-          style={{
-            transformStyle: 'preserve-3d',
-            transform: m.transform,
-            zIndex: m.zIndex
-          }}
-          classNames={{ image: classes.image }}
-        />
+        >
+          <Image
+            layout="fill"
+            objectFit="cover"
+            src={m.src}
+            alt={m.title}
+            style={getBorderRadius(theme)}
+          />
+        </div>
       ))}
     </Group>
   );

@@ -1,33 +1,28 @@
-import {
-  Grid,
-  MantineNumberSize,
-  MantineSizes,
-  Stack,
-  Table
-} from '@mantine/core';
+import { Grid } from '@mantine/core';
 import React, { useRef, useState } from 'react';
+import { Status } from '../../apollo/queries/mediaQuery';
 import { MangaData } from '../../lib/hooks/useMangaData';
-import EntryGrid from './entryGrid';
-import EntryList from './entryLisT';
+import GridEntry from './gridLayout/gridEntry';
 import StatusTitle from './statusTitle';
 import Toolbar from './toolbar';
+import VirtualizedList from './listLayout/virtualizedList';
 
-const isSizes = (
-  radius: (string & {}) | MantineNumberSize
-): radius is keyof MantineSizes => {
-  const sizes = ['xs', 'sm', 'md', 'lg', 'xl'];
-  return typeof radius === 'string' && sizes.includes(radius);
-};
+export interface UpdatedValues {
+  status?: Status;
+  progressVolumes?: number;
+  progress?: number;
+}
 
-const Manga: React.FC<MangaData> = ({ current, waiting }) => {
+const Manga: React.FC<MangaData> = props => {
+  const { current, waiting } = props;
   const toolbarRef = useRef<HTMLDivElement>(null);
   const [title, setTitle] = useState('Waiting For New Volumes');
-  const [layout, setLayout] = useState<'list' | 'grid'>('grid');
+  const [layout, setLayout] = useState<'list' | 'grid'>('list');
 
   const isList = layout === 'list';
 
   return (
-    <Stack spacing={0}>
+    <>
       <Toolbar
         title={title}
         ref={toolbarRef}
@@ -35,54 +30,17 @@ const Manga: React.FC<MangaData> = ({ current, waiting }) => {
         setLayout={setLayout}
       />
       {isList ? (
-        <>
-          {waiting && (
-            <Table
-              sx={theme => ({
-                backgroundColor:
-                  theme.colorScheme === 'dark'
-                    ? theme.colors.dark[7]
-                    : theme.white,
-                borderRadius: isSizes(theme.defaultRadius)
-                  ? theme.radius[theme.defaultRadius]
-                  : 'sm'
-              })}
-            >
-              <tbody>
-                {waiting.map(w => (
-                  <EntryList key={w.mediaId} {...w} />
-                ))}
-              </tbody>
-            </Table>
-          )}
-          {current && (
+        <VirtualizedList
+          {...props}
+          statusTitle={
             <StatusTitle setTitle={setTitle} toolbarRef={toolbarRef} />
-          )}
-          {current && (
-            <Table
-              sx={theme => ({
-                backgroundColor:
-                  theme.colorScheme === 'dark'
-                    ? theme.colors.dark[7]
-                    : theme.white,
-                borderRadius: isSizes(theme.defaultRadius)
-                  ? theme.radius[theme.defaultRadius]
-                  : 'sm'
-              })}
-            >
-              <tbody>
-                {current.map(c => (
-                  <EntryList key={c.mediaId} {...c} />
-                ))}
-              </tbody>
-            </Table>
-          )}
-        </>
+          }
+        />
       ) : (
         <Grid gutter="xl" mb="xl">
           {waiting?.map(w => (
-            <Grid.Col key={w.mediaId} xs={12} md={6} lg={4}>
-              <EntryGrid {...w} />
+            <Grid.Col key={w.mediaId} xs={12} sm={6} lg={4} xl={3}>
+              <GridEntry {...w} />
             </Grid.Col>
           ))}
           {current && (
@@ -91,13 +49,13 @@ const Manga: React.FC<MangaData> = ({ current, waiting }) => {
             </Grid.Col>
           )}
           {current?.map(c => (
-            <Grid.Col key={c.mediaId} xs={12} md={6} lg={4}>
-              <EntryGrid {...c} />
+            <Grid.Col key={c.mediaId} xs={12} sm={6} lg={4} xl={3}>
+              <GridEntry {...c} />
             </Grid.Col>
           ))}
         </Grid>
       )}
-    </Stack>
+    </>
   );
 };
 

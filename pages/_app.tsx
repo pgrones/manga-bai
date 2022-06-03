@@ -2,11 +2,13 @@ import { ApolloProvider } from '@apollo/client';
 import {
   ColorScheme,
   ColorSchemeProvider,
-  MantineProvider
+  DefaultMantineColor,
+  MantineProvider,
+  MantineThemeOverride
 } from '@mantine/core';
 import { useColorScheme } from '@mantine/hooks';
+import { ModalsProvider } from '@mantine/modals';
 import { NotificationsProvider } from '@mantine/notifications';
-import { SpotlightProvider } from '@mantine/spotlight';
 import { getCookie, setCookies } from 'cookies-next';
 import { GetServerSidePropsContext } from 'next';
 import { AppProps } from 'next/app';
@@ -16,18 +18,34 @@ import { useApollo } from '../apollo/client';
 import UserProvider from '../lib/hooks/userProvider';
 import '../styles/globalStyles.css';
 
-export default function App(props: AppProps & { colorScheme: ColorScheme }) {
+const theme: MantineThemeOverride = {
+  fontFamily:
+    "'Inter',-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji",
+  headings: {
+    fontFamily:
+      "'Inter',-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji"
+  },
+  loader: 'bars'
+};
+
+export default function App(
+  props: AppProps & { colorScheme: ColorScheme; siteColor: DefaultMantineColor }
+) {
   const { Component, pageProps } = props;
   const apolloClient = useApollo(pageProps?.initialApolloState);
   const preferredColorScheme = useColorScheme();
   const [colorScheme, setColorScheme] = useState<ColorScheme>(
     props.colorScheme
   );
+  const [primaryColor, setPrimaryColor] = useState<DefaultMantineColor>(
+    props.siteColor
+  );
 
   useEffect(() => {
     if (
       !getCookie('mantine-color-scheme') &&
-      preferredColorScheme !== 'light'
+      preferredColorScheme !== 'light' &&
+      colorScheme !== preferredColorScheme
     ) {
       toggleColorScheme(preferredColorScheme);
     }
@@ -41,6 +59,13 @@ export default function App(props: AppProps & { colorScheme: ColorScheme }) {
       maxAge: 60 * 60 * 24 * 30
     });
     document.documentElement.style.colorScheme = nextColorScheme;
+  };
+
+  const setSiteColor = (value: DefaultMantineColor) => {
+    setPrimaryColor(value);
+    setCookies('mantine-site-color', value, {
+      maxAge: 60 * 60 * 24 * 30
+    });
   };
 
   return (
@@ -60,28 +85,25 @@ export default function App(props: AppProps & { colorScheme: ColorScheme }) {
       >
         <MantineProvider
           theme={{
-            primaryColor: 'indigo',
-            fontFamily:
-              "'Inter',-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji",
-            headings: {
-              fontFamily:
-                "'Inter',-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji"
-            },
-            loader: 'bars',
-            colorScheme
+            ...theme,
+            colorScheme,
+            primaryColor,
+            other: {
+              setSiteColor
+            }
           }}
           withGlobalStyles
           withNormalizeCSS
         >
-          <SpotlightProvider actions={[]}>
-            <NotificationsProvider>
+          <NotificationsProvider>
+            <ModalsProvider>
               <ApolloProvider client={apolloClient}>
                 <UserProvider>
                   <Component {...pageProps} />
                 </UserProvider>
               </ApolloProvider>
-            </NotificationsProvider>
-          </SpotlightProvider>
+            </ModalsProvider>
+          </NotificationsProvider>
         </MantineProvider>
       </ColorSchemeProvider>
     </>
@@ -89,5 +111,6 @@ export default function App(props: AppProps & { colorScheme: ColorScheme }) {
 }
 
 App.getInitialProps = ({ ctx }: { ctx: GetServerSidePropsContext }) => ({
-  colorScheme: getCookie('mantine-color-scheme', ctx) || 'light'
+  colorScheme: getCookie('mantine-color-scheme', ctx) || 'light',
+  siteColor: getCookie('mantine-site-color', ctx) || 'indigo'
 });

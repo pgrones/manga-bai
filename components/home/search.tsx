@@ -1,37 +1,34 @@
-import { Button, MediaQuery, Text } from '@mantine/core';
-import { useOs } from '@mantine/hooks';
+import { MediaQuery, Text, TextInput } from '@mantine/core';
+import { useHotkeys, useOs } from '@mantine/hooks';
+import { useRef } from 'react';
 import { IoSearchOutline } from 'react-icons/io5';
 
 const Search = () => {
   const os = useOs();
   const phone = ['ios', 'android'].includes(os);
+  const searchRef = useRef<HTMLInputElement>(null);
+  useHotkeys([
+    ['mod+K', () => searchRef.current?.focus() || searchRef.current?.select()]
+  ]);
 
   return (
     <MediaQuery smallerThan="sm" styles={{ width: 180 + 'px !important' }}>
-      <Button
+      <TextInput
+        ref={searchRef}
+        type="search"
         size="xs"
-        style={{ width: 250 }}
-        styles={theme => ({
-          root: {
-            paddingLeft: theme.spacing.xs,
-            paddingRight: theme.spacing.xs
-          },
-          inner: { justifyContent: 'space-between' }
-        })}
-        variant="default"
-        rightIcon={
+        placeholder="Search"
+        icon={<IoSearchOutline size={16} />}
+        rightSectionWidth={62}
+        styles={{ rightSection: { pointerEvents: 'none' } }}
+        rightSection={
           !phone && (
             <Text size="xs" color="dimmed" weight="normal">
               Ctrl + K
             </Text>
           )
         }
-      >
-        <IoSearchOutline size={16} />
-        <Text pl="xs" size="xs" color="dimmed" weight="normal">
-          Search
-        </Text>
-      </Button>
+      />
     </MediaQuery>
   );
 };

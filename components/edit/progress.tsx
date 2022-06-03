@@ -5,6 +5,7 @@ import { IoAddOutline } from 'react-icons/io5';
 import { MediaList } from '../../apollo/queries/mediaQuery';
 
 interface ProgressProps {
+  style?: React.CSSProperties;
   text: string;
   progress: number;
   buttonVisible: boolean;
@@ -16,7 +17,7 @@ interface ProgressProps {
 }
 
 const Progress: React.FC<ProgressProps> = React.memo(
-  ({ progress, buttonVisible, updateProgress, text, progressKey }) => {
+  ({ progress, buttonVisible, updateProgress, text, progressKey, style }) => {
     const [progressLocal, setProgressLocal] = useState(progress);
     const [debouncedProgressVolumes] = useDebouncedValue(progressLocal, 500);
 
@@ -25,11 +26,11 @@ const Progress: React.FC<ProgressProps> = React.memo(
     }, [progress]);
 
     useEffect(() => {
-      updateProgress(debouncedProgressVolumes, progressKey);
+      // updateProgress(debouncedProgressVolumes, progressKey);
     }, [debouncedProgressVolumes]);
 
     return (
-      <Group spacing={2}>
+      <Group spacing={2} style={style}>
         <Text size="sm">
           {text} {progressLocal}
         </Text>

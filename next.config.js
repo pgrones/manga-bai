@@ -9,5 +9,8 @@ module.exports = {
     });
 
     return config;
+  },
+  images: {
+    domains: ['s4.anilist.co', 'anilist.co']
   }
 };

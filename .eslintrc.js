@@ -28,8 +28,7 @@ module.exports = {
   extends: [
     'eslint:recommended',
     'next/core-web-vitals',
-    'plugin:react/recommended',
-    'prettier' // Make sure this is always the last element in the array.
+    'plugin:react/recommended'
   ],
   plugins: ['@typescript-eslint'],
   rules: {

@@ -1,16 +1,21 @@
-import { Avatar, Button, Popover } from '@mantine/core';
+import { Avatar, Button, Popover, Stack } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
+import { useState } from 'react';
 import { IoChevronDownOutline, IoLogOutOutline } from 'react-icons/io5';
 import { useUser } from '../../lib/hooks/userProvider';
+import ColorPicker from './colorPicker';
 
 const User = () => {
   const { fullyAuthenticated, aniListUser, signOut: singOut } = useUser();
   const [opened, { toggle }] = useDisclosure(false);
+  const [closeOnClickOutside, setCloseOnClickOutside] = useState(true);
 
   return fullyAuthenticated === true ? (
     <Popover
       opened={opened}
       onClose={toggle}
+      transition="scale-y"
+      closeOnClickOutside={closeOnClickOutside}
       target={
         <Button
           variant="subtle"
@@ -27,14 +32,18 @@ const User = () => {
       position="bottom"
       withArrow
     >
-      <Button
-        variant="subtle"
-        color="gray"
-        leftIcon={<IoLogOutOutline size={16} />}
-        onClick={singOut}
-      >
-        Logout
-      </Button>
+      <Stack spacing={0}>
+        <ColorPicker setCloseOnClickOutside={setCloseOnClickOutside} />
+        <Button
+          variant="subtle"
+          color="gray"
+          leftIcon={<IoLogOutOutline size={16} />}
+          onClick={singOut}
+          styles={{ inner: { justifyContent: 'flex-start' } }}
+        >
+          Logout
+        </Button>
+      </Stack>
     </Popover>
   ) : (
     <Button

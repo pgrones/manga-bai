@@ -1,6 +1,16 @@
-import { Button, CloseButton, Group, Image, Title, Text } from '@mantine/core';
+import {
+  Button,
+  CloseButton,
+  Group,
+  Text,
+  Title,
+  useMantineTheme
+} from '@mantine/core';
+import Image from 'next/image';
 import React from 'react';
 import { Media } from '../../apollo/queries/mediaQuery';
+import { getBorderRadius } from '../../lib/helper/radius';
+import ImageFallback from '../common/ImageFallback';
 
 const Header: React.FC<Media & { close: () => void }> = ({
   bannerImage,
@@ -8,34 +18,44 @@ const Header: React.FC<Media & { close: () => void }> = ({
   title,
   close
 }) => {
+  const theme = useMantineTheme();
+
   return (
-    <>
-      <Image
+    <div style={{ height: 165 }}>
+      <ImageFallback
+        layout="fill"
+        objectFit="cover"
         src={bannerImage}
+        fallBackSrc={coverImage.large}
         alt={title.userPreferred}
-        style={{ opacity: 0.4 }}
-        height={165}
-        withPlaceholder
+        style={{ opacity: 0.3 }}
       />
       <Group
         px="md"
         style={{ position: 'absolute', bottom: -30, width: '100%' }}
         noWrap
       >
-        <Image
-          radius="sm"
-          src={coverImage.large}
-          alt={title.userPreferred}
-          height={140}
-          width={100}
-          withPlaceholder
-        />
+        <div
+          style={{
+            position: 'relative',
+            height: 140,
+            width: 100
+          }}
+        >
+          <Image
+            layout="fill"
+            objectFit="cover"
+            src={coverImage.large}
+            alt={title.userPreferred}
+            style={getBorderRadius(theme)}
+          />
+        </div>
         <Text lineClamp={2} style={{ wordBreak: 'break-word' }}>
           <Title
             order={5}
             mt="xl"
             mr="md"
-            sx={theme => ({ color: theme.white })}
+            sx={theme => ({ color: theme.white, fontWeight: 'normal' })}
           >
             {title.userPreferred}
           </Title>
@@ -57,7 +77,7 @@ const Header: React.FC<Media & { close: () => void }> = ({
         })}
         onClick={close}
       />
-    </>
+    </div>
   );
 };
 
