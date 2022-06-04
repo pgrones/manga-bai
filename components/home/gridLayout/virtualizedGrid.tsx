@@ -65,7 +65,6 @@ const VirtualizedGrid: React.FC<{
   if (current) {
     if (waiting) {
       statusIndex = itemData.length;
-      console.log(statusIndex);
       itemData.push(statusTitle);
     }
     for (let i = 0; i < current.length; i += itemsPerRow) {
