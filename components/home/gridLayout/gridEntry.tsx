@@ -65,7 +65,7 @@ const GridEntry: React.FC<MediaList> = React.memo(props => {
   // const newVolumeAvailable = Math.random() > 0.7;
 
   return (
-    <Paper radius="sm">
+    <Paper radius="sm" style={{ flex: 1 }}>
       <Group noWrap align="flex-start" spacing="sm">
         <div
           style={{
@@ -99,7 +99,7 @@ const GridEntry: React.FC<MediaList> = React.memo(props => {
           justify="space-between"
           style={{ flexGrow: 1, minHeight: 170 }}
         >
-          <Text lineClamp={2} style={{ wordBreak: 'break-word', height: 35 }}>
+          <Text lineClamp={2} style={{ wordBreak: 'break-word', height: 38 }}>
             <Title
               order={6}
               style={{ fontWeight: 'normal' }}
