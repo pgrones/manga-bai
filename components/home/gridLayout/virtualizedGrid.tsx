@@ -26,7 +26,11 @@ const Row: React.FC<{
               typeof m === 'string' ? (
                 <div key={m} style={{ flex: 1 }} />
               ) : (
-                <GridEntry key={'grid-entry-' + m.mediaId} {...m} />
+                <GridEntry
+                  key={'grid-entry-' + m.mediaId}
+                  priority={index === 0}
+                  {...m}
+                />
               )
             )}
       </Group>

@@ -13,19 +13,23 @@ const useNotification = () => {
       color: 'teal'
     });
 
-  const showError = () =>
+  const showError = (message?: string) =>
     showNotification({
       title: 'An Error Occured (ᗒᗣᗕ)՞',
       message: (
         <Text>
-          Try to reload the page. If that doesn&apos;t work contact me on{' '}
-          <Anchor
-            href="https://anilist.co/user/Alzariel/"
-            target="_blank"
-            referrerPolicy="no-referrer"
-          >
-            AniList
-          </Anchor>
+          {message ?? (
+            <>
+              Try to reload the page. If that doesn&apos;t work contact me on{' '}
+              <Anchor
+                href="https://anilist.co/user/Alzariel/"
+                target="_blank"
+                referrerPolicy="no-referrer"
+              >
+                AniList
+              </Anchor>
+            </>
+          )}
         </Text>
       ),
       icon: <IoClose size={22} />,

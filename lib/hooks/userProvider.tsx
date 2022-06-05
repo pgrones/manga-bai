@@ -1,6 +1,6 @@
 import { useApolloClient, useQuery } from '@apollo/client';
 import { useLocalStorage } from '@mantine/hooks';
-import { Unsubscribe, User } from 'firebase/auth';
+import { signInWithCustomToken, Unsubscribe, User } from 'firebase/auth';
 import React, {
   createContext,
   PropsWithChildren,
@@ -16,6 +16,9 @@ import userQuery, {
 import { getUserData } from '../firebase/db';
 import { auth } from '../firebase/firebase';
 import useNotification from './useNotification';
+import useSWR from 'swr';
+import axios from 'axios';
+import { useRouter } from 'next/router';
 
 interface IUserContext {
   fullyAuthenticated: boolean | 'loading';
@@ -24,6 +27,9 @@ interface IUserContext {
   userData: any;
   signOut: () => void;
 }
+
+const fetcher = async (url: string, uid: string) =>
+  await axios.get<string>(url, { params: { uid } }).then(res => res.data);
 
 const UserContext = createContext<IUserContext>({
   fullyAuthenticated: false,
@@ -39,6 +45,7 @@ const UserProvider: React.FC<PropsWithChildren<unknown>> = ({ children }) => {
   const { showError } = useNotification();
   const [hasError, setHasError] = useState<unknown>();
   const apolloClient = useApolloClient();
+  const { pathname } = useRouter();
   const [user, firebaseLoading, firebaseError] = useAuthState(auth);
   const [userData, setUserData] = useState<any>();
   const [accessToken, setAccessToken] = useLocalStorage<string>({
@@ -50,6 +57,19 @@ const UserProvider: React.FC<PropsWithChildren<unknown>> = ({ children }) => {
   const { data, error, loading } = useQuery<UserQueryData>(userQuery, {
     skip: !accessToken
   });
+
+  const { data: authData } = useSWR(
+    data?.Viewer && !user && pathname.includes('signin')
+      ? ['/api/auth', data.Viewer.id]
+      : null,
+    fetcher
+  );
+
+  useEffect(() => {
+    if (authData) {
+      signInWithCustomToken(auth, authData);
+    }
+  }, [authData]);
 
   useEffect(() => {
     let unsubscribe: Unsubscribe | void;

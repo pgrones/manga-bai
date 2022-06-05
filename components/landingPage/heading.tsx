@@ -70,7 +70,7 @@ const Heading: React.FC<{
       <Title align="center" className={classes.heading}>
         Track your preordered, bought, and owned manga and light novels
       </Title>
-      {manga?.map(m => (
+      {manga?.map((m, i) => (
         <div
           className={classes.image}
           style={{ transform: m.transform, zIndex: m.zIndex }}
@@ -82,6 +82,7 @@ const Heading: React.FC<{
             src={m.src}
             alt={m.title}
             style={getBorderRadius(theme)}
+            priority={Math.floor(manga.length / 2) === i}
           />
         </div>
       ))}

@@ -24,6 +24,7 @@ const Row: React.FC<{
           {...(item as MediaList)}
           topRadius={topRadius}
           bottomRadius={bottomRadius}
+          priority={index === 0}
         />
       )}
     </div>

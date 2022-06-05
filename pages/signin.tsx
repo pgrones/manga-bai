@@ -1,10 +1,8 @@
 import { Center, Loader, Stack, Title } from '@mantine/core';
-import { signInAnonymously } from 'firebase/auth';
 import { NextPage } from 'next';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
-import { auth } from '../lib/firebase/firebase';
 import { useUser } from '../lib/hooks/userProvider';
 
 const SigninPage: NextPage = () => {
@@ -27,10 +25,7 @@ const SigninPage: NextPage = () => {
       if (token) {
         (async () => {
           try {
-            await signInAnonymously(auth);
             localStorage.setItem('access_token', token);
-            window.close();
-            router.push('/home');
           } catch (error) {
             console.log(error);
           }

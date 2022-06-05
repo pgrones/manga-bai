@@ -15,9 +15,9 @@ import Progress from '../../edit/progress';
 import { UpdatedValues } from '../manga';
 
 const ListEntry: React.FC<
-  MediaList & { topRadius: boolean; bottomRadius: boolean }
+  MediaList & { topRadius: boolean; bottomRadius: boolean; priority: boolean }
 > = props => {
-  const { status, progressVolumes, topRadius, bottomRadius } = props;
+  const { status, progressVolumes, topRadius, bottomRadius, priority } = props;
   const { title, coverImage } = props.media;
   const { hovered, ref } = useHover();
   const { showSuccess, showError } = useNotification();
@@ -104,6 +104,7 @@ const ListEntry: React.FC<
             src={coverImage.large}
             alt={title.userPreferred}
             style={{ borderRadius }}
+            priority={priority}
           />
         </div>
 

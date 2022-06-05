@@ -21,7 +21,7 @@ const Header: React.FC<Media & { close: () => void }> = ({
   const theme = useMantineTheme();
 
   return (
-    <div style={{ height: 165 }}>
+    <div style={{ height: 165, position: 'relative' }}>
       <ImageFallback
         layout="fill"
         objectFit="cover"

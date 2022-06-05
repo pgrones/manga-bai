@@ -92,7 +92,7 @@ const useMangaData = () => {
               }
             });
 
-            await Promise.allSettled(
+            const result = await Promise.allSettled(
               (managaData.paused || []).map(entry =>
                 fillList({
                   variables: {
@@ -111,6 +111,11 @@ const useMangaData = () => {
                 })
               )
             );
+
+            result.findIndex(r => r.status === 'rejected') > -1 &&
+              showError(
+                `Some entries could not be saved to the custom list "${WAITING}"`
+              );
 
             setManga(createMangaLists((await refetch()).data, customListsData));
           } catch (error) {
