@@ -42,15 +42,12 @@ const VirtualizedGrid: React.FC<{
   current?: MediaList[];
   waiting?: MediaList[];
   statusTitle: JSX.Element;
-}> = ({ current, waiting, statusTitle }) => {
+}> = React.memo(({ current, waiting, statusTitle }) => {
   const theme = useMantineTheme();
   const xs = 1;
-  const sm =
-    useMediaQuery(`(min-width: ${theme.breakpoints.sm}px)`, false) && 2;
-  const lg =
-    useMediaQuery(`(min-width: ${theme.breakpoints.lg}px)`, false) && 3;
-  const xl =
-    useMediaQuery(`(min-width: ${theme.breakpoints.xl}px)`, false) && 4;
+  const sm = useMediaQuery(`(min-width: ${theme.breakpoints.sm}px)`) && 2;
+  const lg = useMediaQuery(`(min-width: ${theme.breakpoints.lg}px)`) && 3;
+  const xl = useMediaQuery(`(min-width: ${theme.breakpoints.xl}px)`) && 4;
 
   const itemData: ((MediaList | string)[] | JSX.Element)[] = [];
   const itemsPerRow = xl || lg || sm || xs;
@@ -102,6 +99,6 @@ const VirtualizedGrid: React.FC<{
       </ReactWindowScroller>
     </div>
   );
-};
+});
 
 export default VirtualizedGrid;

@@ -2,31 +2,34 @@ import { gql } from '@apollo/client';
 
 const mediaQuery = gql`
   query ($userId: Int) {
-    Page {
-      pageInfo {
-        hasNextPage
-      }
-      mediaList(
-        userId: $userId
-        status_in: [CURRENT, PAUSED]
-        type: MANGA
-        sort: STATUS
-      ) {
-        status
-        mediaId
-        progressVolumes
-        progress
-        customLists
-        media {
-          siteUrl
-          bannerImage
-          coverImage {
-            large
-          }
-          title {
-            userPreferred
-          }
+    MediaListCollection(
+      userId: $userId
+      status_in: [CURRENT, PAUSED]
+      type: MANGA
+      sort: STATUS
+    ) {
+      lists {
+        entries {
+          ...mediaListEntry
         }
+      }
+    }
+  }
+
+  fragment mediaListEntry on MediaList {
+    status
+    mediaId
+    progressVolumes
+    progress
+    customLists
+    media {
+      siteUrl
+      bannerImage
+      coverImage {
+        large
+      }
+      title {
+        userPreferred
       }
     }
   }
@@ -35,12 +38,11 @@ const mediaQuery = gql`
 export default mediaQuery;
 
 export interface MediaQueryData {
-  Page: Page;
+  MediaListCollection: MediaListCollection;
 }
 
-export interface Page {
-  pageInfo: PageInfo;
-  mediaList: MediaList[];
+export interface MediaListCollection {
+  lists: { entries: MediaList[] }[];
 }
 
 export interface MediaList {

@@ -1,15 +1,24 @@
 import { Center, Group, SegmentedControl, Select, Title } from '@mantine/core';
 import React from 'react';
 import { IoGrid, IoList } from 'react-icons/io5';
+import { setUserData } from '../../lib/firebase/db';
+import { useUser } from '../../lib/hooks/userProvider';
+import { Layout } from '../../lib/types/user';
 import Search from './search';
 
 const Toolbar: React.ForwardRefExoticComponent<
   {
     title: string;
-    layout: 'list' | 'grid';
-    setLayout: React.Dispatch<React.SetStateAction<'list' | 'grid'>>;
+    layout: Layout;
+    setLayout: React.Dispatch<React.SetStateAction<Layout>>;
   } & React.RefAttributes<HTMLDivElement>
 > = React.forwardRef(({ title, layout, setLayout }, ref) => {
+  const { firebaseUser } = useUser();
+  const onLayoutChange = (value: Layout) => {
+    setUserData(firebaseUser!.uid, { layout: value });
+    setLayout(value);
+  };
+
   return (
     <Group
       ref={ref}
@@ -50,7 +59,7 @@ const Toolbar: React.ForwardRefExoticComponent<
             }
           })}
           value={layout}
-          onChange={(value: 'list' | 'grid') => setLayout(value)}
+          onChange={onLayoutChange}
           data={[
             {
               label: (

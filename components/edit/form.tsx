@@ -8,30 +8,66 @@ import {
   Textarea
 } from '@mantine/core';
 import { useForm } from '@mantine/form';
-import { MediaList } from '../../apollo/queries/mediaQuery';
-import { UpdatedValues } from '../home/manga';
+import { useRef } from 'react';
+import useNotification from '../../lib/hooks/useNotification';
+import { FormProps } from './formTypes';
 
-const Form: React.FC<
-  MediaList & {
-    close: () => void;
-    updateData: (values: UpdatedValues) => void;
-  }
-> = props => {
-  const { progressVolumes, status, progress, media, close, updateData } = props;
+const Form: React.FC<FormProps> = props => {
+  const {
+    aniListData,
+    firebaseData,
+    updateAniListData,
+    updateFirebaseData,
+    close
+  } = props;
+  const { showSuccess } = useNotification();
+  const { progressVolumes, status, progress, media } = aniListData;
+  const formValues = useRef({
+    progressVolumes,
+    progress,
+    status,
+    notes: firebaseData?.notes ?? '',
+    preordered: firebaseData?.preordered ?? progressVolumes
+  });
 
   const form = useForm({
-    initialValues: {
-      progressVolumes,
-      progress,
-      status,
-      notes: '',
-      purchased: 0
-    }
+    initialValues: formValues.current
   });
 
   const handleSubmit = async (values: typeof form.values) => {
-    close();
-    updateData(values);
+    try {
+      await Promise.all([
+        updateAniListData({
+          progress:
+            values.progress === formValues.current.progress
+              ? undefined
+              : values.progress,
+          progressVolumes:
+            values.progressVolumes === formValues.current.progressVolumes
+              ? undefined
+              : values.progressVolumes,
+          status:
+            values.status === formValues.current.status
+              ? undefined
+              : values.status
+        }),
+        updateFirebaseData({
+          notes:
+            values.notes === formValues.current.notes
+              ? undefined
+              : values.notes,
+          preordered:
+            values.preordered === formValues.current.preordered
+              ? undefined
+              : values.preordered
+        })
+      ]);
+      formValues.current = values;
+      showSuccess(`${media.title.userPreferred} entry updated`);
+      close();
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -66,7 +102,7 @@ const Form: React.FC<
         </Grid.Col>
         <Grid.Col xs={6} sm={4}>
           <NumberInput
-            {...form.getInputProps('purchased')}
+            {...form.getInputProps('preordered')}
             min={0}
             variant="filled"
             label="Preordered Up To"

@@ -2,22 +2,10 @@ import { ActionIcon, Group, Text } from '@mantine/core';
 import { useDebouncedValue } from '@mantine/hooks';
 import React, { useEffect, useState } from 'react';
 import { IoAddOutline } from 'react-icons/io5';
-import { MediaList } from '../../apollo/queries/mediaQuery';
-
-interface ProgressProps {
-  style?: React.CSSProperties;
-  text: string;
-  progress: number;
-  buttonVisible: boolean;
-  progressKey: keyof MediaList;
-  updateProgress: (
-    progress: number,
-    key: keyof MediaList
-  ) => void | Promise<void>;
-}
+import { ProgressProps } from './progressTypes';
 
 const Progress: React.FC<ProgressProps> = React.memo(
-  ({ progress, buttonVisible, updateProgress, text, progressKey, style }) => {
+  ({ progress, buttonVisible, updateProgress, text }) => {
     const [progressLocal, setProgressLocal] = useState(progress);
     const [debouncedProgressVolumes] = useDebouncedValue(progressLocal, 500);
 
@@ -26,11 +14,11 @@ const Progress: React.FC<ProgressProps> = React.memo(
     }, [progress]);
 
     useEffect(() => {
-      // updateProgress(debouncedProgressVolumes, progressKey);
+      updateProgress(debouncedProgressVolumes);
     }, [debouncedProgressVolumes]);
 
     return (
-      <Group spacing={2} style={style}>
+      <Group spacing={2} style={{ flex: 1 }}>
         <Text size="sm">
           {text} {progressLocal}
         </Text>

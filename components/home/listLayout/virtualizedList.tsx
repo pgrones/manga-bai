@@ -35,7 +35,7 @@ const VirtualizedList: React.FC<{
   current?: MediaList[];
   waiting?: MediaList[];
   statusTitle: JSX.Element;
-}> = ({ current, waiting, statusTitle }) => {
+}> = React.memo(({ current, waiting, statusTitle }) => {
   const itemData: (MediaList | JSX.Element)[] = [
     ...(current ?? []),
     ...(waiting && current ? [statusTitle] : []),
@@ -61,6 +61,6 @@ const VirtualizedList: React.FC<{
       )}
     </ReactWindowScroller>
   );
-};
+});
 
 export default VirtualizedList;

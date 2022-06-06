@@ -1,6 +1,8 @@
 import { useApolloClient, useQuery } from '@apollo/client';
 import { useLocalStorage } from '@mantine/hooks';
-import { signInWithCustomToken, Unsubscribe, User } from 'firebase/auth';
+import axios from 'axios';
+import { signInWithCustomToken, Unsubscribe } from 'firebase/auth';
+import { useRouter } from 'next/router';
 import React, {
   createContext,
   PropsWithChildren,
@@ -9,24 +11,12 @@ import React, {
   useState
 } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
-import userQuery, {
-  User as AnilistUser,
-  UserQueryData
-} from '../../apollo/queries/userQuery';
+import useSWR from 'swr';
+import userQuery, { UserQueryData } from '../../apollo/queries/userQuery';
 import { getUserData } from '../firebase/db';
 import { auth } from '../firebase/firebase';
 import useNotification from './useNotification';
-import useSWR from 'swr';
-import axios from 'axios';
-import { useRouter } from 'next/router';
-
-interface IUserContext {
-  fullyAuthenticated: boolean | 'loading';
-  aniListUser: AnilistUser | null;
-  firebaseUser: User | null;
-  userData: any;
-  signOut: () => void;
-}
+import { IUserContext } from './userProviderTypes';
 
 const fetcher = async (url: string, uid: string) =>
   await axios.get<string>(url, { params: { uid } }).then(res => res.data);
@@ -75,9 +65,7 @@ const UserProvider: React.FC<PropsWithChildren<unknown>> = ({ children }) => {
     let unsubscribe: Unsubscribe | void;
     if (user) {
       try {
-        unsubscribe = getUserData(user.uid, data => {
-          setUserData(data?.accessToken);
-        });
+        unsubscribe = getUserData(user.uid, setUserData);
       } catch (error) {
         setHasError(error);
         console.log(error);

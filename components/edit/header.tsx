@@ -8,16 +8,12 @@ import {
 } from '@mantine/core';
 import Image from 'next/image';
 import React from 'react';
-import { Media } from '../../apollo/queries/mediaQuery';
 import { getBorderRadius } from '../../lib/helper/radius';
 import ImageFallback from '../common/ImageFallback';
+import { HeaderProps } from './headerTypes';
 
-const Header: React.FC<Media & { close: () => void }> = ({
-  bannerImage,
-  coverImage,
-  title,
-  close
-}) => {
+const Header: React.FC<HeaderProps> = props => {
+  const { bannerImage, coverImage, title, close } = props;
   const theme = useMantineTheme();
 
   return (

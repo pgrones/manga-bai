@@ -4,7 +4,7 @@ import AuthCheck from '../components/common/authCheck';
 import Layout from '../components/common/layout';
 import LoadingIndicator from '../components/common/loadingIndicator';
 import Manga from '../components/home/manga';
-import useMangaData from '../lib/hooks/useMangaData';
+import useInitialData from '../lib/hooks/useInitialData';
 import kanna from '../public/kanna.png';
 
 const HomePage: NextPage = () => {
@@ -27,7 +27,7 @@ const HomePage: NextPage = () => {
 export default HomePage;
 
 const HomeComponent: React.FC = () => {
-  const { manga, loading, error } = useMangaData();
+  const { manga, loading, error } = useInitialData();
 
   return error ? null : loading ? <LoadingIndicator /> : <Manga {...manga!} />;
 };

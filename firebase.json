@@ -17,7 +17,7 @@
       "port": 9000
     },
     "hosting": {
-      "port": 6000
+      "port": 6100
     },
     "ui": {
       "enabled": true

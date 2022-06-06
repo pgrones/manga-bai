@@ -9,54 +9,56 @@ import updateMangaEntry, {
 import customListQuery, {
   CustomListQueryData
 } from '../../apollo/queries/customListQuery';
-import mediaQuery, {
-  MediaList,
-  MediaQueryData
-} from '../../apollo/queries/mediaQuery';
+import mediaQuery, { MediaQueryData } from '../../apollo/queries/mediaQuery';
+import { getMediaData } from '../firebase/db';
+import { IMediaLists } from '../types/entry';
+import { IFirebaseValues } from '../types/firebase';
 import useNotification from './useNotification';
 import { useUser } from './userProvider';
-
-export interface MangaData {
-  current: MediaList[] | undefined;
-  paused: MediaList[] | undefined;
-  waiting: MediaList[] | undefined;
-  hasCustomList: boolean;
-}
 
 const WAITING = 'Waiting For New Volumes';
 
 const createMangaLists = (
   mediaData?: MediaQueryData,
-  customListsData?: CustomListQueryData
-) => {
+  customListsData?: CustomListQueryData,
+  firebaseData?: { [key: number]: IFirebaseValues } | null
+): IMediaLists => {
+  const mediaLists = mediaData?.MediaListCollection.lists;
+
   return {
-    current: mediaData?.Page.mediaList.filter(m => m.status === 'CURRENT'),
-    paused: mediaData?.Page.mediaList.filter(m => m.status === 'PAUSED'),
-    waiting: mediaData?.Page.mediaList.filter(m => m.customLists[WAITING]),
+    paused: mediaLists?.find(l => l.entries.some(e => e.status === 'PAUSED'))
+      ?.entries,
+    current: mediaLists?.find(l => l.entries.some(e => e.status === 'CURRENT'))
+      ?.entries,
+    waiting: mediaLists
+      ?.find(l => l.entries.every(e => e.customLists[WAITING]))
+      ?.entries.map(m => ({ ...m, ...firebaseData?.[m.mediaId] })),
     hasCustomList:
       !!customListsData?.User.mediaListOptions.mangaList.customLists.includes(
         WAITING
       )
-  } as MangaData;
+  };
 };
 
-const useMangaData = () => {
+const useInitialData = () => {
   const { showError } = useNotification();
-  const { aniListUser } = useUser();
+  const { aniListUser, firebaseUser } = useUser();
   const [otherError, setOtherError] = useState(false);
-  const [manga, setManga] = useState<MangaData>();
+  const [otherLoading, setOtherLoading] = useState(true);
+  const [manga, setManga] = useState<IMediaLists>();
 
+  // Query for all the paused and current media of a user
   const {
     data: mediaData,
     loading,
     error,
     refetch
-    //fetchMore
   } = useQuery<MediaQueryData>(mediaQuery, {
     variables: { userId: aniListUser?.id },
     skip: !aniListUser
   });
 
+  // Query for all custom lists of a user
   const {
     data: customListsData,
     loading: customListsLoading,
@@ -66,21 +68,33 @@ const useMangaData = () => {
     skip: !aniListUser
   });
 
+  // Create the custom list "Waiting For New Volumes" on AniList
   const [createList, { loading: createLoading, error: createError }] =
     useMutation<any, CreateCustomListVariables>(createCustomList, {
       ignoreResults: true
     });
 
-  const [fillList, { loading: fillLoading, error: fillError }] = useMutation<
+  // Update an entry in the custom list "Waiting For New Volumes" on AniList
+  const [updateEntry, { loading: fillLoading, error: fillError }] = useMutation<
     any,
     UpdateMangaEntryVariables
   >(updateMangaEntry, { ignoreResults: true });
 
   useEffect(() => {
-    if (customListsData && mediaData) {
-      const managaData = createMangaLists(mediaData, customListsData);
-      if (!managaData.hasCustomList) {
-        (async () => {
+    // Wait for all the needed data
+    if (customListsData && mediaData && firebaseUser) {
+      (async () => {
+        setOtherLoading(true);
+        // Get data from firebase
+        const firebaseData = await getMediaData(firebaseUser.uid);
+        // Group the data by status
+        const mangaData = createMangaLists(
+          mediaData,
+          customListsData,
+          firebaseData
+        );
+
+        if (!mangaData.hasCustomList) {
           try {
             await createList({
               variables: {
@@ -93,8 +107,8 @@ const useMangaData = () => {
             });
 
             const result = await Promise.allSettled(
-              (managaData.paused || []).map(entry =>
-                fillList({
+              (mangaData.paused || []).map(entry =>
+                updateEntry({
                   variables: {
                     mediaId: entry.mediaId,
                     customLists: [
@@ -121,12 +135,13 @@ const useMangaData = () => {
           } catch (error) {
             setOtherError(true);
           }
-        })();
-      } else {
-        setManga(managaData);
-      }
+        } else {
+          setManga(mangaData);
+        }
+        setOtherLoading(false);
+      })();
     }
-  }, [customListsData, mediaData]);
+  }, [customListsData, mediaData, firebaseUser]);
 
   useEffect(() => {
     if (error || createError || customListsError) showError();
@@ -134,9 +149,14 @@ const useMangaData = () => {
 
   return {
     manga,
-    loading: loading || customListsLoading || createLoading || fillLoading,
+    loading:
+      loading ||
+      customListsLoading ||
+      createLoading ||
+      fillLoading ||
+      otherLoading,
     error: error || createError || customListsError || fillError || otherError
   };
 };
 
-export default useMangaData;
+export default useInitialData;

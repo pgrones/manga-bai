@@ -1,17 +1,13 @@
 import { Button, Card } from '@mantine/core';
 import { useModals } from '@mantine/modals';
 import React from 'react';
-import { MediaList } from '../../apollo/queries/mediaQuery';
-import { UpdatedValues } from '../home/manga';
+import { useEntry } from '../../lib/hooks/entryProvider';
 import Form from './form';
 import Header from './header';
 
-const EditModal: React.FC<
-  MediaList & {
-    updateData: (values: UpdatedValues) => void;
-  }
-> = props => {
+const EditModal: React.FC = () => {
   const { openModal, closeModal } = useModals();
+  const entry = useEntry();
 
   const openEditModal = () => {
     const id = openModal({
@@ -32,9 +28,9 @@ const EditModal: React.FC<
               position: 'relative'
             })}
           >
-            <Header {...props.media} close={() => closeModal(id)} />
+            <Header {...entry.aniListData.media} close={() => closeModal(id)} />
           </Card.Section>
-          <Form {...props} close={() => closeModal(id)} />
+          <Form {...entry} close={() => closeModal(id)} />
         </Card>
       )
     });

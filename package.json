@@ -18,7 +18,7 @@
     "lint_perf": "set TIMING=1 && pnpm run lint",
     "tunnel": "cd /d G:\\Programs\\Cloudflare && cloudflared tunnel --url http://localhost:3000",
     "firebase:emulators": "firebase emulators:start",
-    "firebase:kill": "npx kill-port 9000,6000,4000,9099"
+    "firebase:kill": "npx kill-port 4000 4400 4500 6100 9000 9099"
   },
   "dependencies": {
     "@apollo/client": "^3.6.6",
