@@ -52,6 +52,7 @@ const ListEntry: React.FC<
             style={{
               position: 'relative',
               height: 40,
+              minHeight: 40,
               maxWidth: 40,
               minWidth: 40,
               flex: 1,
@@ -65,19 +66,28 @@ const ListEntry: React.FC<
               alt={title.userPreferred}
               style={{ borderRadius }}
               priority={priority}
+              sizes="40px"
             />
           </div>
 
-          <Text lineClamp={2} style={{ wordBreak: 'break-word', flex: 3 }}>
-            <Title
-              order={5}
-              style={{ fontWeight: 'normal' }}
-              title={title.userPreferred}
+          <div style={{ flex: 3 }}>
+            <Text
+              component="a"
+              referrerPolicy="no-referrer"
+              target="_blank"
+              href={`https://anilist.co/manga/${props.mediaId}`}
+              lineClamp={2}
+              style={{ wordBreak: 'break-word' }}
             >
-              {title.userPreferred}
-            </Title>
-          </Text>
-
+              <Title
+                order={5}
+                style={{ fontWeight: 'normal' }}
+                title={title.userPreferred}
+              >
+                {title.userPreferred}
+              </Title>
+            </Text>
+          </div>
           <VolumeProgress buttonVisible={hovered} />
           <PreorderedProgress buttonVisible={hovered} />
 

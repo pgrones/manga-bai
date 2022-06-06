@@ -44,6 +44,7 @@ const GridEntry: React.FC<IMediaData & { priority: boolean }> = React.memo(
                 alt={title.userPreferred}
                 style={getBorderRadius(theme)}
                 priority={props.priority}
+                sizes="120px"
               />
               {/* {newVolumeAvailable && (
             <div className="new-volumes-available">
@@ -61,18 +62,26 @@ const GridEntry: React.FC<IMediaData & { priority: boolean }> = React.memo(
               justify="space-between"
               style={{ flexGrow: 1, minHeight: 170 }}
             >
-              <Text
-                lineClamp={2}
-                style={{ wordBreak: 'break-word', height: 38 }}
-              >
-                <Title
-                  order={6}
-                  style={{ fontWeight: 'normal' }}
-                  title={title.userPreferred}
+              <div style={{ height: 39 }}>
+                <Text
+                  component="a"
+                  referrerPolicy="no-referrer"
+                  target="_blank"
+                  href={`https://anilist.co/manga/${props.mediaId}`}
+                  lineClamp={2}
+                  style={{
+                    wordBreak: 'break-word'
+                  }}
                 >
-                  {title.userPreferred}
-                </Title>
-              </Text>
+                  <Title
+                    order={5}
+                    style={{ fontWeight: 'normal', fontSize: 15 }}
+                    title={title.userPreferred}
+                  >
+                    {title.userPreferred}
+                  </Title>
+                </Text>
+              </div>
               <Stack spacing={2} pb={5}>
                 <VolumeProgress buttonVisible={hovered} />
                 <PreorderedProgress buttonVisible={hovered} />

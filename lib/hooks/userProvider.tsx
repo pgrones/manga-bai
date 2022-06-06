@@ -1,5 +1,6 @@
 import { useApolloClient, useQuery } from '@apollo/client';
 import { useLocalStorage } from '@mantine/hooks';
+import { useNotifications } from '@mantine/notifications';
 import axios from 'axios';
 import { signInWithCustomToken, Unsubscribe } from 'firebase/auth';
 import { useRouter } from 'next/router';
@@ -33,6 +34,7 @@ export const useUser = () => useContext(UserContext);
 
 const UserProvider: React.FC<PropsWithChildren<unknown>> = ({ children }) => {
   const { showError } = useNotification();
+  const { cleanQueue, showNotification } = useNotifications();
   const [hasError, setHasError] = useState<unknown>();
   const apolloClient = useApolloClient();
   const { pathname } = useRouter();
@@ -91,10 +93,17 @@ const UserProvider: React.FC<PropsWithChildren<unknown>> = ({ children }) => {
         aniListUser: data?.Viewer ?? null,
         firebaseUser: user ?? null,
         userData,
-        signOut: () => {
+        signOut: async () => {
           setAccessToken('');
-          auth.signOut();
-          apolloClient.resetStore();
+          await auth.signOut();
+          await apolloClient.resetStore();
+          cleanQueue();
+          showNotification({
+            title:
+              'Remember to revoke the access token from your Apps page on AniList',
+            message: '',
+            autoClose: 10000
+          });
         }
       }}
     >

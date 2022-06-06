@@ -5,6 +5,7 @@ import { areEqual, VariableSizeList as List } from 'react-window';
 //@ts-ignore
 import { ReactWindowScroller } from 'react-window-scroller';
 import { MediaList } from '../../../apollo/queries/mediaQuery';
+import { useMedia } from '../../../lib/hooks/mediaProvider';
 import GridEntry from './gridEntry';
 
 const isReactElement = (item: any): item is JSX.Element =>
@@ -39,10 +40,9 @@ const Row: React.FC<{
 }, areEqual);
 
 const VirtualizedGrid: React.FC<{
-  current?: MediaList[];
-  waiting?: MediaList[];
   statusTitle: JSX.Element;
-}> = React.memo(({ current, waiting, statusTitle }) => {
+}> = React.memo(({ statusTitle }) => {
+  const { current, waiting } = useMedia();
   const theme = useMantineTheme();
   const xs = 1;
   const sm = useMediaQuery(`(min-width: ${theme.breakpoints.sm}px)`) && 2;
@@ -79,7 +79,7 @@ const VirtualizedGrid: React.FC<{
 
   return (
     // Hack to rerender the list on window size changes
-    <div key={itemsPerRow}>
+    <div key={itemsPerRow + (current?.length ?? 0) + (waiting?.length ?? 0)}>
       <ReactWindowScroller>
         {({ ref, outerRef, style, onScroll }: any) => (
           <List

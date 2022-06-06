@@ -9,11 +9,11 @@ const VolumeProgress: React.FC<{ buttonVisible: boolean }> = ({
 
   return (
     <Progress
-      text="Volume progress:"
+      text="Volume progress"
       buttonVisible={buttonVisible}
       progress={aniListData.progressVolumes}
-      updateProgress={
-        (progress: number) => {} // updateProgress(progress, 'progressVolumes')
+      updateProgress={(progress: number) =>
+        updateProgress(progress, 'progressVolumes')
       }
     />
   );

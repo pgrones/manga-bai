@@ -6,6 +6,7 @@ import updateMangaEntry, {
 } from '../../apollo/mutations/updateMangaEntry';
 import { MediaList } from '../../apollo/queries/mediaQuery';
 import { IAniListValues } from '../types/aniList';
+import { WAITING } from './useInitialData';
 import useNotification from './useNotification';
 
 export const useAniListUpdate = (entry: MediaList) => {
@@ -44,7 +45,26 @@ export const useAniListUpdate = (entry: MediaList) => {
     showSuccess(`${entry.media.title.userPreferred} entry updated`);
   };
 
-  return { aniListData, updateAniListData, updateProgress };
+  const removeFromList = async () => {
+    updateEntry({
+      variables: {
+        customLists: Array.from(
+          new Set(
+            Object.keys(
+              Object.fromEntries(
+                Object.entries(aniListData.customLists).filter(
+                  o => o[1] === true && o[0] !== WAITING
+                )
+              )
+            )
+          )
+        ),
+        mediaId: aniListData.mediaId
+      }
+    });
+  };
+
+  return { aniListData, updateAniListData, updateProgress, removeFromList };
 };
 
 export default useAniListUpdate;

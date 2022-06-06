@@ -6,7 +6,7 @@ const userQuery = gql`
       id
       name
       avatar {
-        large
+        medium
       }
     }
   }
@@ -15,15 +15,15 @@ const userQuery = gql`
 export default userQuery;
 
 export interface UserQueryData {
-  Viewer: User;
+  Viewer: AniListUser;
 }
 
-export interface User {
+export interface AniListUser {
   id: number;
   name: string;
   avatar: Avatar;
 }
 
 export interface Avatar {
-  large: string;
+  medium: string;
 }

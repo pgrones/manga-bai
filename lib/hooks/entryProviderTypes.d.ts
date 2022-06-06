@@ -9,4 +9,5 @@ export interface IEntryContext {
   firebaseData?: IFirebaseValues;
   updateFirebaseData: (values: IFirebaseValues) => Promise<void>;
   updatePreordered: (preorderd: number) => void;
+  removeFromList: () => Promise<void>;
 }

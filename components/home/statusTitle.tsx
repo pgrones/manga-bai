@@ -22,8 +22,10 @@ const StatusTitle: React.FC<{
       const observer = new IntersectionObserver(
         ([entry]) => {
           // Dimensionen der Liste
-          const rootTop = entry.rootBounds!.top;
-          const rootBottom = entry.rootBounds!.bottom;
+          const rootTop = entry.rootBounds?.top;
+          const rootBottom = entry.rootBounds?.bottom;
+
+          if (!rootTop || !rootBottom) return;
 
           // Position des Listen Elements
           const topBound = entry.boundingClientRect.top;

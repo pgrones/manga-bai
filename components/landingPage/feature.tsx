@@ -15,7 +15,9 @@ const Feature: React.FC<
           <ThemeIcon size="lg">{icon}</ThemeIcon>
         </Grid.Col>
         <Grid.Col span={11}>
-          <Title order={4}>{title}</Title>
+          <Title order={2} style={{ fontSize: 18 }}>
+            {title}
+          </Title>
         </Grid.Col>
         <Grid.Col span={11} offset={1} py={0}>
           <Text color="dimmed">{text}</Text>

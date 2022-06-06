@@ -44,6 +44,7 @@ const Header: React.FC<HeaderProps> = props => {
             src={coverImage.large}
             alt={title.userPreferred}
             style={getBorderRadius(theme)}
+            sizes="100px"
           />
         </div>
         <Text lineClamp={2} style={{ wordBreak: 'break-word' }}>

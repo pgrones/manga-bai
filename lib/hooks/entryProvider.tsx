@@ -12,7 +12,7 @@ const EntryProvider: React.FC<PropsWithChildren<{ entry: IMediaData }>> = ({
   children,
   entry
 }) => {
-  const { aniListData, updateAniListData, updateProgress } =
+  const { aniListData, updateAniListData, updateProgress, removeFromList } =
     useAniListUpdate(entry);
   const { firebaseData, updateFirebaseData, updatePreordered } =
     useFirebaseUpdate(entry);
@@ -25,7 +25,8 @@ const EntryProvider: React.FC<PropsWithChildren<{ entry: IMediaData }>> = ({
         updateProgress,
         firebaseData,
         updateFirebaseData,
-        updatePreordered
+        updatePreordered,
+        removeFromList
       }}
     >
       {children}

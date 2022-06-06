@@ -9,7 +9,7 @@ const PreorderedProgress: React.FC<{ buttonVisible: boolean }> = ({
 
   return (
     <Progress
-      text="Preordered up to:"
+      text="Preordered up to"
       buttonVisible={buttonVisible}
       progress={firebaseData?.preordered ?? aniListData.progressVolumes}
       updateProgress={updatePreordered}

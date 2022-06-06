@@ -6,14 +6,11 @@ import {
   MantineProvider,
   MantineThemeOverride
 } from '@mantine/core';
-import { useColorScheme } from '@mantine/hooks';
+import { useColorScheme, useLocalStorage } from '@mantine/hooks';
 import { ModalsProvider } from '@mantine/modals';
 import { NotificationsProvider } from '@mantine/notifications';
-import { getCookie, setCookies } from 'cookies-next';
-import { GetServerSidePropsContext } from 'next';
 import { AppProps } from 'next/app';
 import Head from 'next/head';
-import { useEffect, useState } from 'react';
 import { useApollo } from '../apollo/client';
 import UserProvider from '../lib/hooks/userProvider';
 import '../styles/globalStyles.css';
@@ -28,44 +25,29 @@ const theme: MantineThemeOverride = {
   loader: 'bars'
 };
 
-export default function App(
-  props: AppProps & { colorScheme: ColorScheme; siteColor: DefaultMantineColor }
-) {
-  const { Component, pageProps } = props;
+export default function App({ Component, pageProps }: AppProps) {
   const apolloClient = useApollo(pageProps?.initialApolloState);
   const preferredColorScheme = useColorScheme();
-  const [colorScheme, setColorScheme] = useState<ColorScheme>(
-    props.colorScheme
-  );
-  const [primaryColor, setPrimaryColor] = useState<DefaultMantineColor>(
-    props.siteColor
-  );
-
-  useEffect(() => {
-    if (
-      !getCookie('mantine-color-scheme') &&
-      preferredColorScheme !== 'light' &&
-      colorScheme !== preferredColorScheme
-    ) {
-      toggleColorScheme(preferredColorScheme);
-    }
-  }, [preferredColorScheme]);
+  const [colorScheme, setColorScheme] = useLocalStorage<ColorScheme>({
+    key: 'mantine-color-scheme',
+    defaultValue: preferredColorScheme,
+    getInitialValueInEffect: true
+  });
+  const [primaryColor, setPrimaryColor] = useLocalStorage<DefaultMantineColor>({
+    key: 'mantine-site-color',
+    defaultValue: 'indigo',
+    getInitialValueInEffect: true
+  });
 
   const toggleColorScheme = (value?: ColorScheme) => {
     const nextColorScheme =
       value || (colorScheme === 'dark' ? 'light' : 'dark');
     setColorScheme(nextColorScheme);
-    setCookies('mantine-color-scheme', nextColorScheme, {
-      maxAge: 60 * 60 * 24 * 30
-    });
     document.documentElement.style.colorScheme = nextColorScheme;
   };
 
   const setSiteColor = (value: DefaultMantineColor) => {
     setPrimaryColor(value);
-    setCookies('mantine-site-color', value, {
-      maxAge: 60 * 60 * 24 * 30
-    });
   };
 
   return (
@@ -109,8 +91,3 @@ export default function App(
     </>
   );
 }
-
-App.getInitialProps = ({ ctx }: { ctx: GetServerSidePropsContext }) => ({
-  colorScheme: getCookie('mantine-color-scheme', ctx) || 'light',
-  siteColor: getCookie('mantine-site-color', ctx) || 'indigo'
-});

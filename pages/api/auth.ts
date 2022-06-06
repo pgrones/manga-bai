@@ -15,7 +15,6 @@ export default async function handler(
 
   try {
     if (req.method === 'GET' && typeof uid === 'string') {
-      console.log(uid, uid.length);
       const customToken = await admin.auth().createCustomToken(uid);
       res.status(200).json(customToken);
     }

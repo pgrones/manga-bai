@@ -83,6 +83,7 @@ const Heading: React.FC<{
             alt={m.title}
             style={getBorderRadius(theme)}
             priority={Math.floor(manga.length / 2) === i}
+            sizes="200px"
           />
         </div>
       ))}

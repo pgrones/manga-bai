@@ -7,7 +7,7 @@ const useNotification = () => {
 
   const showSuccess = (title?: string, message?: string) =>
     showNotification({
-      title: title,
+      title,
       message: message ?? '',
       icon: <IoCheckmark size={22} />,
       color: 'teal'

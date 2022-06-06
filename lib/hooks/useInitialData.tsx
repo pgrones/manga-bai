@@ -16,7 +16,7 @@ import { IFirebaseValues } from '../types/firebase';
 import useNotification from './useNotification';
 import { useUser } from './userProvider';
 
-const WAITING = 'Waiting For New Volumes';
+export const WAITING = 'Waiting For New Volumes';
 
 const createMangaLists = (
   mediaData?: MediaQueryData,
@@ -45,7 +45,7 @@ const useInitialData = () => {
   const { aniListUser, firebaseUser } = useUser();
   const [otherError, setOtherError] = useState(false);
   const [otherLoading, setOtherLoading] = useState(true);
-  const [manga, setManga] = useState<IMediaLists>();
+  const [manga, setManga] = useState<IMediaLists>({} as IMediaLists);
 
   // Query for all the paused and current media of a user
   const {
@@ -98,11 +98,13 @@ const useInitialData = () => {
           try {
             await createList({
               variables: {
-                customLists: [
-                  ...customListsData.User.mediaListOptions.mangaList
-                    .customLists,
-                  WAITING
-                ]
+                customLists: Array.from(
+                  new Set([
+                    ...customListsData.User.mediaListOptions.mangaList
+                      .customLists,
+                    WAITING
+                  ])
+                )
               }
             });
 
@@ -111,16 +113,18 @@ const useInitialData = () => {
                 updateEntry({
                   variables: {
                     mediaId: entry.mediaId,
-                    customLists: [
-                      ...Object.keys(
-                        Object.fromEntries(
-                          Object.entries(entry.customLists).filter(
-                            o => o[1] === true
+                    customLists: Array.from(
+                      new Set([
+                        ...Object.keys(
+                          Object.fromEntries(
+                            Object.entries(entry.customLists).filter(
+                              o => o[1] === true
+                            )
                           )
-                        )
-                      ),
-                      WAITING
-                    ]
+                        ),
+                        WAITING
+                      ])
+                    )
                   }
                 })
               )

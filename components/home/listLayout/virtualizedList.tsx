@@ -3,6 +3,7 @@ import { areEqual, FixedSizeList as List } from 'react-window';
 //@ts-ignore
 import { ReactWindowScroller } from 'react-window-scroller';
 import { MediaList } from '../../../apollo/queries/mediaQuery';
+import { useMedia } from '../../../lib/hooks/mediaProvider';
 import ListEntry from './listEntry';
 
 const Row: React.FC<{
@@ -32,10 +33,9 @@ const Row: React.FC<{
 }, areEqual);
 
 const VirtualizedList: React.FC<{
-  current?: MediaList[];
-  waiting?: MediaList[];
   statusTitle: JSX.Element;
-}> = React.memo(({ current, waiting, statusTitle }) => {
+}> = React.memo(({ statusTitle }) => {
+  const { current, waiting } = useMedia();
   const itemData: (MediaList | JSX.Element)[] = [
     ...(current ?? []),
     ...(waiting && current ? [statusTitle] : []),
@@ -43,23 +43,25 @@ const VirtualizedList: React.FC<{
   ];
 
   return (
-    <ReactWindowScroller>
-      {({ ref, outerRef, style, onScroll }: any) => (
-        <List
-          ref={ref}
-          outerRef={outerRef}
-          style={style}
-          height={window.innerHeight}
-          itemCount={itemData.length}
-          itemSize={55}
-          width={0}
-          itemData={itemData}
-          onScroll={onScroll}
-        >
-          {Row}
-        </List>
-      )}
-    </ReactWindowScroller>
+    <div key={(current?.length ?? 0) + (waiting?.length ?? 0)}>
+      <ReactWindowScroller>
+        {({ ref, outerRef, style, onScroll }: any) => (
+          <List
+            ref={ref}
+            outerRef={outerRef}
+            style={style}
+            height={window.innerHeight}
+            itemCount={itemData.length}
+            itemSize={55}
+            width={0}
+            itemData={itemData}
+            onScroll={onScroll}
+          >
+            {Row}
+          </List>
+        )}
+      </ReactWindowScroller>
+    </div>
   );
 });
 

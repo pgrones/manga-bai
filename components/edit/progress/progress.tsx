@@ -20,11 +20,12 @@ const Progress: React.FC<ProgressProps> = React.memo(
     return (
       <Group spacing={2} style={{ flex: 1 }}>
         <Text size="sm">
-          {text} {progressLocal}
+          {text}: {progressLocal}
         </Text>
         <ActionIcon
           size="xs"
           onClick={() => setProgressLocal(prev => prev + 1)}
+          aria-label={`Increase ${text}`}
         >
           {buttonVisible && <IoAddOutline size={20} />}
         </ActionIcon>

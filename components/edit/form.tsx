@@ -5,10 +5,13 @@ import {
   Group,
   NumberInput,
   Select,
-  Textarea
+  Textarea,
+  Text
 } from '@mantine/core';
 import { useForm } from '@mantine/form';
+import { useModals } from '@mantine/modals';
 import { useRef } from 'react';
+import { WAITING } from '../../lib/hooks/useInitialData';
 import useNotification from '../../lib/hooks/useNotification';
 import { FormProps } from './formTypes';
 
@@ -18,10 +21,15 @@ const Form: React.FC<FormProps> = props => {
     firebaseData,
     updateAniListData,
     updateFirebaseData,
+    removeFromList,
+    removeCurrentEntry,
+    removeWaitingEntry,
     close
   } = props;
+  const { openConfirmModal, closeAll, closeModal } = useModals();
   const { showSuccess } = useNotification();
   const { progressVolumes, status, progress, media } = aniListData;
+
   const formValues = useRef({
     progressVolumes,
     progress,
@@ -68,6 +76,38 @@ const Form: React.FC<FormProps> = props => {
     } catch (error) {
       console.log(error);
     }
+  };
+
+  const onExclude = () => {
+    const id = openConfirmModal({
+      title: 'Are you sure you want to remove this entry?',
+      children: (
+        <Text size="sm">
+          This will remove the entry from the custom list &quot;{WAITING}&quot;
+          on AniList and the entry will not show up on Manga Bai anymore.
+          <br />
+          <br />
+          You can always undo this action by moving the entry back into the
+          custom list on AniList.
+        </Text>
+      ),
+      labels: { confirm: 'Remove', cancel: 'Cancel' },
+      confirmProps: { color: 'red' },
+      onConfirm: async () => {
+        try {
+          await removeFromList();
+          if (aniListData.status === 'CURRENT')
+            removeCurrentEntry(aniListData.mediaId);
+          if (aniListData.status === 'PAUSED')
+            removeWaitingEntry(aniListData.mediaId);
+          closeAll();
+        } catch (error) {
+          console.log(error);
+          closeModal(id);
+        }
+      },
+      centered: true
+    });
   };
 
   return (
@@ -117,9 +157,8 @@ const Form: React.FC<FormProps> = props => {
             maxRows={4}
             styles={{
               input: {
-                paddingTop: 0 + ' !important',
-                paddingBottom: 0 + ' !important',
-                lineHeight: '34px'
+                paddingTop: 6 + 'px !important',
+                paddingBottom: 6 + 'px !important'
               }
             }}
             variant="filled"
@@ -140,7 +179,8 @@ const Form: React.FC<FormProps> = props => {
             </Anchor>
             <Button
               variant="subtle"
-              title="Exclude this entry from the list. This will not affect your lists on AniList"
+              title="Remove this entry from the list"
+              onClick={onExclude}
               sx={theme => ({
                 'color':
                   theme.colorScheme === 'dark'
@@ -152,7 +192,7 @@ const Form: React.FC<FormProps> = props => {
                 }
               })}
             >
-              Exclude
+              Remove
             </Button>
           </Group>
         </Grid.Col>
