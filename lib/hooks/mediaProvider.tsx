@@ -1,3 +1,4 @@
+import { useLocalStorage } from '@mantine/hooks';
 import React, {
   createContext,
   PropsWithChildren,
@@ -10,7 +11,6 @@ import { CURRENT, WAITING } from '../helper/constants';
 import { IMediaData, IMediaLists } from '../types/entry';
 import { Layout } from '../types/user';
 import { IMediaContext, Status } from './mediaProviderTypes';
-import { useUser } from './userProvider';
 
 const titles: (keyof Title)[] = ['romaji', 'english', 'native'];
 
@@ -21,13 +21,17 @@ export const useMedia = () => useContext(MediaContext);
 const MediaProvider: React.FC<
   PropsWithChildren<{ mediaLists: IMediaLists }>
 > = ({ children, mediaLists }) => {
-  const { userData } = useUser();
   const [current, setCurrent] = useState(mediaLists.current);
   const [waiting, setWaiting] = useState(mediaLists.waiting);
   const [status, setStatus] = useState<Status>(null);
-  const [layout, setLayout] = useState<Layout>(userData?.layout ?? 'grid');
   const fullData =
     useRef<[IMediaData[] | undefined, IMediaData[] | undefined]>();
+
+  const [layout, setLayout] = useLocalStorage<Layout>({
+    key: 'media-layout',
+    defaultValue: 'grid',
+    getInitialValueInEffect: true
+  });
 
   const removeCurrentEntry = (mediaId: number) => {
     setCurrent(prev => (prev ?? []).filter(m => m.mediaId !== mediaId));

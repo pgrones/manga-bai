@@ -1,7 +1,7 @@
 import { gql } from '@apollo/client';
 
 const customListQuery = gql`
-  query ($id: Int) {
+  query getCustomLists($id: Int!) {
     User(id: $id) {
       mediaListOptions {
         mangaList {

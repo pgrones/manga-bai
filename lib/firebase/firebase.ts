@@ -1,5 +1,5 @@
 import { getApps, initializeApp } from 'firebase/app';
-// import { getAnalytics } from 'firebase/analytics';
+import { getAnalytics } from 'firebase/analytics';
 import { getDatabase, connectDatabaseEmulator } from 'firebase/database';
 import { connectAuthEmulator, getAuth } from 'firebase/auth';
 
@@ -14,7 +14,7 @@ const firebaseConfig = {
 };
 
 const app = getApps()[0] ?? initializeApp(firebaseConfig);
-// export const analytics = getAnalytics(app);
+export const analytics = () => getAnalytics(app);
 export const auth = getAuth(app);
 export const db = getDatabase(app, 'https://mangabai-default-rtdb.europe-west1.firebasedatabase.app');
 

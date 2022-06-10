@@ -25,13 +25,13 @@ const createMangaLists = (
   const mediaLists = mediaData?.MediaListCollection.lists;
 
   return {
-    paused: mediaLists?.find(l => l.entries.some(e => e.status === 'PAUSED'))
+    paused: mediaLists?.find(l => l.entries?.some(e => e.status === 'PAUSED'))
       ?.entries,
-    current: mediaLists?.find(l => l.entries.some(e => e.status === 'CURRENT'))
+    current: mediaLists?.find(l => l.entries?.some(e => e.status === 'CURRENT'))
       ?.entries,
     waiting: mediaLists
-      ?.find(l => l.entries.every(e => e.customLists[WAITING]))
-      ?.entries.map(m => ({ ...m, ...firebaseData?.[m.mediaId] })),
+      ?.find(l => l.entries?.every(e => e.customLists[WAITING]))
+      ?.entries?.map(m => ({ ...m, ...firebaseData?.[m.mediaId] })),
     hasCustomList:
       !!customListsData?.User.mediaListOptions.mangaList.customLists.includes(
         WAITING

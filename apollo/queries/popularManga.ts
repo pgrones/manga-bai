@@ -1,7 +1,7 @@
 import { gql } from '@apollo/client';
 
 const popularMangaQuery = gql`
-  query {
+  query getPopularManga {
     Page(perPage: 9) {
       media(type: MANGA, sort: [TRENDING_DESC, POPULARITY_DESC]) {
         id

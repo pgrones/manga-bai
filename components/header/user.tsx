@@ -3,7 +3,7 @@ import { useDisclosure } from '@mantine/hooks';
 import { useState } from 'react';
 import { IoChevronDownOutline, IoLogOutOutline } from 'react-icons/io5';
 import { useUser } from '../../lib/hooks/userProvider';
-import ColorPicker from './colorPicker';
+import ColorPickerPopover from './colorPicker';
 
 const User = () => {
   const { fullyAuthenticated, aniListUser, signOut: singOut } = useUser();
@@ -38,7 +38,7 @@ const User = () => {
       withArrow
     >
       <Stack spacing={0}>
-        <ColorPicker setCloseOnClickOutside={setCloseOnClickOutside} />
+        <ColorPickerPopover setCloseOnClickOutside={setCloseOnClickOutside} />
         <Button
           variant="subtle"
           color="gray"

@@ -1,17 +1,10 @@
 import { Center, SegmentedControl } from '@mantine/core';
 import { IoGrid, IoList } from 'react-icons/io5';
-import { setUserData } from '../../../lib/firebase/db';
 import { useMedia } from '../../../lib/hooks/mediaProvider';
-import { useUser } from '../../../lib/hooks/userProvider';
 import { Layout } from '../../../lib/types/user';
 
 const LayoutToggle = () => {
-  const { firebaseUser } = useUser();
   const { layout, setLayout } = useMedia();
-  const onLayoutChange = (value: Layout) => {
-    setUserData(firebaseUser!.uid, { layout: value });
-    setLayout(value);
-  };
 
   return (
     <SegmentedControl
@@ -26,7 +19,7 @@ const LayoutToggle = () => {
         }
       })}
       value={layout}
-      onChange={onLayoutChange}
+      onChange={(value: Layout) => setLayout(value)}
       data={[
         {
           label: (

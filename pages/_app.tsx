@@ -10,9 +10,10 @@ import { useColorScheme, useLocalStorage } from '@mantine/hooks';
 import { ModalsProvider } from '@mantine/modals';
 import { NotificationsProvider } from '@mantine/notifications';
 import { AppProps } from 'next/app';
-import Head from 'next/head';
 import { useEffect } from 'react';
 import { useApollo } from '../apollo/client';
+import MetaTags from '../components/common/metaTags';
+import { analytics } from '../lib/firebase/firebase';
 import UserProvider from '../lib/hooks/userProvider';
 import '../styles/globalStyles.css';
 
@@ -59,16 +60,18 @@ export default function App({ Component, pageProps }: AppProps) {
     }
   }, [preferredColorScheme]);
 
+  useEffect(() => {
+    if (process.env.NODE_ENV === 'production') {
+      analytics();
+    }
+  }, []);
+
   return (
     <>
-      <Head>
-        <title>Manga Bai</title>
-        <meta
-          name="viewport"
-          content="minimum-scale=1, initial-scale=1, width=device-width"
-        />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
+      <MetaTags
+        title="Manga Bai: Track your preordered, bought, and owned manga and light novels using your exisiting AniList account"
+        description="Track your preordered, bought, and owned manga and light novels using your exisiting AniList account"
+      />
 
       <ColorSchemeProvider
         colorScheme={colorScheme ?? 'light'}

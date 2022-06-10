@@ -2,8 +2,8 @@ import { gql } from '@apollo/client';
 import { CustomLists, Status } from '../queries/mediaQuery';
 
 const updateMangaEntry = gql`
-  mutation (
-    $mediaId: Int
+  mutation updateMangaEntry(
+    $mediaId: Int!
     $customLists: [String]
     $status: MediaListStatus
     $progressVolumes: Int

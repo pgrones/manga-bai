@@ -28,6 +28,7 @@ specifiers:
   firebase-admin: ^10.2.0
   graphql: ^16.5.0
   next: 12.1.4
+  next-sitemap: ^3.0.5
   prettier: ^2.6.2
   react: 18.1.0
   react-dom: 18.1.0
@@ -53,6 +54,7 @@ dependencies:
   firebase-admin: 10.2.0
   graphql: 16.5.0
   next: 12.1.4_ef5jwxihqo6n7gxfmzogljlgcm
+  next-sitemap: 3.0.5_next@12.1.4
   react: 18.1.0
   react-dom: 18.1.0_react@18.1.0
   react-firebase-hooks: 5.0.3_mg4mcf4ansnvjpuybiuvla3nuq
@@ -1375,6 +1377,10 @@ packages:
       '@babel/helper-validator-identifier': 7.16.7
       to-fast-properties: 2.0.0
     dev: true
+
+  /@corex/deepmerge/4.0.16:
+    resolution: {integrity: sha512-NjPTizUx0ovYv7WiC8Erq/yMGjc4OfSMywbEUkb1QpaBb4tgD9fe2DwRy3hfogrMZ30nWxwOtMg7hwuY67RYnQ==}
+    dev: false
 
   /@emotion/cache/11.7.1:
     resolution: {integrity: sha512-r65Zy4Iljb8oyjtLeCuBH8Qjiy107dOYC6SJq7g7GV5UCQWMObY4SJDPGFjiiVpPrOJ2hmJOoBiYTC7hwx9E2A==}
@@ -5251,6 +5257,19 @@ packages:
   /natural-compare/1.4.0:
     resolution: {integrity: sha512-OWND8ei3VtNC9h7V60qff3SVobHr996CTwgxubgyQYEpg290h9J0buyECNNJexkFm5sOajh5G116RYA1c8ZMSw==}
     dev: true
+
+  /next-sitemap/3.0.5_next@12.1.4:
+    resolution: {integrity: sha512-YdiW5wYNruyZCvhGGOMAdTylCQuxQkZKbSFV9Fjuf/U7aAt8lJwc3HG/WvR0n3Q1Y8c1ZiW/24UDZLQPfoKsYg==}
+    engines: {node: '>=14.18'}
+    hasBin: true
+    peerDependencies:
+      '@next/env': '*'
+      next: '*'
+    dependencies:
+      '@corex/deepmerge': 4.0.16
+      minimist: 1.2.6
+      next: 12.1.4_ef5jwxihqo6n7gxfmzogljlgcm
+    dev: false
 
   /next/12.1.4_ef5jwxihqo6n7gxfmzogljlgcm:
     resolution: {integrity: sha512-DA4g97BM4Z0nKtDvCTm58RxdvoQyYzeg0AeVbh0N4Y/D8ELrNu47lQeEgRGF8hV4eQ+Sal90zxrJQQG/mPQ8CQ==}

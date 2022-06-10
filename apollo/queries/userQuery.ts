@@ -1,7 +1,7 @@
 import { gql } from '@apollo/client';
 
 const userQuery = gql`
-  query {
+  query getUser {
     Viewer {
       id
       name

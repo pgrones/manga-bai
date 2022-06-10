@@ -1,26 +1,26 @@
 import type { NextPage } from 'next';
-import Image from 'next/image';
+import Head from 'next/head';
 import AuthCheck from '../components/common/authCheck';
 import Layout from '../components/common/layout';
 import LoadingIndicator from '../components/common/loadingIndicator';
+import Kanna from '../components/home/kanna';
 import Manga from '../components/home/manga';
+import NoData from '../components/home/noData';
 import MediaProvider from '../lib/hooks/mediaProvider';
 import useInitialData from '../lib/hooks/useInitialData';
-import kanna from '../public/kanna.png';
 
 const HomePage: NextPage = () => {
   return (
     <>
+      <Head>
+        <title>Home · Manga Bai</title>
+      </Head>
       <Layout>
         <AuthCheck>
           <HomeComponent />
         </AuthCheck>
       </Layout>
-      {[1, 10, 20].includes(new Date().getDate()) && (
-        <div className="kanna">
-          <Image src={kanna} alt="Kanna" />
-        </div>
-      )}
+      <Kanna />
     </>
   );
 };
@@ -32,6 +32,8 @@ const HomeComponent: React.FC = () => {
 
   return error ? null : loading ? (
     <LoadingIndicator />
+  ) : !manga.current?.length && !manga.waiting?.length ? (
+    <NoData />
   ) : (
     <MediaProvider mediaLists={manga}>
       <Manga />

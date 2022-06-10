@@ -7,9 +7,9 @@ import popularMangaQuery, {
   Media,
   PopularMangaQueryData
 } from '../apollo/queries/popularManga';
+import Layout from '../components/common/layout';
 import Features from '../components/landingPage/features';
 import Heading from '../components/landingPage/heading';
-import Layout from '../components/common/layout';
 import { useUser } from '../lib/hooks/userProvider';
 
 const LandingPage: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({

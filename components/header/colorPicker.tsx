@@ -9,28 +9,35 @@ import { useDisclosure } from '@mantine/hooks';
 import React, { useEffect } from 'react';
 import { IoCheckmarkOutline, IoColorPaletteOutline } from 'react-icons/io5';
 
-const ColorPicker: React.FC<{
+export const ColorPicker: React.FC = () => {
+  const theme = useMantineTheme();
+
+  return (
+    <Group position="center" spacing="xs">
+      {Object.keys(theme.colors).map(color => (
+        <ColorSwatch
+          key={color}
+          component="button"
+          color={theme.colors[color][6]}
+          radius="sm"
+          onClick={() => theme.other.setSiteColor(color)}
+          style={{ color: '#fff', cursor: 'pointer' }}
+        >
+          {color === theme.primaryColor && <IoCheckmarkOutline />}
+        </ColorSwatch>
+      ))}
+    </Group>
+  );
+};
+
+const ColorPickerPopover: React.FC<{
   setCloseOnClickOutside: React.Dispatch<React.SetStateAction<boolean>>;
 }> = ({ setCloseOnClickOutside }) => {
-  const theme = useMantineTheme();
   const [opened, { toggle }] = useDisclosure(false);
 
   useEffect(() => {
     setCloseOnClickOutside(!opened);
   }, [opened]);
-
-  const swatches = Object.keys(theme.colors).map(color => (
-    <ColorSwatch
-      key={color}
-      component="button"
-      color={theme.colors[color][6]}
-      radius="sm"
-      onClick={() => theme.other.setSiteColor(color)}
-      style={{ color: '#fff', cursor: 'pointer' }}
-    >
-      {color === theme.primaryColor && <IoCheckmarkOutline />}
-    </ColorSwatch>
-  ));
 
   return (
     <Popover
@@ -51,11 +58,9 @@ const ColorPicker: React.FC<{
       position="bottom"
       withArrow
     >
-      <Group position="center" spacing="xs">
-        {swatches}
-      </Group>
+      <ColorPicker />
     </Popover>
   );
 };
 
-export default ColorPicker;
+export default ColorPickerPopover;

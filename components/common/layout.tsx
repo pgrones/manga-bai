@@ -1,6 +1,7 @@
 import { AppShell, Container, Footer, Header } from '@mantine/core';
 import React, { PropsWithChildren } from 'react';
-import Appheader from '../header/header';
+import AppHeader from '../header/header';
+import AppFooter from '../footer/footer';
 
 const Layout: React.FC<PropsWithChildren<{ is404?: boolean }>> = ({
   children,
@@ -11,22 +12,22 @@ const Layout: React.FC<PropsWithChildren<{ is404?: boolean }>> = ({
       header={
         <Header
           height={55}
-          sx={{ paddingRight: 'var(--removed-scroll-width, 0px)' }}
+          sx={{
+            paddingRight: 'var(--removed-scroll-width, 0px)'
+          }}
         >
-          <Appheader />
+          <AppHeader />
         </Header>
       }
       footer={
         <Footer
-          height={180}
+          height={300}
           sx={{
             zIndex: is404 ? 1 : 0,
             paddingRight: 'var(--removed-scroll-width, 0px)'
           }}
         >
-          <Container size="xl">
-            As an Amazon Associate I earn from qualifying purchases.
-          </Container>
+          <AppFooter />
         </Footer>
       }
       styles={theme => ({

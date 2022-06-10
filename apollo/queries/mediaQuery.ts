@@ -1,7 +1,7 @@
 import { gql } from '@apollo/client';
 
 const mediaQuery = gql`
-  query ($userId: Int) {
+  query getMediaCollection($userId: Int!) {
     MediaListCollection(
       userId: $userId
       status_in: [CURRENT, PAUSED]
@@ -46,7 +46,7 @@ export interface MediaQueryData {
 }
 
 export interface MediaListCollection {
-  lists: { entries: MediaList[] }[];
+  lists: { entries?: MediaList[] }[];
 }
 
 export interface MediaList {
