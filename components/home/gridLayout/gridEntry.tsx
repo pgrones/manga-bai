@@ -1,11 +1,4 @@
-import {
-  Group,
-  Paper,
-  Stack,
-  Text,
-  Title,
-  useMantineTheme
-} from '@mantine/core';
+import { Group, Paper, Stack, Text, useMantineTheme } from '@mantine/core';
 import { useHover } from '@mantine/hooks';
 import Image from 'next/image';
 import React from 'react';
@@ -16,80 +9,71 @@ import EditModal from '../../edit/modal';
 import PreorderedProgress from '../../edit/progress/preorderedProgress';
 import VolumeProgress from '../../edit/progress/volumeProgress';
 
-const GridEntry: React.FC<IMediaData & { priority: boolean }> = React.memo(
-  props => {
-    const { coverImage, title } = props.media;
-    const { hovered, ref } = useHover();
-    const theme = useMantineTheme();
+const GridEntry: React.FC<IMediaData> = React.memo(props => {
+  const { coverImage, title } = props.media;
+  const { hovered, ref } = useHover();
+  const theme = useMantineTheme();
 
-    // const newVolumeAvailable = Math.random() > 0.7;
+  // const newVolumeAvailable = Math.random() > 0.7;
 
-    return (
-      <EntryProvider entry={props}>
-        <Paper radius="sm" style={{ flex: 1 }}>
-          <Group noWrap align="flex-start" spacing="sm">
-            <div
-              style={{
-                position: 'relative',
-                height: 170,
-                width: 120,
-                minWidth: 120,
-                ...getBorderRadius(theme)
-              }}
-            >
-              <Image
-                layout="fill"
-                objectFit="cover"
-                src={coverImage.large}
-                alt={title.userPreferred}
-                style={getBorderRadius(theme)}
-                priority={props.priority}
-                sizes="120px"
-              />
-              {/* {newVolumeAvailable && (
+  return (
+    <EntryProvider entry={props}>
+      <Paper radius="sm" style={{ flex: 1 }}>
+        <Group noWrap align="flex-start" spacing="sm">
+          <div
+            style={{
+              position: 'relative',
+              height: 170,
+              width: 120,
+              minWidth: 120,
+              ...getBorderRadius(theme)
+            }}
+          >
+            <Image
+              layout="fill"
+              objectFit="cover"
+              src={coverImage.large}
+              alt={title.userPreferred}
+              style={getBorderRadius(theme)}
+              sizes="120px"
+            />
+            {/* {newVolumeAvailable && (
             <div className="new-volumes-available">
               <Text size="sm" sx={theme => ({ color: theme.colors.gray[0] })}>
                 New Volume Available
               </Text>
             </div>
           )} */}
+          </div>
+          <Stack
+            ref={ref}
+            py="xs"
+            pr="xs"
+            align="stretch"
+            justify="space-between"
+            style={{ flexGrow: 1, minHeight: 170 }}
+          >
+            <div style={{ height: 39 }}>
+              <Text
+                component="a"
+                referrerPolicy="no-referrer"
+                target="_blank"
+                href={`https://anilist.co/manga/${props.mediaId}`}
+                lineClamp={2}
+                size="sm"
+                mt={-4}
+              >
+                {title.userPreferred}
+              </Text>
             </div>
-            <Stack
-              ref={ref}
-              py="xs"
-              pr="xs"
-              align="stretch"
-              justify="space-between"
-              style={{ flexGrow: 1, minHeight: 170 }}
-            >
-              <div style={{ height: 39 }}>
-                <Text
-                  component="a"
-                  referrerPolicy="no-referrer"
-                  target="_blank"
-                  href={`https://anilist.co/manga/${props.mediaId}`}
-                  lineClamp={2}
-                  style={{
-                    wordBreak: 'break-word'
-                  }}
-                >
-                  <Title
-                    order={5}
-                    style={{ fontWeight: 'normal', fontSize: 15 }}
-                    title={title.userPreferred}
-                  >
-                    {title.userPreferred}
-                  </Title>
-                </Text>
-              </div>
-              <Stack spacing={2} pb={5}>
-                <VolumeProgress buttonVisible={hovered} />
-                <PreorderedProgress buttonVisible={hovered} />
-              </Stack>
+            <Stack spacing={2} pb={5}>
+              <VolumeProgress buttonVisible={hovered} />
+              <PreorderedProgress buttonVisible={hovered} />
+            </Stack>
 
-              <Group position="apart" align="center">
-                <EditModal />
-                {/* <Stack spacing={2} align="flex-end">
+            <Group position="apart" align="center">
+              <EditModal />
+              {/* <Stack spacing={2} align="flex-end">
               <Anchor
                 size="sm"
                 href="https://amzn.to/3lEKHwX"
@@ -103,13 +87,12 @@ const GridEntry: React.FC<IMediaData & { priority: boolean }> = React.memo(
                 (Affiliate Link)
               </Text>
             </Stack> */}
-              </Group>
-            </Stack>
-          </Group>
-        </Paper>
-      </EntryProvider>
-    );
-  }
-);
+            </Group>
+          </Stack>
+        </Group>
+      </Paper>
+    </EntryProvider>
+  );
+});
 
 export default GridEntry;

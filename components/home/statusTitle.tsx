@@ -1,5 +1,6 @@
 import { Title } from '@mantine/core';
 import React, { useEffect, useRef } from 'react';
+import { CURRENT, WAITING } from '../../lib/helper/constants';
 
 const StatusTitle: React.FC<{
   setTitle: React.Dispatch<React.SetStateAction<string>>;
@@ -38,8 +39,7 @@ const StatusTitle: React.FC<{
           // der oberere Rand der Liste unter der Mitte des Elements liegt
           const out = rootTop > center;
           // Die Gruppe muss nur aktualisiert werden, wenn das Element am oberen Rand ist
-          top &&
-            setTitle(out ? 'Currently Reading' : 'Waiting For New Volumes');
+          top && setTitle(out ? CURRENT : WAITING);
         },
         {
           rootMargin: `-${rootMargin}px 0px 0px 0px`,
@@ -56,7 +56,7 @@ const StatusTitle: React.FC<{
 
   return (
     <Title ref={titleRef} pt="xl" order={4}>
-      Currently Reading
+      {CURRENT}
     </Title>
   );
 };

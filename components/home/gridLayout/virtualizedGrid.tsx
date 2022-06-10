@@ -27,11 +27,7 @@ const Row: React.FC<{
               typeof m === 'string' ? (
                 <div key={m} style={{ flex: 1 }} />
               ) : (
-                <GridEntry
-                  key={'grid-entry-' + m.mediaId}
-                  priority={index === 0}
-                  {...m}
-                />
+                <GridEntry key={'grid-entry-' + m.mediaId} {...m} />
               )
             )}
       </Group>
@@ -53,7 +49,7 @@ const VirtualizedGrid: React.FC<{
   const itemsPerRow = xl || lg || sm || xs;
   let statusIndex = -1;
 
-  if (waiting) {
+  if (waiting?.length) {
     for (let i = 0; i < waiting.length; i += itemsPerRow) {
       const row: (MediaList | string)[] = waiting.slice(i, i + itemsPerRow);
       for (let i = row.length; i < itemsPerRow; i++) {
@@ -63,8 +59,8 @@ const VirtualizedGrid: React.FC<{
     }
   }
 
-  if (current) {
-    if (waiting) {
+  if (current?.length) {
+    if (waiting?.length) {
       statusIndex = itemData.length;
       itemData.push(statusTitle);
     }

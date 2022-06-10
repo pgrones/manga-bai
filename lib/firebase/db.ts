@@ -21,7 +21,7 @@ export const getUserData = (uid: string, onChange: (data: any) => void) => {
   });
 };
 
-export const setMediaData = (
+export const setMediaData = async (
   uid: string,
   mediaId: number,
   values: IFirebaseValues

@@ -1,7 +1,8 @@
-import { Group, Paper, Text, Title, useMantineTheme } from '@mantine/core';
+import { Center, Group, Paper, Text, useMantineTheme } from '@mantine/core';
 import { useHover } from '@mantine/hooks';
 import Image from 'next/image';
 import React from 'react';
+import { Format } from '../../../apollo/queries/mediaQuery';
 import { getBorderRadius } from '../../../lib/helper/radius';
 import EntryProvider from '../../../lib/hooks/entryProvider';
 import { IMediaData } from '../../../lib/types/entry';
@@ -9,11 +10,17 @@ import EditModal from '../../edit/modal';
 import PreorderedProgress from '../../edit/progress/preorderedProgress';
 import VolumeProgress from '../../edit/progress/volumeProgress';
 
+const formatMap: { [key in Format]: string } = {
+  ONE_SHOT: 'One Shot',
+  MANGA: 'Manga',
+  NOVEL: 'Light Novel'
+};
+
 const ListEntry: React.FC<
-  IMediaData & { topRadius: boolean; bottomRadius: boolean; priority: boolean }
+  IMediaData & { topRadius: boolean; bottomRadius: boolean }
 > = props => {
-  const { topRadius, bottomRadius, priority } = props;
-  const { title, coverImage } = props.media;
+  const { topRadius, bottomRadius } = props;
+  const { title, coverImage, format } = props.media;
   const { hovered, ref } = useHover();
   const theme = useMantineTheme();
   const borderRadius = getBorderRadius(theme).borderRadius;
@@ -47,7 +54,7 @@ const ListEntry: React.FC<
           }
         })}
       >
-        <Group spacing="xl" style={{ height: 55 }}>
+        <Group spacing="xl" position="center" style={{ height: 55 }}>
           <div
             style={{
               position: 'relative',
@@ -65,7 +72,6 @@ const ListEntry: React.FC<
               src={coverImage.large}
               alt={title.userPreferred}
               style={{ borderRadius }}
-              priority={priority}
               sizes="40px"
             />
           </div>
@@ -77,20 +83,18 @@ const ListEntry: React.FC<
               target="_blank"
               href={`https://anilist.co/manga/${props.mediaId}`}
               lineClamp={2}
-              style={{ wordBreak: 'break-word' }}
+              style={{ wordBreak: 'break-word', fontSize: 15 }}
             >
-              <Title
-                order={5}
-                style={{ fontWeight: 'normal' }}
-                title={title.userPreferred}
-              >
-                {title.userPreferred}
-              </Title>
+              {title.userPreferred}
             </Text>
           </div>
           <VolumeProgress buttonVisible={hovered} />
           <PreorderedProgress buttonVisible={hovered} />
-
+          <Center style={{ flex: 1 }}>
+            <Text size="sm" title="Format">
+              {formatMap[format]}
+            </Text>
+          </Center>
           {/* 
         {newVolumeAvailable && (
           <Stack spacing={2}>

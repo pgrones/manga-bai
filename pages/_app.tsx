@@ -11,6 +11,7 @@ import { ModalsProvider } from '@mantine/modals';
 import { NotificationsProvider } from '@mantine/notifications';
 import { AppProps } from 'next/app';
 import Head from 'next/head';
+import { useEffect } from 'react';
 import { useApollo } from '../apollo/client';
 import UserProvider from '../lib/hooks/userProvider';
 import '../styles/globalStyles.css';
@@ -28,9 +29,11 @@ const theme: MantineThemeOverride = {
 export default function App({ Component, pageProps }: AppProps) {
   const apolloClient = useApollo(pageProps?.initialApolloState);
   const preferredColorScheme = useColorScheme();
-  const [colorScheme, setColorScheme] = useLocalStorage<ColorScheme>({
+  const [colorScheme, setColorScheme] = useLocalStorage<
+    ColorScheme | undefined
+  >({
     key: 'mantine-color-scheme',
-    defaultValue: preferredColorScheme,
+    defaultValue: undefined,
     getInitialValueInEffect: true
   });
   const [primaryColor, setPrimaryColor] = useLocalStorage<DefaultMantineColor>({
@@ -50,6 +53,12 @@ export default function App({ Component, pageProps }: AppProps) {
     setPrimaryColor(value);
   };
 
+  useEffect(() => {
+    if (!colorScheme && preferredColorScheme !== 'light') {
+      toggleColorScheme(preferredColorScheme);
+    }
+  }, [preferredColorScheme]);
+
   return (
     <>
       <Head>
@@ -62,7 +71,7 @@ export default function App({ Component, pageProps }: AppProps) {
       </Head>
 
       <ColorSchemeProvider
-        colorScheme={colorScheme}
+        colorScheme={colorScheme ?? 'light'}
         toggleColorScheme={toggleColorScheme}
       >
         <MantineProvider

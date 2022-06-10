@@ -24,12 +24,16 @@ const mediaQuery = gql`
     customLists
     media {
       siteUrl
+      format
       bannerImage
       coverImage {
         large
       }
       title {
         userPreferred
+        romaji
+        english
+        native
       }
     }
   }
@@ -56,6 +60,7 @@ export interface MediaList {
 
 export interface Media {
   siteUrl: string;
+  format: Format;
   coverImage: Image;
   bannerImage: string;
   title: Title;
@@ -67,6 +72,9 @@ export interface Image {
 
 export interface Title {
   userPreferred: string;
+  romaji: string;
+  english: string;
+  native: string;
 }
 
 export interface CustomLists {
@@ -74,7 +82,4 @@ export interface CustomLists {
 }
 
 export type Status = 'CURRENT' | 'PAUSED';
-
-export interface PageInfo {
-  hasNextPage: boolean;
-}
+export type Format = 'MANGA' | 'NOVEL' | 'ONE_SHOT';

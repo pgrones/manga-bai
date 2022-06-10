@@ -25,7 +25,6 @@ const Row: React.FC<{
           {...(item as MediaList)}
           topRadius={topRadius}
           bottomRadius={bottomRadius}
-          priority={index === 0}
         />
       )}
     </div>
@@ -37,9 +36,9 @@ const VirtualizedList: React.FC<{
 }> = React.memo(({ statusTitle }) => {
   const { current, waiting } = useMedia();
   const itemData: (MediaList | JSX.Element)[] = [
-    ...(current ?? []),
-    ...(waiting && current ? [statusTitle] : []),
-    ...(waiting ?? [])
+    ...(waiting ?? []),
+    ...(waiting?.length && current?.length ? [statusTitle] : []),
+    ...(current ?? [])
   ];
 
   return (

@@ -11,7 +11,7 @@ import {
 import { useForm } from '@mantine/form';
 import { useModals } from '@mantine/modals';
 import { useRef } from 'react';
-import { WAITING } from '../../lib/hooks/useInitialData';
+import { CURRENT, WAITING } from '../../lib/helper/constants';
 import useNotification from '../../lib/hooks/useNotification';
 import { FormProps } from './formTypes';
 
@@ -119,8 +119,8 @@ const Form: React.FC<FormProps> = props => {
             variant="filled"
             label="Status"
             data={[
-              { label: 'Currently Reading', value: 'CURRENT' },
-              { label: 'Wating For New Volumes', value: 'PAUSED' }
+              { label: CURRENT, value: 'CURRENT' },
+              { label: WAITING, value: 'PAUSED' }
             ]}
           />
         </Grid.Col>

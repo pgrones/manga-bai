@@ -5,11 +5,11 @@ import updateMangaEntry, {
   UpdateMangaEntryVariables
 } from '../../apollo/mutations/updateMangaEntry';
 import { MediaList } from '../../apollo/queries/mediaQuery';
+import { WAITING } from '../helper/constants';
 import { IAniListValues } from '../types/aniList';
-import { WAITING } from './useInitialData';
 import useNotification from './useNotification';
 
-export const useAniListUpdate = (entry: MediaList) => {
+export const useAniListData = (entry: MediaList) => {
   const [aniListData, setAniListData] = useState<MediaList>(entry);
   const { showSuccess, showError } = useNotification();
 
@@ -67,4 +67,4 @@ export const useAniListUpdate = (entry: MediaList) => {
   return { aniListData, updateAniListData, updateProgress, removeFromList };
 };
 
-export default useAniListUpdate;
+export default useAniListData;

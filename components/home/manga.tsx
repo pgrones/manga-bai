@@ -1,42 +1,49 @@
-import React, { useRef, useState } from 'react';
+import React, { Suspense, useEffect, useRef, useState } from 'react';
+import { CURRENT, WAITING } from '../../lib/helper/constants';
 import { useMedia } from '../../lib/hooks/mediaProvider';
-import { useUser } from '../../lib/hooks/userProvider';
-import { Layout } from '../../lib/types/user';
-import VirtualizedGrid from './gridLayout/virtualizedGrid';
-import VirtualizedList from './listLayout/virtualizedList';
+import LoadingIndicator from '../common/loadingIndicator';
 import StatusTitle from './statusTitle';
-import Toolbar from './toolbar';
+import Toolbar from './toolbar/toolbar';
+
+const VirtualizedList = React.lazy(
+  () => import('./listLayout/virtualizedList')
+);
+
+const VirtualizedGrid = React.lazy(
+  () => import('./gridLayout/virtualizedGrid')
+);
 
 const Manga: React.FC = () => {
-  const { current, waiting } = useMedia();
+  const { current, waiting, layout } = useMedia();
   const toolbarRef = useRef<HTMLDivElement>(null);
-  const [title, setTitle] = useState(
-    waiting ? 'Waiting For New Volumes' : current ? 'Currently Reading' : ''
-  );
-  const { userData } = useUser();
-  const [layout, setLayout] = useState<Layout>(userData?.layout ?? 'grid');
   const isList = layout === 'list';
+  const [title, setTitle] = useState(
+    waiting?.length ? WAITING : current?.length ? CURRENT : ''
+  );
+
+  useEffect(() => {
+    setTitle(waiting?.length ? WAITING : current?.length ? CURRENT : '');
+  }, [current, waiting]);
 
   return (
     <>
-      <Toolbar
-        title={title}
-        ref={toolbarRef}
-        layout={layout}
-        setLayout={setLayout}
-      />
+      <Toolbar title={title} ref={toolbarRef} />
       {isList ? (
-        <VirtualizedList
-          statusTitle={
-            <StatusTitle setTitle={setTitle} toolbarRef={toolbarRef} />
-          }
-        />
+        <Suspense fallback={<LoadingIndicator />}>
+          <VirtualizedList
+            statusTitle={
+              <StatusTitle setTitle={setTitle} toolbarRef={toolbarRef} />
+            }
+          />
+        </Suspense>
       ) : (
-        <VirtualizedGrid
-          statusTitle={
-            <StatusTitle setTitle={setTitle} toolbarRef={toolbarRef} />
-          }
-        />
+        <Suspense fallback={<LoadingIndicator />}>
+          <VirtualizedGrid
+            statusTitle={
+              <StatusTitle setTitle={setTitle} toolbarRef={toolbarRef} />
+            }
+          />
+        </Suspense>
       )}
     </>
   );

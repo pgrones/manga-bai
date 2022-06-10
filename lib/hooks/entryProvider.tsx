@@ -1,8 +1,8 @@
 import React, { createContext, PropsWithChildren, useContext } from 'react';
 import { IMediaData } from '../types/entry';
 import { IEntryContext } from './entryProviderTypes';
-import useAniListUpdate from './useAniListUpdate';
-import useFirebaseUpdate from './useFirebaseUpdate';
+import useAniListData from './useAniListData';
+import useFirebaseData from './useFirebaseData';
 
 const EntryContext = createContext<IEntryContext>({} as IEntryContext);
 
@@ -13,9 +13,9 @@ const EntryProvider: React.FC<PropsWithChildren<{ entry: IMediaData }>> = ({
   entry
 }) => {
   const { aniListData, updateAniListData, updateProgress, removeFromList } =
-    useAniListUpdate(entry);
+    useAniListData(entry);
   const { firebaseData, updateFirebaseData, updatePreordered } =
-    useFirebaseUpdate(entry);
+    useFirebaseData(entry);
 
   return (
     <EntryContext.Provider

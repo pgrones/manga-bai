@@ -11,12 +11,11 @@ import customListQuery, {
 } from '../../apollo/queries/customListQuery';
 import mediaQuery, { MediaQueryData } from '../../apollo/queries/mediaQuery';
 import { getMediaData } from '../firebase/db';
+import { WAITING } from '../helper/constants';
 import { IMediaLists } from '../types/entry';
 import { IFirebaseValues } from '../types/firebase';
 import useNotification from './useNotification';
 import { useUser } from './userProvider';
-
-export const WAITING = 'Waiting For New Volumes';
 
 const createMangaLists = (
   mediaData?: MediaQueryData,

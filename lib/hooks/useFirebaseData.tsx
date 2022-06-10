@@ -5,7 +5,7 @@ import { IFirebaseValues } from '../types/firebase';
 import useNotification from './useNotification';
 import { useUser } from './userProvider';
 
-const useFirebaseUpdate = (mediaEntry: IMediaData) => {
+const useFirebaseData = (mediaEntry: IMediaData) => {
   const { firebaseUser } = useUser();
   const [firebaseData, setFirebaseData] = useState<IFirebaseValues>({
     notes: mediaEntry.notes ?? '',
@@ -34,4 +34,4 @@ const useFirebaseUpdate = (mediaEntry: IMediaData) => {
   return { firebaseData, updateFirebaseData, updatePreordered };
 };
 
-export default useFirebaseUpdate;
+export default useFirebaseData;
