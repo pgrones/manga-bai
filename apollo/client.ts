@@ -1,16 +1,47 @@
 import {
   ApolloClient,
+  ApolloLink,
   createHttpLink,
+  from,
   InMemoryCache,
   NormalizedCacheObject
 } from '@apollo/client';
 import { setContext } from '@apollo/client/link/context';
+import { RetryLink } from '@apollo/client/link/retry';
 import { useMemo } from 'react';
 
 let apolloClient: ApolloClient<NormalizedCacheObject>;
 
 const httpLink = createHttpLink({
   uri: 'https://graphql.anilist.co'
+});
+
+const retryLink = new RetryLink({
+  attempts: (count, _, error) => {
+    return count <= 5 && !!error;
+  },
+  delay: (count, operation) => {
+    const {
+      response: { headers }
+    } = operation.getContext();
+    console.log(headers.get('x-ratelimit-limit'));
+    return count * 1000 * Math.random();
+  }
+});
+
+const afterwareLink = new ApolloLink((operation, forward) => {
+  return forward(operation).map(response => {
+    const context = operation.getContext();
+    const {
+      response: { headers }
+    } = context;
+
+    if (headers) {
+      console.log(headers.get('x-ratelimit-limit'));
+    }
+
+    return response;
+  });
 });
 
 const authLink = setContext((_, { headers }) => {
@@ -31,7 +62,7 @@ const authLink = setContext((_, { headers }) => {
 const createApolloClient = () => {
   return new ApolloClient({
     ssrMode: typeof window === 'undefined',
-    link: authLink.concat(httpLink),
+    link: from([authLink.concat(httpLink)]),
     cache: new InMemoryCache()
   });
 };
