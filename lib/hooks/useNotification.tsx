@@ -13,9 +13,10 @@ const useNotification = () => {
       color: 'teal'
     });
 
-  const showError = (message?: string) =>
+  const showError = (error?: any, message?: string) => {
+    console.log(error);
     showNotification({
-      title: 'An Error Occured (ᗒᗣᗕ)՞',
+      title: 'An Error Occurred (ᗒᗣᗕ)՞',
       message: (
         <Text>
           {message ?? (
@@ -36,6 +37,7 @@ const useNotification = () => {
       color: 'red',
       autoClose: false
     });
+  };
 
   return { showSuccess, showError };
 };

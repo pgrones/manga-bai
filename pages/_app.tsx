@@ -14,7 +14,7 @@ import { useEffect } from 'react';
 import { useApollo } from '../apollo/client';
 import MetaTags from '../components/common/metaTags';
 import { analytics } from '../lib/firebase/firebase';
-import UserProvider from '../lib/hooks/userProvider';
+import UserProvider from '../lib/hooks/provider/userProvider';
 import '../styles/globalStyles.css';
 
 const theme: MantineThemeOverride = {
@@ -69,8 +69,8 @@ export default function App({ Component, pageProps }: AppProps) {
   return (
     <>
       <MetaTags
-        title="Manga Bai: Track your preordered, bought, and owned manga and light novels using your exisiting AniList account"
-        description="Track your preordered, bought, and owned manga and light novels using your exisiting AniList account"
+        title="Manga Bai: Track your preordered, bought, and owned manga and light novels using your existing AniList account"
+        description="Track your preordered, bought, and owned manga and light novels using your existing AniList account"
       />
 
       <ColorSchemeProvider

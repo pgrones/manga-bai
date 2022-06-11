@@ -11,7 +11,6 @@ export interface IMediaContext {
   status: Status;
   setStatus: React.Dispatch<React.SetStateAction<Status>>;
   layout: Layout;
-  setLayout: React.Dispatch<React.SetStateAction<Layout>>;
 }
 
 export type Status = typeof CURRENT | typeof WAITING | null;

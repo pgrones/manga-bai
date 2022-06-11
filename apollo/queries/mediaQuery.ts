@@ -41,6 +41,10 @@ const mediaQuery = gql`
 
 export default mediaQuery;
 
+export interface MediaQueryVariables {
+  userId: number;
+}
+
 export interface MediaQueryData {
   MediaListCollection: MediaListCollection;
 }
@@ -54,7 +58,7 @@ export interface MediaList {
   mediaId: number;
   progressVolumes: number;
   progress: number;
-  customLists: CustomLists;
+  customLists: CustomLists | null;
   media: Media;
 }
 

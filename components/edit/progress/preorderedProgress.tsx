@@ -1,5 +1,5 @@
 import React from 'react';
-import { useEntry } from '../../../lib/hooks/entryProvider';
+import { useEntry } from '../../../lib/hooks/provider/entryProvider';
 import Progress from './progress';
 
 const PreorderedProgress: React.FC<{ buttonVisible: boolean }> = ({

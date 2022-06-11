@@ -1,6 +1,6 @@
-import { MediaList } from '../../apollo/queries/mediaQuery';
-import { IAniListValues } from '../types/aniList';
-import { IFirebaseValues } from '../types/firebase';
+import { MediaList } from '../../../apollo/queries/mediaQuery';
+import { IAniListValues } from '../../types/aniList';
+import { IFirebaseValues } from '../../types/firebase';
 
 export interface IEntryContext {
   aniListData: MediaList;
@@ -8,6 +8,6 @@ export interface IEntryContext {
   updateProgress: (progress: number, key: keyof MediaList) => void;
   firebaseData?: IFirebaseValues;
   updateFirebaseData: (values: IFirebaseValues) => Promise<void>;
-  updatePreordered: (preorderd: number) => void;
+  updatePreordered: (preordered: number) => void;
   removeFromList: () => Promise<void>;
 }

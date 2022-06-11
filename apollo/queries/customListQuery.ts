@@ -14,6 +14,10 @@ const customListQuery = gql`
 
 export default customListQuery;
 
+export interface CustomListQueryVariables {
+  id: number;
+}
+
 export interface CustomListQueryData {
   User: User;
 }

@@ -6,10 +6,10 @@ import React, {
   useRef,
   useState
 } from 'react';
-import { Title } from '../../apollo/queries/mediaQuery';
-import { CURRENT, WAITING } from '../helper/constants';
-import { IMediaData, IMediaLists } from '../types/entry';
-import { Layout } from '../types/user';
+import { Title } from '../../../apollo/queries/mediaQuery';
+import { CURRENT, WAITING } from '../../helper/constants';
+import { IMediaData, IMediaLists } from '../../types/entry';
+import { Layout } from '../../types/user';
 import { IMediaContext, Status } from './mediaProviderTypes';
 
 const titles: (keyof Title)[] = ['romaji', 'english', 'native'];
@@ -27,7 +27,7 @@ const MediaProvider: React.FC<
   const fullData =
     useRef<[IMediaData[] | undefined, IMediaData[] | undefined]>();
 
-  const [layout, setLayout] = useLocalStorage<Layout>({
+  const [layout] = useLocalStorage<Layout>({
     key: 'media-layout',
     defaultValue: 'grid',
     getInitialValueInEffect: true
@@ -77,8 +77,7 @@ const MediaProvider: React.FC<
         search,
         status,
         setStatus,
-        layout,
-        setLayout
+        layout
       }}
     >
       {children}

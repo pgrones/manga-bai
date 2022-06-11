@@ -1,6 +1,6 @@
 import React, { Suspense, useEffect, useRef, useState } from 'react';
 import { CURRENT, WAITING } from '../../lib/helper/constants';
-import { useMedia } from '../../lib/hooks/mediaProvider';
+import { useMedia } from '../../lib/hooks/provider/mediaProvider';
 import LoadingIndicator from '../common/loadingIndicator';
 import StatusTitle from './statusTitle';
 import Toolbar from './toolbar/toolbar';
@@ -13,7 +13,7 @@ const VirtualizedGrid = React.lazy(
   () => import('./gridLayout/virtualizedGrid')
 );
 
-const Manga: React.FC = () => {
+const MangaList: React.FC = () => {
   const { current, waiting, layout } = useMedia();
   const toolbarRef = useRef<HTMLDivElement>(null);
   const isList = layout === 'list';
@@ -49,4 +49,4 @@ const Manga: React.FC = () => {
   );
 };
 
-export default Manga;
+export default MangaList;

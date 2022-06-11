@@ -3,7 +3,7 @@ import { areEqual, FixedSizeList as List } from 'react-window';
 //@ts-ignore
 import { ReactWindowScroller } from 'react-window-scroller';
 import { MediaList } from '../../../apollo/queries/mediaQuery';
-import { useMedia } from '../../../lib/hooks/mediaProvider';
+import { useMedia } from '../../../lib/hooks/provider/mediaProvider';
 import ListEntry from './listEntry';
 
 const Row: React.FC<{

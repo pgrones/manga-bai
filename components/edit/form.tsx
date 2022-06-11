@@ -146,7 +146,7 @@ const Form: React.FC<FormProps> = props => {
             min={0}
             variant="filled"
             label="Preordered Up To"
-            description="Preorderd, bought, or owned volumes"
+            description="Preordered, bought, or owned volumes"
           />
         </Grid.Col>
         <Grid.Col xs={6} sm={4}>

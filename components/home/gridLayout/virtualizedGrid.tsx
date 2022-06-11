@@ -5,7 +5,7 @@ import { areEqual, VariableSizeList as List } from 'react-window';
 //@ts-ignore
 import { ReactWindowScroller } from 'react-window-scroller';
 import { MediaList } from '../../../apollo/queries/mediaQuery';
-import { useMedia } from '../../../lib/hooks/mediaProvider';
+import { useMedia } from '../../../lib/hooks/provider/mediaProvider';
 import GridEntry from './gridEntry';
 
 const isReactElement = (item: any): item is JSX.Element =>

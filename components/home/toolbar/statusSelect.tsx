@@ -1,7 +1,7 @@
 import { Select } from '@mantine/core';
 import { CURRENT, WAITING } from '../../../lib/helper/constants';
-import { useMedia } from '../../../lib/hooks/mediaProvider';
-import { Status } from '../../../lib/hooks/mediaProviderTypes';
+import { useMedia } from '../../../lib/hooks/provider/mediaProvider';
+import { Status } from '../../../lib/hooks/provider/mediaProviderTypes';
 
 const StatusSelect = () => {
   const { status, setStatus } = useMedia();

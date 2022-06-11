@@ -4,7 +4,7 @@ import Image from 'next/image';
 import React from 'react';
 import { Format } from '../../../apollo/queries/mediaQuery';
 import { getBorderRadius } from '../../../lib/helper/radius';
-import EntryProvider from '../../../lib/hooks/entryProvider';
+import EntryProvider from '../../../lib/hooks/provider/entryProvider';
 import { IMediaData } from '../../../lib/types/entry';
 import EditModal from '../../edit/modal';
 import PreorderedProgress from '../../edit/progress/preorderedProgress';

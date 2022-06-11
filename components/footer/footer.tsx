@@ -108,5 +108,3 @@ const Footer = () => {
 };
 
 export default Footer;
-
-// sitemap, github, anilist

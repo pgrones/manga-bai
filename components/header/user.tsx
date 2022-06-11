@@ -2,7 +2,7 @@ import { Avatar, Button, Popover, Stack } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { useState } from 'react';
 import { IoChevronDownOutline, IoLogOutOutline } from 'react-icons/io5';
-import { useUser } from '../../lib/hooks/userProvider';
+import { useUser } from '../../lib/hooks/provider/userProvider';
 import ColorPickerPopover from './colorPicker';
 
 const User = () => {

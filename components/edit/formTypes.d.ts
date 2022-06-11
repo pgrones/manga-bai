@@ -1,5 +1,5 @@
-import { IEntryContext } from '../../lib/hooks/entryProviderTypes';
-import { IMediaContext } from '../../lib/hooks/mediaProviderTypes';
+import { IEntryContext } from '../../lib/hooks/provider/entryProviderTypes';
+import { IMediaContext } from '../../lib/hooks/provider/mediaProviderTypes';
 
 export interface FormProps extends IEntryContext, IMediaContext {
   close: () => void;

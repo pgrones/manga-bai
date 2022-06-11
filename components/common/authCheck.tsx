@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router';
 import React, { PropsWithChildren, useEffect } from 'react';
-import { useUser } from '../../lib/hooks/userProvider';
+import { useUser } from '../../lib/hooks/provider/userProvider';
 import LoadingIndicator from './loadingIndicator';
 
 const AuthCheck: React.FC<PropsWithChildren<unknown>> = ({ children }) => {

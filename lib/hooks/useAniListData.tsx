@@ -5,7 +5,7 @@ import updateMangaEntry, {
   UpdateMangaEntryVariables
 } from '../../apollo/mutations/updateMangaEntry';
 import { MediaList } from '../../apollo/queries/mediaQuery';
-import { WAITING } from '../helper/constants';
+import { WAITING_CUSTOM_LIST } from '../helper/constants';
 import { IAniListValues } from '../types/aniList';
 import useNotification from './useNotification';
 
@@ -52,8 +52,8 @@ export const useAniListData = (entry: MediaList) => {
           new Set(
             Object.keys(
               Object.fromEntries(
-                Object.entries(aniListData.customLists).filter(
-                  o => o[1] === true && o[0] !== WAITING
+                Object.entries(aniListData.customLists ?? []).filter(
+                  o => o[1] === true && o[0] !== WAITING_CUSTOM_LIST
                 )
               )
             )

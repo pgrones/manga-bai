@@ -3,9 +3,9 @@ import { NextPage } from 'next';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
-import { useUser } from '../lib/hooks/userProvider';
+import { useUser } from '../lib/hooks/provider/userProvider';
 
-const SigninPage: NextPage = () => {
+const SignInPage: NextPage = () => {
   const { fullyAuthenticated } = useUser();
   const router = useRouter();
   const { asPath } = router;
@@ -56,4 +56,4 @@ const SigninPage: NextPage = () => {
   );
 };
 
-export default SigninPage;
+export default SignInPage;

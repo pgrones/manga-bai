@@ -1,10 +1,14 @@
-import { Center, SegmentedControl } from '@mantine/core';
+import { Box, Center, SegmentedControl } from '@mantine/core';
+import { useLocalStorage } from '@mantine/hooks';
 import { IoGrid, IoList } from 'react-icons/io5';
-import { useMedia } from '../../../lib/hooks/mediaProvider';
 import { Layout } from '../../../lib/types/user';
 
-const LayoutToggle = () => {
-  const { layout, setLayout } = useMedia();
+const LayoutToggle: React.FC<{ labels?: boolean }> = ({ labels }) => {
+  const [layout, setLayout] = useLocalStorage<Layout>({
+    key: 'media-layout',
+    defaultValue: 'grid',
+    getInitialValueInEffect: true
+  });
 
   return (
     <SegmentedControl
@@ -25,6 +29,7 @@ const LayoutToggle = () => {
           label: (
             <Center>
               <IoList size={18} />
+              {labels && <Box ml={10}>List</Box>}
             </Center>
           ),
           value: 'list'
@@ -33,6 +38,7 @@ const LayoutToggle = () => {
           label: (
             <Center>
               <IoGrid size={18} />
+              {labels && <Box ml={10}>Grid</Box>}
             </Center>
           ),
           value: 'grid'

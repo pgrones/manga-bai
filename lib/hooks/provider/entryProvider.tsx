@@ -1,8 +1,8 @@
 import React, { createContext, PropsWithChildren, useContext } from 'react';
-import { IMediaData } from '../types/entry';
+import { IMediaData } from '../../types/entry';
 import { IEntryContext } from './entryProviderTypes';
-import useAniListData from './useAniListData';
-import useFirebaseData from './useFirebaseData';
+import useAniListData from '../useAniListData';
+import useFirebaseData from '../useFirebaseData';
 
 const EntryContext = createContext<IEntryContext>({} as IEntryContext);
 

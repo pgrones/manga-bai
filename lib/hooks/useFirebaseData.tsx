@@ -3,7 +3,7 @@ import { setMediaData } from '../firebase/db';
 import { IMediaData } from '../types/entry';
 import { IFirebaseValues } from '../types/firebase';
 import useNotification from './useNotification';
-import { useUser } from './userProvider';
+import { useUser } from './provider/userProvider';
 
 const useFirebaseData = (mediaEntry: IMediaData) => {
   const { firebaseUser } = useUser();

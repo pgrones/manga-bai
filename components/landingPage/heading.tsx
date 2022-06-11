@@ -50,7 +50,7 @@ const Heading: React.FC<{
   return (
     <Group
       spacing={0}
-      style={{ perspective: 1000, overflow: 'hidden' }}
+      style={{ perspective: 1000, overflow: 'hidden', minHeight: 300 }}
       noWrap
       position="center"
     >

@@ -1,15 +1,15 @@
-import kanna from '../../public/kanna.png';
-import Image from 'next/image';
 import { MediaQuery } from '@mantine/core';
+import Image from 'next/image';
+import kanna from '../../public/kanna.png';
 
 const Kanna = () => {
   return (
     <MediaQuery smallerThan="xl" styles={{ display: 'none' }}>
-      {[1, 10, 20].includes(new Date().getDate()) && (
-        <div className="kanna">
+      <div className="kanna">
+        {[1, 10, 20].includes(new Date().getDate()) && (
           <Image src={kanna} alt="" width={80} height={68} />
-        </div>
-      )}
+        )}
+      </div>
     </MediaQuery>
   );
 };

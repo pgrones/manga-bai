@@ -10,7 +10,7 @@ import popularMangaQuery, {
 import Layout from '../components/common/layout';
 import Features from '../components/landingPage/features';
 import Heading from '../components/landingPage/heading';
-import { useUser } from '../lib/hooks/userProvider';
+import { useUser } from '../lib/hooks/provider/userProvider';
 
 const LandingPage: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({
   manga
@@ -69,43 +69,53 @@ export const getStaticProps: GetStaticProps<{
 }> = async () => {
   const apolloClient = initializeApollo();
 
-  const { data } = await apolloClient.query<PopularMangaQueryData>({
-    query: popularMangaQuery
-  });
+  try {
+    const { data } = await apolloClient.query<PopularMangaQueryData>({
+      query: popularMangaQuery
+    });
 
-  const manga: { media: Media; transform: string; zIndex: number }[] = [];
-  for (let i = 0; i < data.Page.media.length; i++) {
-    const m = data.Page.media[i];
-    const even = i % 2 === 0;
-    const index = Math.ceil(i / 2);
-    const zIndex = index && -index;
-    const translate = index * -100;
+    const manga: { media: Media; transform: string; zIndex: number }[] = [];
+    for (let i = 0; i < data.Page.media.length; i++) {
+      const m = data.Page.media[i];
+      const even = i % 2 === 0;
+      const index = Math.ceil(i / 2);
+      const zIndex = index && -index;
+      const translate = index * -100;
 
-    if (even) {
-      manga.push({
-        media: m,
-        transform: `translateZ(${translate}px)`,
-        zIndex
-      });
-    } else {
-      manga.unshift({
-        media: m,
-        transform: `translateZ(${translate}px)`,
-        zIndex
-      });
+      if (even) {
+        manga.push({
+          media: m,
+          transform: `translateZ(${translate}px)`,
+          zIndex
+        });
+      } else {
+        manga.unshift({
+          media: m,
+          transform: `translateZ(${translate}px)`,
+          zIndex
+        });
+      }
     }
-  }
 
-  return {
-    props: {
-      manga: manga.map(m => ({
-        id: m.media.id,
-        title: m.media.title.romaji,
-        src: m.media.coverImage.large,
-        transform: m.transform,
-        zIndex: m.zIndex
-      }))
-    },
-    revalidate: 60 * 60 * 24
-  };
+    return {
+      props: {
+        manga: manga.map(m => ({
+          id: m.media.id,
+          title: m.media.title.romaji,
+          src: m.media.coverImage.large,
+          transform: m.transform,
+          zIndex: m.zIndex
+        }))
+      },
+      revalidate: 60 * 60 * 24
+    };
+  } catch (error) {
+    console.log(JSON.stringify(error, null, 2));
+    return {
+      props: {
+        manga: []
+      },
+      revalidate: 60 * 60 * 24
+    };
+  }
 };

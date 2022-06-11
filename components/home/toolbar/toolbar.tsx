@@ -26,7 +26,7 @@ const Toolbar: React.ForwardRefExoticComponent<
       position="apart"
     >
       <Title order={4}>{title}</Title>
-      <Group spacing="xl">
+      <Group spacing="lg">
         <SearchInput />
         <StatusSelect />
         <LayoutToggle />

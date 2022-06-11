@@ -1,8 +1,8 @@
 import { Button, Card } from '@mantine/core';
 import { useModals } from '@mantine/modals';
 import React from 'react';
-import { useEntry } from '../../lib/hooks/entryProvider';
-import { useMedia } from '../../lib/hooks/mediaProvider';
+import { useEntry } from '../../lib/hooks/provider/entryProvider';
+import { useMedia } from '../../lib/hooks/provider/mediaProvider';
 import Form from './form';
 import Header from './header';
 

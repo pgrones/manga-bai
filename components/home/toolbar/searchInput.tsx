@@ -2,7 +2,7 @@ import { CloseButton, MediaQuery, Text, TextInput } from '@mantine/core';
 import { useHotkeys, useInputState, useOs } from '@mantine/hooks';
 import { useEffect, useRef } from 'react';
 import { IoSearchOutline } from 'react-icons/io5';
-import { useMedia } from '../../../lib/hooks/mediaProvider';
+import { useMedia } from '../../../lib/hooks/provider/mediaProvider';
 
 const SearchInput = () => {
   const os = useOs();

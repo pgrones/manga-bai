@@ -1,16 +1,11 @@
-import { Center, Loader } from '@mantine/core';
+import { Loader } from '@mantine/core';
+import MainCenter from './mainCenter';
 
 const LoadingIndicator = () => {
   return (
-    <Center
-      sx={theme => ({
-        height: `calc(100vh - var(--mantine-header-height) - ${
-          theme.spacing.md * 2
-        }px)`
-      })}
-    >
+    <MainCenter>
       <Loader size="lg" />
-    </Center>
+    </MainCenter>
   );
 };
 
