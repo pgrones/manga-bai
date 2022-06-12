@@ -1,12 +1,14 @@
-import { Button, Card } from '@mantine/core';
+import { Card } from '@mantine/core';
 import { useModals } from '@mantine/modals';
-import React from 'react';
+import React, { PropsWithChildren } from 'react';
 import { useEntry } from '../../lib/hooks/provider/entryProvider';
 import { useMedia } from '../../lib/hooks/provider/mediaProvider';
 import Form from './form';
 import Header from './header';
 
-const EditModal: React.FC = () => {
+const EditModal: React.FC<PropsWithChildren<unknown>> = ({
+  children = null
+}) => {
   const { openModal, closeModal } = useModals();
   const entry = useEntry();
   const media = useMedia();
@@ -39,9 +41,9 @@ const EditModal: React.FC = () => {
   };
 
   return (
-    <Button size="xs" variant="light" onClick={openEditModal}>
-      Edit
-    </Button>
+    (React.isValidElement(children) &&
+      React.cloneElement(children, { onClick: openEditModal })) ||
+    null
   );
 };
 

@@ -1,6 +1,5 @@
 import {
   ApolloClient,
-  ApolloLink,
   createHttpLink,
   from,
   InMemoryCache,
@@ -17,31 +16,18 @@ const httpLink = createHttpLink({
 });
 
 const retryLink = new RetryLink({
-  attempts: (count, _, error) => {
-    return count <= 5 && !!error;
-  },
+  attempts: (count, _, error) => count < 5 && !!error,
   delay: (count, operation) => {
-    const {
-      response: { headers }
-    } = operation.getContext();
-    console.log(headers.get('x-ratelimit-limit'));
-    return count * 1000 * Math.random();
-  }
-});
+    const { response } = operation.getContext();
 
-const afterwareLink = new ApolloLink((operation, forward) => {
-  return forward(operation).map(response => {
-    const context = operation.getContext();
-    const {
-      response: { headers }
-    } = context;
-
-    if (headers) {
-      console.log(headers.get('x-ratelimit-limit'));
+    let delay = Math.random() * (1000 * 2 ** count);
+    const reset = response?.headers?.get('x-ratelimit-reset');
+    if (reset) {
+      delay += Math.max(reset * 1000 - Date.now(), 0);
     }
 
-    return response;
-  });
+    return delay;
+  }
 });
 
 const authLink = setContext((_, { headers }) => {
@@ -62,7 +48,7 @@ const authLink = setContext((_, { headers }) => {
 const createApolloClient = () => {
   return new ApolloClient({
     ssrMode: typeof window === 'undefined',
-    link: from([authLink.concat(httpLink)]),
+    link: from([retryLink, authLink.concat(httpLink)]),
     cache: new InMemoryCache()
   });
 };

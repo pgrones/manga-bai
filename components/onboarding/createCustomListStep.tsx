@@ -1,5 +1,5 @@
 import { useMutation } from '@apollo/client';
-import { Button, Stack, Switch, Text } from '@mantine/core';
+import { Button, Progress, Stack, Switch, Text } from '@mantine/core';
 import { useEffect, useState } from 'react';
 import updateCustomLists, {
   UpdateCustomListsVariables
@@ -8,7 +8,7 @@ import updateMangaEntry, {
   UpdateMangaEntryVariables
 } from '../../apollo/mutations/updateMangaEntry';
 import { WAITING, WAITING_CUSTOM_LIST } from '../../lib/helper/constants';
-import { createMediaLists } from '../../lib/helper/customList';
+import { createMediaLists, createMutation } from '../../lib/helper/customList';
 import { useOnboarding } from '../../lib/hooks/provider/onboardingProvider';
 import useNotification from '../../lib/hooks/useNotification';
 
@@ -24,6 +24,9 @@ const CreateCustomListStep = () => {
   const { showError } = useNotification();
   const [createCustomList, setCreateCustomList] = useState(true);
   const [importPaused, setImportPaused] = useState(true);
+  const [progress, setProgress] = useState(0);
+  const [ratio, setRatio] = useState<string>();
+  const [hasManyEntries, setHasManyEntries] = useState(false);
 
   // Create the custom list "Waiting For New Volumes" on AniList
   const [updateLists, { error }] = useMutation<
@@ -63,29 +66,75 @@ const CreateCustomListStep = () => {
       }
 
       if (importPaused) {
-        const test = [
-          ...(mangaLists.paused ?? []),
-          ...(mangaLists.paused ?? []),
-          ...(mangaLists.paused ?? []),
-          ...(mangaLists.paused ?? [])
-        ];
-        await Promise.allSettled(
-          test.map(entry =>
-            updateEntry({
-              variables: {
-                mediaId: entry.mediaId,
-                customLists: Array.from(
-                  new Set([
-                    ...Object.entries(entry.customLists ?? [])
-                      .filter(o => o[1] === true)
-                      .map(o => o[0]),
-                    WAITING_CUSTOM_LIST
-                  ])
-                )
-              }
-            })
-          )
-        );
+        const onMutation = async (options: any) => {
+          await updateEntry(options);
+          setProgress(prev => prev + 100 / (mangaLists.paused ?? []).length);
+          setRatio(
+            prev =>
+              `${!prev ? 1 : parseInt(prev.split('/')[0]) + 1}/${
+                (mangaLists.paused ?? []).length
+              }`
+          );
+        };
+
+        const chunks: Promise<void>[] = [];
+        const itemsPerMinute = 75;
+
+        if ((mangaLists.paused ?? []).length <= itemsPerMinute) {
+          chunks.push(
+            ...createMutation(mangaLists.paused ?? [], 200, onMutation)
+          );
+        } else {
+          setHasManyEntries(true);
+          const timeUntilNextMinute = (60 - new Date().getSeconds()) * 1000;
+
+          let requestsPossibleInFirstMinute = Math.min(
+            itemsPerMinute,
+            (timeUntilNextMinute - 1000) / 205
+          );
+          if (requestsPossibleInFirstMinute < 0)
+            requestsPossibleInFirstMinute = 0;
+
+          const delayInFirstMinute =
+            timeUntilNextMinute / requestsPossibleInFirstMinute;
+
+          const firstChunk = (mangaLists.paused ?? []).slice(
+            0,
+            requestsPossibleInFirstMinute
+          );
+          const remainingChunks = (mangaLists.paused ?? []).slice(
+            requestsPossibleInFirstMinute
+          );
+
+          chunks.push(
+            ...createMutation(
+              firstChunk,
+              delayInFirstMinute,
+              onMutation,
+              undefined,
+              'firstChunk'
+            )
+          );
+
+          for (let i = 0; i < remainingChunks.length; i += itemsPerMinute) {
+            const lastChunk = i + itemsPerMinute >= remainingChunks.length;
+            const chunk = remainingChunks.slice(i, i + itemsPerMinute);
+            const chunkDelay =
+              timeUntilNextMinute + (60 * 1000 * i) / itemsPerMinute;
+
+            chunks.push(
+              ...createMutation(
+                chunk,
+                lastChunk ? 200 : 760,
+                onMutation,
+                chunkDelay,
+                'chunk ' + (i + itemsPerMinute) / itemsPerMinute
+              )
+            );
+          }
+        }
+
+        await Promise.allSettled(chunks);
 
         mangaLists.waiting = mangaLists.paused;
       }
@@ -127,9 +176,29 @@ const CreateCustomListStep = () => {
         onChange={e => setImportPaused(e.currentTarget.checked)}
         disabled={loading || !createCustomList}
       />
-      <Button mt="xl" onClick={next} loading={loading}>
-        Next
-      </Button>
+      {progress ? (
+        <div style={{ alignSelf: 'stretch' }}>
+          <Text mt="xl" mb="xs">
+            Importing paused entries {ratio}
+          </Text>
+          <Progress aria-label="Import progress" value={progress} />
+          <Text mt="xs" size="sm">
+            {hasManyEntries && (
+              <>
+                Woah, those are a lot of paused entries!
+                <br />
+              </>
+            )}
+            Please be patient. AniList&apos;s server only allows up to 90
+            updates per minute. No worries, you&apos;ll only need to endure this
+            once.
+          </Text>
+        </div>
+      ) : (
+        <Button mt="xl" onClick={next} loading={loading}>
+          Next
+        </Button>
+      )}
     </Stack>
   );
 };

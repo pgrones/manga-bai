@@ -1,7 +1,16 @@
-import { Center, Group, Paper, Text, useMantineTheme } from '@mantine/core';
+import {
+  ActionIcon,
+  Button,
+  Center,
+  Group,
+  Paper,
+  Text,
+  useMantineTheme
+} from '@mantine/core';
 import { useHover } from '@mantine/hooks';
 import Image from 'next/image';
 import React from 'react';
+import { IoEllipsisHorizontal } from 'react-icons/io5';
 import { Format } from '../../../apollo/queries/mediaQuery';
 import { getBorderRadius } from '../../../lib/helper/radius';
 import EntryProvider from '../../../lib/hooks/provider/entryProvider';
@@ -22,6 +31,7 @@ const ListEntry: React.FC<
   const { topRadius, bottomRadius } = props;
   const { title, coverImage, format } = props.media;
   const { hovered, ref } = useHover();
+  const { hovered: imgHovered, ref: imgRef } = useHover();
   const theme = useMantineTheme();
   const borderRadius = getBorderRadius(theme).borderRadius;
 
@@ -56,6 +66,7 @@ const ListEntry: React.FC<
       >
         <Group spacing="xl" position="center" style={{ height: 55 }}>
           <div
+            ref={imgRef}
             style={{
               position: 'relative',
               height: 40,
@@ -74,19 +85,41 @@ const ListEntry: React.FC<
               style={{ borderRadius }}
               sizes="40px"
             />
+            {imgHovered && (
+              <EditModal>
+                <ActionIcon
+                  title="Edit"
+                  variant="filled"
+                  size={40}
+                  style={{
+                    backgroundColor: theme.fn.rgba(
+                      theme.colors[theme.primaryColor][8],
+                      0.6
+                    ),
+                    position: 'absolute',
+                    zIndex: 1
+                  }}
+                >
+                  <IoEllipsisHorizontal size={26} />
+                </ActionIcon>
+              </EditModal>
+            )}
           </div>
 
           <div style={{ flex: 3 }}>
-            <Text
-              component="a"
-              referrerPolicy="no-referrer"
-              target="_blank"
-              href={`https://anilist.co/manga/${props.mediaId}`}
-              lineClamp={2}
-              style={{ wordBreak: 'break-word', fontSize: 15 }}
-            >
-              {title.userPreferred}
-            </Text>
+            <div style={{ display: 'table' }}>
+              <Text
+                title="Open this entry on AniList"
+                component="a"
+                referrerPolicy="no-referrer"
+                target="_blank"
+                href={`https://anilist.co/manga/${props.mediaId}`}
+                lineClamp={2}
+                style={{ wordBreak: 'break-word', fontSize: 15 }}
+              >
+                {title.userPreferred}
+              </Text>
+            </div>
           </div>
           <VolumeProgress buttonVisible={hovered} />
           <PreorderedProgress buttonVisible={hovered} />
@@ -114,7 +147,11 @@ const ListEntry: React.FC<
         )}
        */}
 
-          <EditModal />
+          <EditModal>
+            <Button size="xs" variant="light" title="Edit">
+              Edit
+            </Button>
+          </EditModal>
         </Group>
       </Paper>
     </EntryProvider>

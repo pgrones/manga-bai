@@ -57,11 +57,18 @@ const Header: React.FC<HeaderProps> = props => {
             {title.userPreferred}
           </Title>
         </Text>
-        <Button mt="xl" form="form" type="submit" ml="auto">
+        <Button
+          mt="xl"
+          form="form"
+          type="submit"
+          ml="auto"
+          title="Save changes"
+        >
           Save
         </Button>
       </Group>
       <CloseButton
+        title="Close"
         size="lg"
         sx={theme => ({
           'color': theme.white,

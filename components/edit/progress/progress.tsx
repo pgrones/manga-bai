@@ -25,7 +25,7 @@ const Progress: React.FC<ProgressProps> = React.memo(
         <ActionIcon
           size="xs"
           onClick={() => setProgressLocal(prev => prev + 1)}
-          aria-label={`Increase ${text}`}
+          title={`Increase ${text}`}
         >
           {buttonVisible && <IoAddOutline size={20} />}
         </ActionIcon>

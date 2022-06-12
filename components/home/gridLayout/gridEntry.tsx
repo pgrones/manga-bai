@@ -1,7 +1,16 @@
-import { Group, Paper, Stack, Text, useMantineTheme } from '@mantine/core';
+import {
+  ActionIcon,
+  Button,
+  Group,
+  Paper,
+  Stack,
+  Text,
+  useMantineTheme
+} from '@mantine/core';
 import { useHover } from '@mantine/hooks';
 import Image from 'next/image';
 import React from 'react';
+import { IoEllipsisHorizontal } from 'react-icons/io5';
 import { getBorderRadius } from '../../../lib/helper/radius';
 import EntryProvider from '../../../lib/hooks/provider/entryProvider';
 import { IMediaData } from '../../../lib/types/entry';
@@ -12,6 +21,7 @@ import VolumeProgress from '../../edit/progress/volumeProgress';
 const GridEntry: React.FC<IMediaData> = React.memo(props => {
   const { coverImage, title } = props.media;
   const { hovered, ref } = useHover();
+  const { hovered: imgHovered, ref: imgRef } = useHover();
   const theme = useMantineTheme();
 
   // const newVolumeAvailable = Math.random() > 0.7;
@@ -21,6 +31,7 @@ const GridEntry: React.FC<IMediaData> = React.memo(props => {
       <Paper radius="sm" style={{ flex: 1 }}>
         <Group noWrap align="flex-start" spacing="sm">
           <div
+            ref={imgRef}
             style={{
               position: 'relative',
               height: 170,
@@ -37,6 +48,26 @@ const GridEntry: React.FC<IMediaData> = React.memo(props => {
               style={getBorderRadius(theme)}
               sizes="120px"
             />
+            {imgHovered && (
+              <EditModal>
+                <ActionIcon
+                  title="Edit"
+                  variant="filled"
+                  style={{
+                    backgroundColor: theme.fn.rgba(
+                      theme.colors[theme.primaryColor][8],
+                      0.6
+                    ),
+                    position: 'absolute',
+                    left: 5,
+                    top: 5,
+                    zIndex: 1
+                  }}
+                >
+                  <IoEllipsisHorizontal size={20} />
+                </ActionIcon>
+              </EditModal>
+            )}
             {/* {newVolumeAvailable && (
             <div className="new-volumes-available">
               <Text size="sm" sx={theme => ({ color: theme.colors.gray[0] })}>
@@ -54,17 +85,20 @@ const GridEntry: React.FC<IMediaData> = React.memo(props => {
             style={{ flexGrow: 1, minHeight: 170 }}
           >
             <div style={{ height: 39 }}>
-              <Text
-                component="a"
-                referrerPolicy="no-referrer"
-                target="_blank"
-                href={`https://anilist.co/manga/${props.mediaId}`}
-                lineClamp={2}
-                size="sm"
-                mt={-4}
-              >
-                {title.userPreferred}
-              </Text>
+              <div style={{ display: 'table' }}>
+                <Text
+                  title="Open this entry on AniList"
+                  component="a"
+                  referrerPolicy="no-referrer"
+                  target="_blank"
+                  href={`https://anilist.co/manga/${props.mediaId}`}
+                  lineClamp={2}
+                  size="sm"
+                  mt={-4}
+                >
+                  {title.userPreferred}
+                </Text>
+              </div>
             </div>
             <Stack spacing={2} pb={5}>
               <VolumeProgress buttonVisible={hovered} />
@@ -72,7 +106,11 @@ const GridEntry: React.FC<IMediaData> = React.memo(props => {
             </Stack>
 
             <Group position="apart" align="center">
-              <EditModal />
+              <EditModal>
+                <Button size="xs" variant="light" title="Edit">
+                  Edit
+                </Button>
+              </EditModal>
               {/* <Stack spacing={2} align="flex-end">
               <Anchor
                 size="sm"
