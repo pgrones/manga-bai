@@ -35,10 +35,7 @@ const Layout: React.FC<PropsWithChildren<{ is404?: boolean }>> = ({
           zIndex: is404 ? 0 : 1,
           marginBottom: is404 ? 0 : 'var(--mantine-footer-height, 0px)',
           paddingBottom: theme.spacing.md,
-          backgroundColor:
-            theme.colorScheme === 'dark'
-              ? theme.colors.dark[9]
-              : theme.colors.gray[1]
+          backgroundColor: theme.other.getThemeBg(theme)
         }
       })}
       fixed

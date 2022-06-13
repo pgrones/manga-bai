@@ -18,15 +18,12 @@ const Toolbar: React.ForwardRefExoticComponent<
         zIndex: 101,
         top: `var(--mantine-header-height, 0px)`,
         marginTop: -theme.spacing.md,
-        backgroundColor:
-          theme.colorScheme === 'dark'
-            ? theme.colors.dark[9]
-            : theme.colors.gray[1]
+        backgroundColor: theme.other.getThemeBg(theme)
       })}
       position="apart"
     >
       <Title order={4}>{title}</Title>
-      <Group spacing="lg">
+      <Group spacing="xl">
         <SearchInput />
         <StatusSelect />
         <LayoutToggle />

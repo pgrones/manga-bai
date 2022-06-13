@@ -21,14 +21,7 @@ const Features = () => {
           title="Get notifications when new volumes are available"
           text="Manga Bai lets you know when a new volume of a series you're reading is on sale on Amazon. You can choose wether you prefer English or Japanese volumes."
         >
-          <Overlay
-            opacity={0.9}
-            color={
-              theme.colorScheme === 'dark'
-                ? theme.colors.dark[9]
-                : theme.colors.gray[1]
-            }
-          >
+          <Overlay opacity={0.9} color={theme.other.getThemeBg(theme)}>
             <Center style={{ height: '100%' }}>
               Available as soon as the site has access to the Amazon API.
               <br />

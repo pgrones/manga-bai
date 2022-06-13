@@ -28,7 +28,11 @@ const GridEntry: React.FC<IMediaData> = React.memo(props => {
 
   return (
     <EntryProvider entry={props}>
-      <Paper radius="sm" style={{ flex: 1 }}>
+      <Paper
+        radius="sm"
+        withBorder={theme.colorScheme === 'light'}
+        style={{ flex: 1 }}
+      >
         <Group noWrap align="flex-start" spacing="sm">
           <div
             ref={imgRef}

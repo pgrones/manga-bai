@@ -4,6 +4,7 @@ import {
   ColorSchemeProvider,
   DefaultMantineColor,
   MantineProvider,
+  MantineTheme,
   MantineThemeOverride
 } from '@mantine/core';
 import { useColorScheme, useLocalStorage } from '@mantine/hooks';
@@ -54,6 +55,9 @@ export default function App({ Component, pageProps }: AppProps) {
     setPrimaryColor(value);
   };
 
+  const getThemeBg = (theme: MantineTheme) =>
+    theme.colorScheme === 'dark' ? theme.colors.dark[9] : theme.colors.gray[0];
+
   useEffect(() => {
     if (!colorScheme && preferredColorScheme !== 'light') {
       toggleColorScheme(preferredColorScheme);
@@ -83,7 +87,8 @@ export default function App({ Component, pageProps }: AppProps) {
             colorScheme,
             primaryColor,
             other: {
-              setSiteColor
+              setSiteColor,
+              getThemeBg
             }
           }}
           withGlobalStyles

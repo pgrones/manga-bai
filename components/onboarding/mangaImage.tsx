@@ -47,11 +47,7 @@ const MangaImage = () => {
           <Overlay
             zIndex={5}
             opacity={0.85}
-            color={
-              theme.colorScheme === 'dark'
-                ? theme.colors.dark[9]
-                : theme.colors.gray[1]
-            }
+            color={theme.other.getThemeBg(theme)}
           />
           <Image
             src={m.coverImage}

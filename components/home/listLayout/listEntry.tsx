@@ -43,18 +43,21 @@ const ListEntry: React.FC<
         ref={ref}
         px="xs"
         radius={0}
+        withBorder={theme.colorScheme === 'light'}
         sx={theme => ({
           ...(topRadius
             ? {
                 borderTopLeftRadius: borderRadius,
-                borderTopRightRadius: borderRadius
+                borderTopRightRadius: borderRadius,
+                borderBottom: 0
               }
             : bottomRadius
             ? {
                 borderBottomLeftRadius: borderRadius,
-                borderBottomRightRadius: borderRadius
+                borderBottomRightRadius: borderRadius,
+                borderTop: 0
               }
-            : {}),
+            : { borderTop: 0, borderBottom: 0 }),
           'height': 55,
           '&:hover': {
             backgroundColor: theme.fn.rgba(

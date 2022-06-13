@@ -57,11 +57,7 @@ const Heading: React.FC<{
       <Overlay
         zIndex={1}
         opacity={0.8}
-        color={
-          theme.colorScheme === 'dark'
-            ? theme.colors.dark[9]
-            : theme.colors.gray[1]
-        }
+        color={theme.other.getThemeBg(theme)}
         sx={theme => ({
           left: -theme.spacing.md * 2,
           right: -theme.spacing.md * 2

@@ -12,23 +12,36 @@ const LayoutToggle: React.FC<{ labels?: boolean }> = ({ labels }) => {
 
   return (
     <SegmentedControl
-      size="xs"
       styles={theme => ({
         root: {
-          backgroundColor:
-            theme.colorScheme === 'dark'
-              ? theme.colors.dark[7]
-              : theme.colors.gray[3],
-          height: 31
-        }
+          backgroundColor: 'transparent',
+          padding: labels ? undefined : 0
+        },
+        ...(!labels
+          ? {
+              active: {
+                marginTop: 4,
+                marginLeft: 4,
+                border: `${theme.colorScheme === 'light' ? 1 : 0}px solid ${
+                  theme.colors.gray[2]
+                }`
+              },
+              control: {
+                height: 30
+              },
+              label: {
+                height: 30
+              }
+            }
+          : {})
       })}
       value={layout}
       onChange={(value: Layout) => setLayout(value)}
       data={[
         {
           label: (
-            <Center>
-              <IoList size={18} />
+            <Center style={{ height: '100%', width: labels ? undefined : 18 }}>
+              <IoList size={24} style={{ minWidth: 24 }} />
               {labels && <Box ml={10}>List</Box>}
             </Center>
           ),
@@ -36,7 +49,7 @@ const LayoutToggle: React.FC<{ labels?: boolean }> = ({ labels }) => {
         },
         {
           label: (
-            <Center>
+            <Center style={{ height: '100%' }}>
               <IoGrid size={18} />
               {labels && <Box ml={10}>Grid</Box>}
             </Center>

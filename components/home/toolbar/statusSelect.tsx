@@ -10,6 +10,7 @@ const StatusSelect = () => {
     <Select
       size="xs"
       placeholder="Status"
+      style={{ width: 203 }}
       clearable
       value={status}
       onChange={(v: Status) => setStatus(v)}

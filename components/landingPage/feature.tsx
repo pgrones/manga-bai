@@ -1,4 +1,11 @@
-import { Grid, Paper, Text, ThemeIcon, Title } from '@mantine/core';
+import {
+  Grid,
+  Paper,
+  Text,
+  ThemeIcon,
+  Title,
+  useMantineTheme
+} from '@mantine/core';
 import React, { PropsWithChildren } from 'react';
 
 const Feature: React.FC<
@@ -8,8 +15,14 @@ const Feature: React.FC<
     text: string;
   }>
 > = ({ icon, title, text, children }) => {
+  const theme = useMantineTheme();
+
   return (
-    <Paper p="md" style={{ position: 'relative' }}>
+    <Paper
+      p="md"
+      withBorder={theme.colorScheme === 'light'}
+      style={{ position: 'relative' }}
+    >
       <Grid align="center">
         <Grid.Col span={1}>
           <ThemeIcon size="lg">{icon}</ThemeIcon>
@@ -19,7 +32,7 @@ const Feature: React.FC<
             {title}
           </Title>
         </Grid.Col>
-        <Grid.Col span={11} offset={1} py={0}>
+        <Grid.Col span={11} offset={1} pt={0}>
           <Text color="dimmed">{text}</Text>
         </Grid.Col>
       </Grid>
