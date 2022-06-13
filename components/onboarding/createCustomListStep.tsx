@@ -8,7 +8,10 @@ import updateMangaEntry, {
   UpdateMangaEntryVariables
 } from '../../apollo/mutations/updateMangaEntry';
 import { WAITING, WAITING_CUSTOM_LIST } from '../../lib/helper/constants';
-import { createMediaLists, createMutation } from '../../lib/helper/customList';
+import {
+  createMediaLists,
+  createMutation
+} from '../../lib/helper/onboardingHelper';
 import { useOnboarding } from '../../lib/hooks/provider/onboardingProvider';
 import useNotification from '../../lib/hooks/useNotification';
 
@@ -148,34 +151,38 @@ const CreateCustomListStep = () => {
   };
 
   return (
-    <Stack py="xl" align="flex-start">
-      <Text>
-        Manga Bai creates a custom list called &quot;{WAITING}&quot; on AniList
-        to keep track of all the entries that don&apos;t have a next volume yet.
-        If you don&apos;t want to create this list, Manga Bai will only track
-        entries you&apos;re currently reading.
-      </Text>
-      <Switch
-        label={`Create the custom list "${WAITING}"`}
-        checked={createCustomList}
-        onChange={e => {
-          const value = e.currentTarget.checked;
-          setCreateCustomList(value);
-          if (!value) setImportPaused(false);
-        }}
-        disabled={loading}
-      />
-      <Text pt="xl">
-        Manga Bai imports all of your paused entries into &quot;{WAITING}
-        &quot;. If you don&apos;t want to import those entries, you&apos;ll have
-        to populate the list yourself on AniList.
-      </Text>
-      <Switch
-        label={`Import paused entries into "${WAITING}"`}
-        checked={importPaused}
-        onChange={e => setImportPaused(e.currentTarget.checked)}
-        disabled={loading || !createCustomList}
-      />
+    <Stack py="xl" spacing="xl" align="flex-start">
+      <Stack>
+        <Text>
+          Manga Bai creates a custom list called &quot;{WAITING}&quot; on
+          AniList to keep track of all the entries that don&apos;t have a next
+          volume yet. If you don&apos;t want to create this list, Manga Bai will
+          only track entries you&apos;re currently reading.
+        </Text>
+        <Switch
+          label={`Create the custom list "${WAITING}"`}
+          checked={createCustomList}
+          onChange={e => {
+            const value = e.currentTarget.checked;
+            setCreateCustomList(value);
+            if (!value) setImportPaused(false);
+          }}
+          disabled={loading}
+        />
+      </Stack>
+      <Stack pt="xl">
+        <Text>
+          Manga Bai imports all of your paused entries into &quot;{WAITING}
+          &quot;. If you don&apos;t want to import those entries, you&apos;ll
+          have to populate the list yourself on AniList.
+        </Text>
+        <Switch
+          label={`Import paused entries into "${WAITING}"`}
+          checked={importPaused}
+          onChange={e => setImportPaused(e.currentTarget.checked)}
+          disabled={loading || !createCustomList}
+        />
+      </Stack>
       {progress ? (
         <div style={{ alignSelf: 'stretch' }}>
           <Text mt="xl" mb="xs">

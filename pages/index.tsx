@@ -102,7 +102,7 @@ export const getStaticProps: GetStaticProps<{
         manga: manga.map(m => ({
           id: m.media.id,
           title: m.media.title.romaji,
-          src: m.media.coverImage.large,
+          src: m.media.coverImage.extraLarge,
           transform: m.transform,
           zIndex: m.zIndex
         }))

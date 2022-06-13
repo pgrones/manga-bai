@@ -9,7 +9,7 @@ const popularMangaQuery = gql`
           romaji
         }
         coverImage {
-          large
+          extraLarge
         }
       }
     }
@@ -37,5 +37,5 @@ export interface Title {
 }
 
 export interface Image {
-  large: string;
+  extraLarge: string;
 }

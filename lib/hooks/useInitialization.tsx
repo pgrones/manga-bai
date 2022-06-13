@@ -9,7 +9,7 @@ import mediaQuery, {
   MediaQueryVariables
 } from '../../apollo/queries/mediaQuery';
 import { getMediaData } from '../firebase/db';
-import { createMediaLists } from '../helper/customList';
+import { createMediaLists } from '../helper/onboardingHelper';
 import { IMediaLists } from '../types/entry';
 import { useUser } from './provider/userProvider';
 import useNotification from './useNotification';

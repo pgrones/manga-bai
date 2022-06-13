@@ -6,7 +6,7 @@ const mediaQuery = gql`
       userId: $userId
       status_in: [CURRENT, PAUSED]
       type: MANGA
-      sort: STATUS
+      sort: SCORE_DESC
     ) {
       lists {
         entries {
@@ -28,6 +28,7 @@ const mediaQuery = gql`
       bannerImage
       coverImage {
         large
+        extraLarge
       }
       title {
         userPreferred
@@ -72,6 +73,7 @@ export interface Media {
 
 export interface Image {
   large: string;
+  extraLarge: string;
 }
 
 export interface Title {

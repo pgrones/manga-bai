@@ -13,21 +13,23 @@ const CustomizeStep = () => {
         Customize the site to your liking! You can also do this later via the
         settings in the top right corner.
       </Text>
-      <Group>
+      <Group mt="lg">
         <Text size="sm">Site theme</Text>
         <ThemeToggle size="md" />
       </Group>
-      <Group>
+      <Group mt="lg">
         <Text size="sm">Site color</Text>
         <Box pl="xs">
           <ColorPicker />
         </Box>
       </Group>
-      <Group>
+      <Group mt="lg">
         <Text size="sm">Preferred layout</Text>
         <LayoutToggle labels />
       </Group>
-      <Button onClick={done}>Done</Button>
+      <Button mt="xl" onClick={done}>
+        Done
+      </Button>
     </Stack>
   );
 };
