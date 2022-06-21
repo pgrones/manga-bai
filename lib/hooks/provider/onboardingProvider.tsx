@@ -4,7 +4,7 @@ import React, {
   useContext,
   useState
 } from 'react';
-import { MediaQueryData } from '../../../apollo/queries/mediaQuery';
+import { MediaListQueryData } from '../../../apollo/queries/mediaListQuery';
 import { setUserData } from '../../firebase/db';
 import { IMediaLists } from '../../types/entry';
 import { IOnboardingContext } from './onboardingProviderTypes';
@@ -21,7 +21,7 @@ const OnboardingProvider: React.FC<
     setMediaLists: React.Dispatch<
       React.SetStateAction<IMediaLists | undefined>
     >;
-    mediaData: MediaQueryData | undefined;
+    mediaData: MediaListQueryData | undefined;
     customLists: string[] | undefined;
   }>
 > = ({ children, setMediaLists, mediaData, customLists }) => {

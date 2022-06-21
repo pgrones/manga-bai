@@ -1,13 +1,12 @@
-import { Center, Grid, Overlay, useMantineTheme } from '@mantine/core';
+import { Grid } from '@mantine/core';
 import { IoBagCheck, IoColorPalette, IoNotifications } from 'react-icons/io5';
 import { SiAnilist } from 'react-icons/si';
+import { WAITING } from '../../lib/helper/constants';
 import Feature from './feature';
 
 const Features = () => {
-  const theme = useMantineTheme();
-
   return (
-    <Grid gutter="xl">
+    <Grid gutter="xl" py="xs">
       <Grid.Col sm={6}>
         <Feature
           icon={<IoBagCheck size={24} />}
@@ -19,22 +18,15 @@ const Features = () => {
         <Feature
           icon={<IoNotifications size={24} />}
           title="Get notifications when new volumes are available"
-          text="Manga Bai lets you know when a new volume of a series you're reading is on sale on Amazon. You can choose wether you prefer English or Japanese volumes."
-        >
-          <Overlay opacity={0.9} color={theme.other.getThemeBg(theme)}>
-            <Center style={{ height: '100%' }}>
-              Available as soon as the site has access to the Amazon API.
-              <br />
-              Use the affiliate links at the top of the site make this possible.
-            </Center>
-          </Overlay>
-        </Feature>
+          text="Available as soon as the site has access to the Amazon API. Use the affiliate links at the top of the site make this possible."
+          // text="Manga Bai lets you know when a new volume of a series you're reading is on sale on Amazon. You can choose wether you prefer English or Japanese volumes."
+        />
       </Grid.Col>
       <Grid.Col sm={6}>
         <Feature
           icon={<SiAnilist size={24} />}
-          title="Use your exisiting AniList account"
-          text='Login with your AniList account and synchronize your changes. The custom list "Wating For New Volumes" lets your updates appear on AniList as well as Manga Bai.'
+          title="Use your existing AniList account"
+          text={`Login with your AniList account and synchronize your changes. The custom list "${WAITING}" lets your updates appear on AniList as well as Manga Bai.`}
         />
       </Grid.Col>
       <Grid.Col sm={6}>

@@ -6,7 +6,7 @@ import React, {
   useRef,
   useState
 } from 'react';
-import { Title } from '../../../apollo/queries/mediaQuery';
+import { Title } from '../../../apollo/queries/mediaListQuery';
 import { CURRENT, WAITING } from '../../helper/constants';
 import { IMediaData, IMediaLists } from '../../types/entry';
 import { Layout } from '../../types/user';
@@ -35,10 +35,19 @@ const MediaProvider: React.FC<
 
   const removeCurrentEntry = (mediaId: number) => {
     setCurrent(prev => (prev ?? []).filter(m => m.mediaId !== mediaId));
+    fullData.current?.[0]?.splice(
+      fullData.current?.[0].findIndex(m => m.mediaId === mediaId),
+      1
+    );
   };
 
   const removeWaitingEntry = (mediaId: number) => {
     setWaiting(prev => (prev ?? []).filter(m => m.mediaId !== mediaId));
+
+    fullData.current?.[1]?.splice(
+      fullData.current?.[1].findIndex(m => m.mediaId === mediaId),
+      1
+    );
   };
 
   const search = (value: string) => {

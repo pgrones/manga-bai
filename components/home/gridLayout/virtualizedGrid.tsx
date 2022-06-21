@@ -4,7 +4,7 @@ import React from 'react';
 import { areEqual, VariableSizeList as List } from 'react-window';
 //@ts-ignore
 import { ReactWindowScroller } from 'react-window-scroller';
-import { MediaList } from '../../../apollo/queries/mediaQuery';
+import { MediaList } from '../../../apollo/queries/mediaListQuery';
 import { useMedia } from '../../../lib/hooks/provider/mediaProvider';
 import GridEntry from './gridEntry';
 
@@ -41,12 +41,13 @@ const VirtualizedGrid: React.FC<{
   const { current, waiting } = useMedia();
   const theme = useMantineTheme();
   const xs = 1;
-  const sm = useMediaQuery(`(min-width: ${theme.breakpoints.sm}px)`) && 2;
+  const sm = useMediaQuery(`(min-width: ${theme.breakpoints.xs}px)`) && 2;
+  const md = useMediaQuery(`(min-width: ${theme.breakpoints.md}px)`) && 3;
   const lg = useMediaQuery(`(min-width: ${theme.breakpoints.lg}px)`) && 3;
   const xl = useMediaQuery(`(min-width: ${theme.breakpoints.xl}px)`) && 4;
 
   const itemData: ((MediaList | string)[] | JSX.Element)[] = [];
-  const itemsPerRow = xl || lg || sm || xs;
+  const itemsPerRow = xl || md || sm || xs;
   let statusIndex = -1;
 
   if (waiting?.length) {
@@ -75,7 +76,14 @@ const VirtualizedGrid: React.FC<{
 
   return (
     // Hack to rerender the list on window size changes
-    <div key={itemsPerRow + (current?.length ?? 0) + (waiting?.length ?? 0)}>
+    <div
+      key={
+        itemsPerRow +
+        (current?.length ?? 0) +
+        (waiting?.length ?? 0) +
+        (lg ? 'true' : 'false')
+      }
+    >
       <ReactWindowScroller>
         {({ ref, outerRef, style, onScroll }: any) => (
           <List
@@ -85,7 +93,7 @@ const VirtualizedGrid: React.FC<{
             height={window.innerHeight}
             width={0}
             itemCount={itemData.length}
-            itemSize={index => (index === statusIndex ? 60 : 194)}
+            itemSize={index => (index === statusIndex ? 60 : !lg ? 144 : 194)}
             itemData={itemData}
             onScroll={onScroll}
           >

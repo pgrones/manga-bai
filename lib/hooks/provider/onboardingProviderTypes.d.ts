@@ -1,4 +1,4 @@
-import { MediaQueryData } from '../../../apollo/queries/mediaQuery';
+import { MediaListQueryData } from '../../../apollo/queries/mediaListQuery';
 import { IMediaLists } from '../../types/entry';
 
 export interface IOnboardingContext {
@@ -6,7 +6,7 @@ export interface IOnboardingContext {
   nextStep: () => void;
   loading: boolean;
   setLoading: React.Dispatch<React.SetStateAction<boolean>>;
-  mediaData: MediaQueryData | undefined;
+  mediaData: MediaListQueryData | undefined;
   setMediaLists: React.Dispatch<React.SetStateAction<IMediaLists | undefined>>;
   customLists: string[] | undefined;
   done: () => void;

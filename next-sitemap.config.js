@@ -1,6 +1,6 @@
 /** @type {import('next-sitemap').IConfig} */
 module.exports = {
-  siteUrl: 'TODO',
+  siteUrl: 'https://mangabai.com',
   generateIndexSitemap: false,
   generateRobotsTxt: true,
   robotsTxtOptions: {

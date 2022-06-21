@@ -1,4 +1,4 @@
-import { Media } from '../../apollo/queries/mediaQuery';
+import { Media } from '../../apollo/queries/mediaListQuery';
 
 export interface HeaderProps extends Media {
   close: () => void;

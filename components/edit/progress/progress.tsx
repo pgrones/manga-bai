@@ -1,4 +1,4 @@
-import { ActionIcon, Group, Text } from '@mantine/core';
+import { ActionIcon, Group, MediaQuery, Text } from '@mantine/core';
 import { useDebouncedValue } from '@mantine/hooks';
 import React, { useEffect, useState } from 'react';
 import { IoAddOutline } from 'react-icons/io5';
@@ -18,18 +18,20 @@ const Progress: React.FC<ProgressProps> = React.memo(
     }, [debouncedProgressVolumes]);
 
     return (
-      <Group spacing={2} style={{ flex: 1 }}>
-        <Text size="sm">
-          {text}: {progressLocal}
-        </Text>
-        <ActionIcon
-          size="xs"
-          onClick={() => setProgressLocal(prev => prev + 1)}
-          title={`Increase ${text}`}
-        >
-          {buttonVisible && <IoAddOutline size={20} />}
-        </ActionIcon>
-      </Group>
+      <MediaQuery smallerThan="sm" styles={{ flex: 'none !important' }}>
+        <Group spacing={2} style={{ flex: 2 }} noWrap>
+          <Text size="sm" style={{ whiteSpace: 'nowrap' }}>
+            {text}: {progressLocal}
+          </Text>
+          <ActionIcon
+            size="xs"
+            onClick={() => setProgressLocal(prev => prev + 1)}
+            title={`Increase ${text}`}
+          >
+            {buttonVisible && <IoAddOutline size={20} />}
+          </ActionIcon>
+        </Group>
+      </MediaQuery>
     );
   }
 );

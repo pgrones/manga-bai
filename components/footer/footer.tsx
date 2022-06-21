@@ -1,21 +1,30 @@
-import { Container, Divider, Group, Stack, Text } from '@mantine/core';
+import {
+  Container,
+  Divider,
+  Group,
+  MediaQuery,
+  Stack,
+  Text
+} from '@mantine/core';
 import AmazonLink from '../common/amazonLink';
 import { ColorPicker } from '../header/colorPicker';
 import Logo from '../header/logo';
 
 const Footer = () => {
   return (
-    <Container size="xl" pt="md" pb="xl" style={{ height: '100%' }}>
+    <Container size="xl" px={0} pt="md" pb="xl" style={{ height: '100%' }}>
       <Stack style={{ height: '100%' }} justify="space-around" pb="xl">
         <Group position="apart" align="flex-start">
-          <Stack spacing="xs">
-            <Logo />
-            <Text size="sm">
-              Track your preordered, bought, and owned manga and light novels
-            </Text>
-          </Stack>
-          <Group spacing="xl" align="flex-start">
-            <Stack spacing={8} px="xl">
+          <MediaQuery smallerThan="md" styles={{ display: 'none' }}>
+            <Stack spacing="xs">
+              <Logo />
+              <Text size="sm">
+                Track your preordered, bought, and owned manga and light novels
+              </Text>
+            </Stack>
+          </MediaQuery>
+          <Group spacing={48} align="flex-start">
+            <Stack spacing={8}>
               <Text weight="bold" pb={5}>
                 Support the site
               </Text>
@@ -28,13 +37,10 @@ const Footer = () => {
               >
                 Buy me a coffee
               </Text>
-              <AmazonLink title="Amazon.com" href='"https://amzn.to/3lEKHwX"' />
-              <AmazonLink
-                title="Amazon.co.jp"
-                href='"https://amzn.to/3lEKHwX"'
-              />
+              <AmazonLink title="Amazon.com" href="https://amzn.to/3lEKHwX" />
+              <AmazonLink title="Amazon.co.jp" href="https://amzn.to/3QGxmmi" />
             </Stack>
-            <Stack spacing={8} px="xl">
+            <Stack spacing={8}>
               <Text weight="bold" pb={5}>
                 Links
               </Text>
@@ -66,7 +72,7 @@ const Footer = () => {
                 Sitemap
               </Text>
             </Stack>
-            <Stack spacing={8} pl="xl">
+            <Stack spacing={8}>
               <Text weight="bold" pb={5}>
                 Contact
               </Text>

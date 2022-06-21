@@ -4,10 +4,10 @@ import customListQuery, {
   CustomListQueryData,
   CustomListQueryVariables
 } from '../../apollo/queries/customListQuery';
-import mediaQuery, {
-  MediaQueryData,
-  MediaQueryVariables
-} from '../../apollo/queries/mediaQuery';
+import mediaListQuery, {
+  MediaListQueryData,
+  MediaListQueryVariables
+} from '../../apollo/queries/mediaListQuery';
 import { getMediaData } from '../firebase/db';
 import { createMediaLists } from '../helper/onboardingHelper';
 import { IMediaLists } from '../types/entry';
@@ -25,7 +25,7 @@ const useInitialization = (
     data: mediaData,
     loading,
     error
-  } = useQuery<MediaQueryData, MediaQueryVariables>(mediaQuery, {
+  } = useQuery<MediaListQueryData, MediaListQueryVariables>(mediaListQuery, {
     variables: { userId: aniListUser!.id },
     skip: !aniListUser
   });

@@ -1,26 +1,35 @@
 import { CSSProperties } from 'react';
-import { MediaList, MediaQueryData } from '../../apollo/queries/mediaQuery';
+import {
+  MediaList,
+  MediaListQueryData
+} from '../../apollo/queries/mediaListQuery';
 import { PopularMangaQueryData } from '../../apollo/queries/popularManga';
 import { IMediaLists } from '../types/entry';
 import { IFirebaseValues } from '../types/firebase';
 import { WAITING_CUSTOM_LIST } from './constants';
 
 export const createMediaLists = (
-  mediaData?: MediaQueryData,
+  mediaData?: MediaListQueryData,
   customLists?: string[],
   firebaseData?: { [key: number]: IFirebaseValues } | null
 ): IMediaLists => {
   const mediaLists = mediaData?.MediaListCollection.lists;
+  const waiting = mediaLists
+    ?.find(l => l.entries?.every(e => e.customLists?.[WAITING_CUSTOM_LIST]))
+    ?.entries?.map(m => ({ ...m, ...firebaseData?.[m.mediaId] }))
+    .filter(m => !m.removed);
 
   return {
-    paused: mediaLists?.find(l => l.entries?.some(e => e.status === 'PAUSED'))
+    paused: mediaLists?.find(l => l.entries?.every(e => e.status === 'PAUSED'))
       ?.entries,
     current: mediaLists
-      ?.find(l => l.entries?.some(e => e.status === 'CURRENT'))
-      ?.entries?.map(m => ({ ...m, ...firebaseData?.[m.mediaId] })),
-    waiting: mediaLists
-      ?.find(l => l.entries?.every(e => e.customLists?.[WAITING_CUSTOM_LIST]))
-      ?.entries?.map(m => ({ ...m, ...firebaseData?.[m.mediaId] })),
+      ?.find(l => l.entries?.every(e => e.status === 'CURRENT'))
+      ?.entries?.map(m => ({ ...m, ...firebaseData?.[m.mediaId] }))
+      .filter(
+        m =>
+          !m.removed && waiting?.findIndex(w => w.mediaId === m.mediaId) === -1
+      ),
+    waiting,
     hasCustomList: !!customLists?.includes(WAITING_CUSTOM_LIST)
   };
 };
@@ -32,8 +41,7 @@ export const createMutation = (
   chunk: MediaList[],
   ms: number,
   onMutation: (options: any) => Promise<void>,
-  chunkDelay?: number,
-  c?: string
+  chunkDelay?: number
 ) => {
   return chunk.map(async (entry, i) => {
     await delay((chunkDelay ?? 0) + ms * i + Math.random() * 10);
@@ -50,22 +58,16 @@ export const createMutation = (
         )
       }
     });
-
-    console.log(
-      'delay: ' + Math.round(ms + Math.random() * 10),
-      '| length: ' + chunk.length,
-      '| chunk: ' + c + ' - ' + i
-    );
   });
 };
 
 const isMediaQueryData = (
-  data: MediaQueryData | PopularMangaQueryData
-): data is MediaQueryData =>
+  data: MediaListQueryData | PopularMangaQueryData
+): data is MediaListQueryData =>
   Object.prototype.hasOwnProperty.call(data, 'MediaListCollection');
 
 export const getCovers = (
-  mediaData: MediaQueryData | PopularMangaQueryData | undefined
+  mediaData: MediaListQueryData | PopularMangaQueryData | undefined
 ) => {
   if (mediaData) {
     let covers: { id: number; coverImage: string }[];

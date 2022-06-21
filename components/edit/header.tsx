@@ -2,7 +2,6 @@ import {
   Button,
   CloseButton,
   Group,
-  Text,
   Title,
   useMantineTheme
 } from '@mantine/core';
@@ -27,15 +26,18 @@ const Header: React.FC<HeaderProps> = props => {
         style={{ opacity: 0.3 }}
       />
       <Group
-        px="md"
-        style={{ position: 'absolute', bottom: -30, width: '100%' }}
+        p="md"
+        align="flex-end"
+        style={{ position: 'absolute', bottom: 0, width: '100%' }}
         noWrap
       >
         <div
           style={{
             position: 'relative',
+            bottom: -46,
             height: 140,
-            width: 100
+            width: 100,
+            minWidth: 100
           }}
         >
           <Image
@@ -47,16 +49,17 @@ const Header: React.FC<HeaderProps> = props => {
             sizes="100px"
           />
         </div>
-        <Text lineClamp={2} style={{ wordBreak: 'break-word' }}>
+        <Group style={{ minHeight: 36 }}>
           <Title
             order={5}
-            mt="xl"
-            mr="md"
-            sx={theme => ({ color: theme.white, fontWeight: 'normal' })}
+            sx={theme => ({
+              color: theme.white,
+              fontWeight: 'normal'
+            })}
           >
             {title.userPreferred}
           </Title>
-        </Text>
+        </Group>
         <Button
           mt="xl"
           form="form"

@@ -4,7 +4,7 @@ import updateMangaEntry, {
   UpdateMangaEntryData,
   UpdateMangaEntryVariables
 } from '../../apollo/mutations/updateMangaEntry';
-import { MediaList } from '../../apollo/queries/mediaQuery';
+import { MediaList } from '../../apollo/queries/mediaListQuery';
 import { WAITING_CUSTOM_LIST } from '../helper/constants';
 import { IAniListValues } from '../types/aniList';
 import useNotification from './useNotification';
@@ -46,7 +46,7 @@ export const useAniListData = (entry: MediaList) => {
   };
 
   const removeFromList = async () => {
-    updateEntry({
+    await updateEntry({
       variables: {
         customLists: Array.from(
           new Set(

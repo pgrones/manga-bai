@@ -13,13 +13,13 @@ const MetaTags: React.FC<MetaTagsProps> = ({ title, description }) => {
       <meta name="twitter:site" content="@Alzariel" />
       <meta name="twitter:title" content={title} />
       <meta name="twitter:description" content={description} />
-      <meta name="twitter:image" content="TODO" />
+      <meta name="twitter:image" content="https://mangabai.com/logo.webp" />
 
       <meta property="og:site_name" content="Manga Bai" />
       <meta property="og:title" content={title} />
       <meta property="og:description" content={description} />
-      <meta property="og:url" content="TODO" />
-      <meta property="og:image" content="TODO" />
+      <meta property="og:url" content="https://mangabai.com" />
+      <meta property="og:image" content="https://mangabai.com/logo.webp" />
     </Head>
   );
 };

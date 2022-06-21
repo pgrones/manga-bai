@@ -34,3 +34,14 @@ export const getMediaData = async (
 ): Promise<{ [key: number]: IFirebaseValues } | null> => {
   return (await get(ref(db, uid + '/media'))).val();
 };
+
+export const hasRemovedMediaData = (
+  uid: string,
+  onChange: (hasRemovedMediaData: boolean) => void
+) => {
+  const mediaRef = ref(db, uid + '/media');
+  return onValue(mediaRef, snapshot => {
+    const data: { [key: number]: IFirebaseValues } | null = snapshot.val();
+    if (data) onChange(Object.values(data).some(d => d.removed));
+  });
+};

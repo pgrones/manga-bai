@@ -4,7 +4,7 @@ Allow: /
 Disallow: /api/*
 
 # Host
-Host: TODO
+Host: https://mangabai.com
 
 # Sitemaps
-Sitemap: TODO/sitemap.xml
+Sitemap: https://mangabai.com/sitemap.xml

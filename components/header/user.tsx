@@ -1,26 +1,54 @@
 import { Avatar, Button, Popover, Stack } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
-import { useState } from 'react';
+import { Unsubscribe } from 'firebase/database';
+import dynamic from 'next/dynamic';
+import Link from 'next/link';
+import { useEffect, useState } from 'react';
+import { CgPlayListRemove } from 'react-icons/cg';
 import { IoChevronDownOutline, IoLogOutOutline } from 'react-icons/io5';
+import { hasRemovedMediaData } from '../../lib/firebase/db';
 import { useUser } from '../../lib/hooks/provider/userProvider';
 import ColorPickerPopover from './colorPicker';
 
+const LoginButton = dynamic(() => import('../common/loginButton'), {
+  ssr: false
+});
+
 const User = () => {
-  const { fullyAuthenticated, aniListUser, signOut: singOut } = useUser();
-  const [opened, { toggle }] = useDisclosure(false);
+  const { fullyAuthenticated, aniListUser, firebaseUser, signOut } = useUser();
+  const [opened, { toggle, close }] = useDisclosure(false);
   const [closeOnClickOutside, setCloseOnClickOutside] = useState(true);
+  const [removedMediaData, setRemovedMediaData] = useState(false);
+
+  useEffect(() => {
+    let unsubscribe: Unsubscribe | void;
+    if (firebaseUser) {
+      try {
+        unsubscribe = hasRemovedMediaData(
+          firebaseUser.uid,
+          setRemovedMediaData
+        );
+      } catch (error) {
+        console.log(error);
+      }
+    } else {
+      setRemovedMediaData(false);
+    }
+
+    return unsubscribe;
+  }, [firebaseUser]);
 
   return fullyAuthenticated === true ? (
     <Popover
       opened={opened}
-      onClose={toggle}
+      onClose={close}
       transition="scale-y"
       closeOnClickOutside={closeOnClickOutside}
       target={
         <Button
           variant="subtle"
           p={0}
-          mt={3}
+          mt={5}
           color="gray"
           onClick={toggle}
           rightIcon={<IoChevronDownOutline size={18} />}
@@ -38,12 +66,28 @@ const User = () => {
       withArrow
     >
       <Stack spacing={0}>
+        {removedMediaData && (
+          <Link href="/removedEntries" passHref>
+            <Button
+              variant="subtle"
+              color="gray"
+              component="a"
+              leftIcon={<CgPlayListRemove size={20} />}
+              styles={{
+                inner: { justifyContent: 'flex-start' },
+                leftIcon: { marginLeft: -2, marginRight: 8 }
+              }}
+            >
+              Removed entries
+            </Button>
+          </Link>
+        )}
         <ColorPickerPopover setCloseOnClickOutside={setCloseOnClickOutside} />
         <Button
           variant="subtle"
           color="gray"
           leftIcon={<IoLogOutOutline size={16} />}
-          onClick={singOut}
+          onClick={signOut}
           styles={{ inner: { justifyContent: 'flex-start' } }}
         >
           Logout
@@ -51,13 +95,7 @@ const User = () => {
       </Stack>
     </Popover>
   ) : (
-    <Button
-      onClick={() =>
-        window.open('/signin', 'Login with AniList', 'height=500,width=500')
-      }
-    >
-      Login with AniList
-    </Button>
+    <LoginButton size="xs" />
   );
 };
 

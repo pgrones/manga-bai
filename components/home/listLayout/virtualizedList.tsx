@@ -1,8 +1,10 @@
+import { useMantineTheme } from '@mantine/core';
+import { useMediaQuery } from '@mantine/hooks';
 import React from 'react';
 import { areEqual, FixedSizeList as List } from 'react-window';
 //@ts-ignore
 import { ReactWindowScroller } from 'react-window-scroller';
-import { MediaList } from '../../../apollo/queries/mediaQuery';
+import { MediaList } from '../../../apollo/queries/mediaListQuery';
 import { useMedia } from '../../../lib/hooks/provider/mediaProvider';
 import ListEntry from './listEntry';
 
@@ -35,6 +37,9 @@ const VirtualizedList: React.FC<{
   statusTitle: JSX.Element;
 }> = React.memo(({ statusTitle }) => {
   const { current, waiting } = useMedia();
+  const theme = useMantineTheme();
+  const matches = useMediaQuery(`(min-width: ${theme.breakpoints.xs}px)`);
+
   const itemData: (MediaList | JSX.Element)[] = [
     ...(waiting ?? []),
     ...(waiting?.length && current?.length ? [statusTitle] : []),
@@ -42,7 +47,13 @@ const VirtualizedList: React.FC<{
   ];
 
   return (
-    <div key={(current?.length ?? 0) + (waiting?.length ?? 0)}>
+    <div
+      key={
+        (current?.length ?? 0) +
+        (waiting?.length ?? 0) +
+        (matches ? 'true' : 'false')
+      }
+    >
       <ReactWindowScroller>
         {({ ref, outerRef, style, onScroll }: any) => (
           <List
@@ -51,7 +62,7 @@ const VirtualizedList: React.FC<{
             style={style}
             height={window.innerHeight}
             itemCount={itemData.length}
-            itemSize={55}
+            itemSize={matches ? 55 : 75}
             width={0}
             itemData={itemData}
             onScroll={onScroll}

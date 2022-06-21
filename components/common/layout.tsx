@@ -2,6 +2,7 @@ import { AppShell, Container, Footer, Header } from '@mantine/core';
 import React, { PropsWithChildren } from 'react';
 import AppHeader from '../header/header';
 import AppFooter from '../footer/footer';
+import BurgerButton from './burgerButton';
 
 const Layout: React.FC<PropsWithChildren<{ is404?: boolean }>> = ({
   children,
@@ -12,20 +13,22 @@ const Layout: React.FC<PropsWithChildren<{ is404?: boolean }>> = ({
       header={
         <Header
           height={55}
-          sx={{
-            paddingRight: 'var(--removed-scroll-width, 0px)'
-          }}
+          sx={theme => ({
+            paddingRight: `calc(var(--removed-scroll-width, 0px) + ${theme.spacing.md}px)`,
+            paddingLeft: theme.spacing.md
+          })}
         >
           <AppHeader />
         </Header>
       }
       footer={
         <Footer
-          height={300}
-          sx={{
-            zIndex: is404 ? 1 : 0,
-            paddingRight: 'var(--removed-scroll-width, 0px)'
-          }}
+          height={350}
+          sx={theme => ({
+            paddingRight: `calc(var(--removed-scroll-width, 0px) + ${theme.spacing.md}px)`,
+            paddingLeft: theme.spacing.md,
+            zIndex: is404 ? 1 : 0
+          })}
         >
           <AppFooter />
         </Footer>
@@ -40,7 +43,10 @@ const Layout: React.FC<PropsWithChildren<{ is404?: boolean }>> = ({
       })}
       fixed
     >
-      <Container size="xl">{children}</Container>
+      <Container size="xl" p={0}>
+        {children}
+        <BurgerButton />
+      </Container>
     </AppShell>
   );
 };

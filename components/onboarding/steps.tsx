@@ -10,7 +10,16 @@ const Steps: React.FC = () => {
 
   return (
     <>
-      <Container pt="xl">
+      <Container
+        pt="xl"
+        p={0}
+        sx={theme => ({
+          height: `calc(100vh - var(--mantine-header-height) - ${
+            theme.spacing.md * 2
+          }px)`,
+          overflow: 'auto'
+        })}
+      >
         <Stepper
           active={step}
           breakpoint="sm"

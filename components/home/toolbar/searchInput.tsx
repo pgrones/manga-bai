@@ -4,7 +4,9 @@ import { useEffect, useRef } from 'react';
 import { IoSearchOutline } from 'react-icons/io5';
 import { useMedia } from '../../../lib/hooks/provider/mediaProvider';
 
-const SearchInput = () => {
+const SearchInput: React.FC<{ searchFn?: (value: string) => void }> = ({
+  searchFn
+}) => {
   const os = useOs();
   const phone = ['ios', 'android'].includes(os);
   const { search } = useMedia();
@@ -15,40 +17,50 @@ const SearchInput = () => {
   ]);
 
   useEffect(() => {
-    search(searchValue);
+    (searchFn ?? search)(searchValue);
   }, [searchValue]);
 
   return (
-    <MediaQuery smallerThan="sm" styles={{ width: 180 + 'px !important' }}>
-      <TextInput
-        ref={searchRef}
-        value={searchValue}
-        onChange={setSearchValue}
-        type="search"
-        size="xs"
-        placeholder="Search"
-        icon={<IoSearchOutline size={16} />}
-        rightSectionWidth={searchValue ? 25 : 62}
+    <MediaQuery
+      query="(max-width: 410px)"
+      styles={{ width: searchFn ? 'auto !important' : '100% !important' }}
+    >
+      <MediaQuery
+        smallerThan="sm"
         styles={{
-          root: { width: 270 },
-          rightSection: { pointerEvents: searchValue ? 'auto' : 'none' }
+          width: searchFn ? 'auto !important' : 'min(180px, 48%) !important'
         }}
-        rightSection={
-          searchValue ? (
-            <CloseButton
-              size="xs"
-              variant="transparent"
-              onClick={() => setSearchValue('')}
-            />
-          ) : (
-            !phone && (
-              <Text size="xs" color="dimmed" weight="normal">
-                {os === 'macos' ? '⌘' : 'Ctrl'} + S
-              </Text>
+      >
+        <TextInput
+          ref={searchRef}
+          value={searchValue}
+          onChange={setSearchValue}
+          type="search"
+          size="xs"
+          placeholder="Search"
+          icon={<IoSearchOutline size={16} />}
+          rightSectionWidth={searchValue ? 25 : 62}
+          styles={{
+            root: { width: 270 },
+            rightSection: { pointerEvents: searchValue ? 'auto' : 'none' }
+          }}
+          rightSection={
+            searchValue ? (
+              <CloseButton
+                size="xs"
+                variant="transparent"
+                onClick={() => setSearchValue('')}
+              />
+            ) : (
+              !phone && (
+                <Text size="xs" color="dimmed" weight="normal">
+                  {os === 'macos' ? '⌘' : 'Ctrl'} + S
+                </Text>
+              )
             )
-          )
-        }
-      />
+          }
+        />
+      </MediaQuery>
     </MediaQuery>
   );
 };

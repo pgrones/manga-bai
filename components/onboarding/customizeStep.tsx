@@ -1,4 +1,4 @@
-import { Box, Button, Group, Stack, Text } from '@mantine/core';
+import { Button, Group, Stack, Text } from '@mantine/core';
 import { useOnboarding } from '../../lib/hooks/provider/onboardingProvider';
 import { ColorPicker } from '../header/colorPicker';
 import ThemeToggle from '../header/themeToggle';
@@ -17,11 +17,9 @@ const CustomizeStep = () => {
         <Text>Site theme</Text>
         <ThemeToggle />
       </Group>
-      <Group mt="md">
+      <Group mt="md" spacing="xl">
         <Text>Site color</Text>
-        <Box pl="xs">
-          <ColorPicker />
-        </Box>
+        <ColorPicker />
       </Group>
       <Group mt="md">
         <Text>Preferred layout</Text>

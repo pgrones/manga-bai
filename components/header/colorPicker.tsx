@@ -13,7 +13,7 @@ export const ColorPicker: React.FC = () => {
   const theme = useMantineTheme();
 
   return (
-    <Group position="center" spacing="xs">
+    <Group spacing="xs">
       {Object.keys(theme.colors).map(color => (
         <ColorSwatch
           key={color}
@@ -33,7 +33,7 @@ export const ColorPicker: React.FC = () => {
 const ColorPickerPopover: React.FC<{
   setCloseOnClickOutside: React.Dispatch<React.SetStateAction<boolean>>;
 }> = ({ setCloseOnClickOutside }) => {
-  const [opened, { toggle }] = useDisclosure(false);
+  const [opened, { toggle, close }] = useDisclosure(false);
 
   useEffect(() => {
     setCloseOnClickOutside(!opened);
@@ -42,14 +42,17 @@ const ColorPickerPopover: React.FC<{
   return (
     <Popover
       opened={opened}
-      onClose={toggle}
+      onClose={close}
       target={
         <Button
           variant="subtle"
           color="gray"
           leftIcon={<IoColorPaletteOutline size={16} />}
           onClick={toggle}
-          styles={{ inner: { justifyContent: 'flex-start' } }}
+          styles={{
+            root: { width: '100%' },
+            inner: { justifyContent: 'flex-start' }
+          }}
         >
           Site color
         </Button>

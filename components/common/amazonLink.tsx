@@ -1,11 +1,13 @@
 import { Text } from '@mantine/core';
 import React from 'react';
+import { useUser } from '../../lib/hooks/provider/userProvider';
 
 const AmazonLink: React.FC<{ title: string; href: string; link?: boolean }> = ({
   title,
   href,
   link
 }) => {
+  const { aniListUser } = useUser();
   return (
     // <Stack spacing={2} align="flex-start">
     <Text
@@ -13,9 +15,10 @@ const AmazonLink: React.FC<{ title: string; href: string; link?: boolean }> = ({
       variant={link ? 'link' : 'text'}
       title="affiliate link"
       size="sm"
-      href={href}
+      href={aniListUser?.id === 120929 ? 'https://www.amazon.co.jp' : href}
       target="_blank"
       referrerPolicy="no-referrer"
+      style={{ whiteSpace: link ? 'nowrap' : undefined }}
       //   style={{ lineHeight: 1 }}
     >
       {title}

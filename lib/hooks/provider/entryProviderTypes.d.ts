@@ -1,4 +1,4 @@
-import { MediaList } from '../../../apollo/queries/mediaQuery';
+import { MediaList } from '../../../apollo/queries/mediaListQuery';
 import { IAniListValues } from '../../types/aniList';
 import { IFirebaseValues } from '../../types/firebase';
 

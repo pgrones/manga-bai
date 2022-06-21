@@ -11,7 +11,11 @@ import {
 import { useForm } from '@mantine/form';
 import { useModals } from '@mantine/modals';
 import { useRef } from 'react';
-import { CURRENT, WAITING } from '../../lib/helper/constants';
+import {
+  CURRENT,
+  WAITING,
+  WAITING_CUSTOM_LIST
+} from '../../lib/helper/constants';
 import useNotification from '../../lib/hooks/useNotification';
 import { FormProps } from './formTypes';
 
@@ -87,19 +91,22 @@ const Form: React.FC<FormProps> = props => {
           on AniList and the entry will not show up on Manga Bai anymore.
           <br />
           <br />
-          You can always undo this action by moving the entry back into the
-          custom list on AniList.
+          You can always undo this action in the settings in the top right
+          corner.
         </Text>
       ),
       labels: { confirm: 'Remove', cancel: 'Cancel' },
       confirmProps: { color: 'red' },
       onConfirm: async () => {
         try {
-          await removeFromList();
-          if (aniListData.status === 'CURRENT')
-            removeCurrentEntry(aniListData.mediaId);
-          if (aniListData.status === 'PAUSED')
+          if (aniListData.customLists?.[WAITING_CUSTOM_LIST]) {
             removeWaitingEntry(aniListData.mediaId);
+            await removeFromList();
+          } else if (aniListData.status === 'CURRENT') {
+            removeCurrentEntry(aniListData.mediaId);
+          }
+
+          await updateFirebaseData({ removed: true });
           closeAll();
         } catch (error) {
           console.log(error);
@@ -180,7 +187,7 @@ const Form: React.FC<FormProps> = props => {
             </Anchor>
             <Button
               variant="subtle"
-              title="Remove this entry from the list"
+              title="Remove this entry from Manga Bai"
               onClick={onExclude}
               sx={theme => ({
                 'color':

@@ -1,4 +1,4 @@
-import { MediaList } from '../../apollo/queries/mediaQuery';
+import { MediaList } from '../../apollo/queries/mediaListQuery';
 import { IFirebaseValues } from './firebase';
 
 export type IMediaData = MediaList & IFirebaseValues;

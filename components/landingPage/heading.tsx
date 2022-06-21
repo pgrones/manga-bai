@@ -1,6 +1,7 @@
 import {
   createStyles,
   Group,
+  MediaQuery,
   Overlay,
   Title,
   useMantineTheme
@@ -48,42 +49,44 @@ const Heading: React.FC<{
   const { classes } = useStyles();
 
   return (
-    <Group
-      spacing={0}
-      style={{ perspective: 1000, overflow: 'hidden', minHeight: 300 }}
-      noWrap
-      position="center"
-    >
-      <Overlay
-        zIndex={1}
-        opacity={0.8}
-        color={theme.other.getThemeBg(theme)}
-        sx={theme => ({
-          left: -theme.spacing.md * 2,
-          right: -theme.spacing.md * 2
-        })}
-      />
-      <Title align="center" className={classes.heading}>
-        Track your preordered, bought, and owned manga and light novels
-      </Title>
-      {manga?.map((m, i) => (
-        <div
-          className={classes.image}
-          style={{ transform: m.transform, zIndex: m.zIndex }}
-          key={m.id}
-        >
-          <Image
-            layout="fill"
-            objectFit="cover"
-            src={m.src}
-            alt={m.title}
-            style={getBorderRadius(theme)}
-            priority={Math.floor(manga.length / 2) === i}
-            sizes="200px"
-          />
-        </div>
-      ))}
-    </Group>
+    <MediaQuery smallerThan="lg" styles={{ minHeight: 180 + 'px !important' }}>
+      <Group
+        spacing={0}
+        style={{ perspective: 1000, overflow: 'hidden', minHeight: 300 }}
+        noWrap
+        position="center"
+      >
+        <Overlay
+          zIndex={1}
+          opacity={0.8}
+          color={theme.other.getThemeBg(theme)}
+          sx={theme => ({
+            left: -theme.spacing.md * 2,
+            right: -theme.spacing.md * 2
+          })}
+        />
+        <Title align="center" className={classes.heading}>
+          Track your preordered, bought, and owned manga and light novels
+        </Title>
+        {manga?.map((m, i) => (
+          <div
+            className={classes.image}
+            style={{ transform: m.transform, zIndex: m.zIndex }}
+            key={m.id}
+          >
+            <Image
+              layout="fill"
+              objectFit="cover"
+              src={m.src}
+              alt={m.title}
+              style={getBorderRadius(theme)}
+              priority={Math.floor(manga.length / 2) === i}
+              sizes="200px"
+            />
+          </div>
+        ))}
+      </Group>
+    </MediaQuery>
   );
 };
 

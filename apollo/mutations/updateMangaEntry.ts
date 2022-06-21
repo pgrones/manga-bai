@@ -1,5 +1,5 @@
 import { gql } from '@apollo/client';
-import { CustomLists, Status } from '../queries/mediaQuery';
+import { CustomLists, Status } from '../queries/mediaListQuery';
 
 const updateMangaEntry = gql`
   mutation updateMangaEntry(

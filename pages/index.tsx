@@ -1,5 +1,6 @@
-import { Button, Center, Stack } from '@mantine/core';
+import { Center, MediaQuery, Stack } from '@mantine/core';
 import { GetStaticProps, InferGetStaticPropsType, NextPage } from 'next';
+import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import { initializeApollo } from '../apollo/client';
@@ -11,6 +12,10 @@ import Layout from '../components/common/layout';
 import Features from '../components/landingPage/features';
 import Heading from '../components/landingPage/heading';
 import { useUser } from '../lib/hooks/provider/userProvider';
+
+const LoginButton = dynamic(() => import('../components/common/loginButton'), {
+  ssr: false
+});
 
 const LandingPage: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({
   manga
@@ -28,28 +33,21 @@ const LandingPage: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({
     <Layout>
       <Stack
         sx={theme => ({
-          height: `calc(100vh - var(--mantine-header-height, 0px) - ${
+          minHeight: `calc(100vh - var(--mantine-header-height, 0px) - ${
             theme.spacing.md * 2
           }px)`
         })}
-        py="xl"
+        py="xs"
         justify="space-between"
       >
         <Heading manga={manga} />
         <Features />
-        <Center>
-          <Button
-            size="md"
-            onClick={() =>
-              window.open(
-                '/signin',
-                'Login with AniList',
-                'height=500,width=500'
-              )
-            }
-          >
-            Login with AniList
-          </Button>
+        <Center styles={{ width: '100%' }}>
+          <MediaQuery smallerThan="sm" styles={{ width: '100%' }}>
+            <div>
+              <LoginButton size="md" fullWidth />
+            </div>
+          </MediaQuery>
         </Center>
       </Stack>
     </Layout>

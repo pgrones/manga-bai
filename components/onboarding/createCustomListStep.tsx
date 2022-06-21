@@ -110,13 +110,7 @@ const CreateCustomListStep = () => {
           );
 
           chunks.push(
-            ...createMutation(
-              firstChunk,
-              delayInFirstMinute,
-              onMutation,
-              undefined,
-              'firstChunk'
-            )
+            ...createMutation(firstChunk, delayInFirstMinute, onMutation)
           );
 
           for (let i = 0; i < remainingChunks.length; i += itemsPerMinute) {
@@ -130,8 +124,7 @@ const CreateCustomListStep = () => {
                 chunk,
                 lastChunk ? 200 : 760,
                 onMutation,
-                chunkDelay,
-                'chunk ' + (i + itemsPerMinute) / itemsPerMinute
+                chunkDelay
               )
             );
           }
