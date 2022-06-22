@@ -1,4 +1,6 @@
-import { Center, MediaQuery, Stack } from '@mantine/core';
+import { useApolloClient } from '@apollo/client';
+import { Anchor, Center, MediaQuery, Stack } from '@mantine/core';
+import { useNotifications } from '@mantine/notifications';
 import { GetStaticProps, InferGetStaticPropsType, NextPage } from 'next';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
@@ -21,13 +23,42 @@ const LandingPage: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({
   manga
 }) => {
   const { fullyAuthenticated } = useUser();
-  const router = useRouter();
+  const { push, query } = useRouter();
+  const { showNotification, cleanQueue } = useNotifications();
+  const apolloClient = useApolloClient();
 
   useEffect(() => {
     if (fullyAuthenticated === true) {
-      router.push('/home');
+      push('/home');
     }
   }, [fullyAuthenticated]);
+
+  useEffect(() => {
+    if (query.reason === 'InvalidToken') {
+      window.close();
+      apolloClient.resetStore();
+      cleanQueue();
+      showNotification({
+        title: 'Invalid or expired token',
+        message: (
+          <>
+            You have been redirected to the main page, since your AniList token
+            is either invalid or expired. Please login again to receive a new
+            token. If the error persists contact me on{' '}
+            <Anchor
+              href="https://anilist.co/user/Alzariel/"
+              target="_blank"
+              referrerPolicy="no-referrer"
+            >
+              AniList
+            </Anchor>
+            .
+          </>
+        ),
+        autoClose: false
+      });
+    }
+  }, [query]);
 
   return (
     <Layout>

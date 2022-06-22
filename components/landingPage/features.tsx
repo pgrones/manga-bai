@@ -14,7 +14,7 @@ const Features = () => {
           text="Remembering if and where you bought the newest volume of a manga or light novel can be quite difficult. With Manga Bai you'll never preorder a volume twice again."
         />
       </Grid.Col>
-      <Grid.Col sm={6}>
+      <Grid.Col sm={6} style={{ opacity: 0.5 }}>
         <Feature
           icon={<IoNotifications size={24} />}
           title="Get notifications when new volumes are available"

@@ -5,9 +5,12 @@ import {
   InMemoryCache,
   NormalizedCacheObject
 } from '@apollo/client';
+import { GraphQLError } from 'graphql';
 import { setContext } from '@apollo/client/link/context';
+import { onError } from '@apollo/client/link/error';
 import { RetryLink } from '@apollo/client/link/retry';
 import { useMemo } from 'react';
+import { auth } from '../lib/firebase/firebase';
 
 let apolloClient: ApolloClient<NormalizedCacheObject>;
 
@@ -15,15 +18,35 @@ const httpLink = createHttpLink({
   uri: 'https://graphql.anilist.co'
 });
 
+const errorLink = onError(({ graphQLErrors }) => {
+  if (graphQLErrors && typeof window !== 'undefined') {
+    const invalidToken =
+      graphQLErrors.find(e => e.message === 'Invalid token') ||
+      graphQLErrors.find(
+        e => (e as GraphQLError & { status: number }).status === 401
+      );
+
+    if (invalidToken) {
+      localStorage.setItem('access_token', '');
+      auth.signOut();
+      window.location.href = '/?reason=InvalidToken';
+    }
+  }
+});
+
 const retryLink = new RetryLink({
-  attempts: (count, _, error) => count < 5 && !!error,
+  attempts: (count, _, error) =>
+    !!error &&
+    error.response?.status !== 401 &&
+    !error.result?.errors?.find((e: any) => e.message === 'Invalid token') &&
+    count < 5,
   delay: (count, operation) => {
     const { response } = operation.getContext();
 
-    let delay = Math.random() * (1000 * 2 ** count);
+    let delay = Math.random() * (3000 * 2 ** count);
     const reset = response?.headers?.get('x-ratelimit-reset');
     if (reset) {
-      delay += Math.max(reset * 1000 - Date.now(), 0);
+      delay += Math.max(reset * 1000 - Date.now() + Math.random() * 5000, 0);
     }
 
     return delay;
@@ -48,7 +71,7 @@ const authLink = setContext((_, { headers }) => {
 const createApolloClient = () => {
   return new ApolloClient({
     ssrMode: typeof window === 'undefined',
-    link: from([retryLink, authLink.concat(httpLink)]),
+    link: from([errorLink, retryLink, authLink.concat(httpLink)]),
     cache: new InMemoryCache()
   });
 };

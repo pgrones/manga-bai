@@ -68,7 +68,7 @@ const useInitialization = (
     onboardingDone: userData?.onboardingDone,
     mediaData,
     customLists: customListsData?.User.mediaListOptions.mangaList.customLists,
-    loading: loading || customListsLoading,
+    loading: loading || customListsLoading || userData === undefined,
     error: error || customListsError
   };
 };

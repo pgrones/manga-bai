@@ -5,7 +5,7 @@ export interface IUserContext {
   fullyAuthenticated: boolean | 'loading';
   aniListUser: AniListUser | null;
   firebaseUser: User | null;
-  userData: IUserData | null;
+  userData: IUserData | null | undefined;
   signOut: () => void;
 }
 

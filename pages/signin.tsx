@@ -23,14 +23,7 @@ const SignInPage: NextPage = () => {
       );
 
       if (token) {
-        (async () => {
-          try {
-            localStorage.setItem('access_token', token);
-          } catch (error) {
-            console.log(error);
-          }
-        })();
-
+        localStorage.setItem('access_token', token);
         return;
       }
     }

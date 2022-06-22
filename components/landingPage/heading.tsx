@@ -52,7 +52,7 @@ const Heading: React.FC<{
     <MediaQuery smallerThan="lg" styles={{ minHeight: 180 + 'px !important' }}>
       <Group
         spacing={0}
-        style={{ perspective: 1000, overflow: 'hidden', minHeight: 300 }}
+        style={{ perspective: 1100, overflow: 'hidden', minHeight: 300 }}
         noWrap
         position="center"
       >

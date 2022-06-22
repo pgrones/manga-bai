@@ -1,4 +1,5 @@
 import { useApolloClient, useQuery } from '@apollo/client';
+import { Anchor } from '@mantine/core';
 import { useLocalStorage } from '@mantine/hooks';
 import { useNotifications } from '@mantine/notifications';
 import axios from 'axios';
@@ -38,7 +39,7 @@ const UserProvider: React.FC<PropsWithChildren<unknown>> = ({ children }) => {
   const apolloClient = useApolloClient();
   const { pathname } = useRouter();
   const [user, firebaseLoading, firebaseError] = useAuthState(auth);
-  const [userData, setUserData] = useState<IUserData | null>(null);
+  const [userData, setUserData] = useState<IUserData | null>();
   const [hasError, setHasError] = useState<unknown>();
   const [accessToken, setAccessToken] = useLocalStorage<string>({
     key: 'access_token',
@@ -73,7 +74,7 @@ const UserProvider: React.FC<PropsWithChildren<unknown>> = ({ children }) => {
         console.log(error);
       }
     } else {
-      setUserData(null);
+      setUserData(undefined);
     }
 
     return unsubscribe;
@@ -99,10 +100,21 @@ const UserProvider: React.FC<PropsWithChildren<unknown>> = ({ children }) => {
           await apolloClient.resetStore();
           cleanQueue();
           showNotification({
-            title:
-              'Remember to revoke the access token from your Apps page on AniList',
+            title: (
+              <>
+                Remember to revoke the access token from your{' '}
+                <Anchor
+                  href="https://anilist.co/settings/apps"
+                  target="_blank"
+                  referrerPolicy="no-referrer"
+                >
+                  Apps page
+                </Anchor>{' '}
+                on AniList
+              </>
+            ),
             message: '',
-            autoClose: 10000
+            autoClose: 20000
           });
         }
       }}
