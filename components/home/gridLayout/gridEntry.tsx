@@ -31,6 +31,7 @@ const GridEntry: React.FC<IMediaData> = React.memo(props => {
     <EntryProvider entry={props}>
       <Paper
         radius="sm"
+        mb="xl"
         withBorder={theme.colorScheme === 'light'}
         style={{ flex: 1 }}
       >
@@ -134,20 +135,6 @@ const GridEntry: React.FC<IMediaData> = React.memo(props => {
                       Edit
                     </Button>
                   </EditModal>
-                  {/* <Stack spacing={2} align="flex-end">
-              <Anchor
-                size="sm"
-                href="https://amzn.to/3lEKHwX"
-                target="_blank"
-                referrerPolicy="no-referrer"
-                style={{ lineHeight: 1 }}
-              >
-                Buy on Amazon
-              </Anchor>
-              <Text size="xs" color="dimmed" style={{ lineHeight: 1 }}>
-                (Affiliate Link)
-              </Text>
-            </Stack> */}
                 </Group>
               </MediaQuery>
             </Stack>

@@ -1,4 +1,5 @@
 import { Container, MediaQuery, Stepper } from '@mantine/core';
+import { useRef } from 'react';
 import { WAITING } from '../../lib/helper/constants';
 import { useOnboarding } from '../../lib/hooks/provider/onboardingProvider';
 import CreateCustomListStep from './createCustomListStep';
@@ -7,6 +8,7 @@ import MangaImage from './mangaImage';
 
 const Steps: React.FC = () => {
   const { step, loading } = useOnboarding();
+  const scrollableRef = useRef<HTMLDivElement>(null);
 
   return (
     <>
@@ -19,6 +21,7 @@ const Steps: React.FC = () => {
           }px)`,
           overflow: 'auto'
         })}
+        ref={scrollableRef}
       >
         <Stepper
           active={step}
@@ -31,7 +34,7 @@ const Steps: React.FC = () => {
             description={`"${WAITING}"`}
             loading={loading && step === 1}
           >
-            <CreateCustomListStep />
+            <CreateCustomListStep scrollableRef={scrollableRef} />
           </Stepper.Step>
           <Stepper.Step
             label="Customizing the site"

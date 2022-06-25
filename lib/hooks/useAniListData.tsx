@@ -1,5 +1,5 @@
 import { useMutation } from '@apollo/client';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import updateMangaEntry, {
   UpdateMangaEntryData,
   UpdateMangaEntryVariables
@@ -7,10 +7,11 @@ import updateMangaEntry, {
 import { MediaList } from '../../apollo/queries/mediaListQuery';
 import { WAITING_CUSTOM_LIST } from '../helper/constants';
 import { IAniListValues } from '../types/aniList';
+import { useMedia } from './provider/mediaProvider';
 import useNotification from './useNotification';
 
 export const useAniListData = (entry: MediaList) => {
-  const [aniListData, setAniListData] = useState<MediaList>(entry);
+  const { updateEntry: updateLocalEntry } = useMedia();
   const { showSuccess, showError } = useNotification();
 
   const [updateEntry, { error }] = useMutation<
@@ -30,17 +31,32 @@ export const useAniListData = (entry: MediaList) => {
 
     if (!Object.keys(values).length) return;
 
+    const customLists = new Set(
+      Object.keys(
+        Object.fromEntries(
+          Object.entries(entry.customLists ?? []).filter(o => o[1] === true)
+        )
+      )
+    );
+
+    if (values.status === 'PAUSED') customLists.add(WAITING_CUSTOM_LIST);
+    if (values.status === 'CURRENT') customLists.delete(WAITING_CUSTOM_LIST);
+
     const { data } = await updateEntry({
-      variables: { ...values, mediaId: entry.mediaId }
+      variables: {
+        ...values,
+        mediaId: entry.mediaId,
+        customLists: Array.from(customLists)
+      }
     });
 
     if (!data) return;
 
-    setAniListData(prev => ({ ...prev, ...data.SaveMediaListEntry }));
+    updateLocalEntry(data.SaveMediaListEntry.mediaId, data.SaveMediaListEntry);
   };
 
   const updateProgress = async (progress: number, key: keyof MediaList) => {
-    if (progress === aniListData[key]) return;
+    if (progress === entry[key]) return;
     await updateAniListData({ [key]: progress });
     showSuccess(`${entry.media.title.userPreferred} entry updated`);
   };
@@ -52,19 +68,24 @@ export const useAniListData = (entry: MediaList) => {
           new Set(
             Object.keys(
               Object.fromEntries(
-                Object.entries(aniListData.customLists ?? []).filter(
+                Object.entries(entry.customLists ?? []).filter(
                   o => o[1] === true && o[0] !== WAITING_CUSTOM_LIST
                 )
               )
             )
           )
         ),
-        mediaId: aniListData.mediaId
+        mediaId: entry.mediaId
       }
     });
   };
 
-  return { aniListData, updateAniListData, updateProgress, removeFromList };
+  return {
+    aniListData: entry,
+    updateAniListData,
+    updateProgress,
+    removeFromList
+  };
 };
 
 export default useAniListData;

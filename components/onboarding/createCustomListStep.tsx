@@ -15,7 +15,9 @@ import {
 import { useOnboarding } from '../../lib/hooks/provider/onboardingProvider';
 import useNotification from '../../lib/hooks/useNotification';
 
-const CreateCustomListStep = () => {
+const CreateCustomListStep: React.FC<{
+  scrollableRef: React.RefObject<HTMLDivElement>;
+}> = ({ scrollableRef }) => {
   const {
     mediaData,
     setMediaLists,
@@ -27,7 +29,7 @@ const CreateCustomListStep = () => {
   const { showError } = useNotification();
   const [createCustomList, setCreateCustomList] = useState(true);
   const [importPaused, setImportPaused] = useState(true);
-  const [progress, setProgress] = useState(0);
+  const [progress, setProgress] = useState<number>();
   const [ratio, setRatio] = useState<string>();
   const [hasManyEntries, setHasManyEntries] = useState(false);
 
@@ -52,8 +54,17 @@ const CreateCustomListStep = () => {
     }
   }, [error, fillError]);
 
+  useEffect(() => {
+    if (progress === 0)
+      scrollableRef.current?.scrollTo({
+        top: scrollableRef.current.scrollHeight,
+        behavior: 'smooth'
+      });
+  }, [progress]);
+
   const next = async () => {
     setLoading(true);
+    setProgress(0);
     // Group the data by status
     const mangaLists = createMediaLists(mediaData, customLists);
 
@@ -71,7 +82,9 @@ const CreateCustomListStep = () => {
       if (importPaused) {
         const onMutation = async (options: any) => {
           await updateEntry(options);
-          setProgress(prev => prev + 100 / (mangaLists.paused ?? []).length);
+          setProgress(
+            prev => (prev ?? 0) + 100 / (mangaLists.paused ?? []).length
+          );
           setRatio(
             prev =>
               `${!prev ? 1 : parseInt(prev.split('/')[0]) + 1}/${
@@ -176,13 +189,13 @@ const CreateCustomListStep = () => {
           disabled={loading || !createCustomList}
         />
       </Stack>
-      {progress ? (
+      {progress !== undefined ? (
         <div style={{ alignSelf: 'stretch' }}>
           <Text mt="xl" mb="xs">
             Importing paused entries {ratio}
           </Text>
           <Progress aria-label="Import progress" value={progress} />
-          <Text mt="xs" size="sm">
+          <Text mt="xs" pb={40} size="sm">
             {hasManyEntries && (
               <>
                 Woah, those are a lot of paused entries!

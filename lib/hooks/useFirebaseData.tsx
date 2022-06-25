@@ -1,16 +1,13 @@
-import { useState } from 'react';
 import { setMediaData } from '../firebase/db';
 import { IMediaData } from '../types/entry';
 import { IFirebaseValues } from '../types/firebase';
-import useNotification from './useNotification';
+import { useMedia } from './provider/mediaProvider';
 import { useUser } from './provider/userProvider';
+import useNotification from './useNotification';
 
-const useFirebaseData = (mediaEntry: IMediaData) => {
+const useFirebaseData = (entry: IMediaData) => {
+  const { updateEntry } = useMedia();
   const { firebaseUser } = useUser();
-  const [firebaseData, setFirebaseData] = useState<IFirebaseValues>({
-    notes: mediaEntry.notes ?? '',
-    preordered: mediaEntry.preordered ?? mediaEntry.progressVolumes
-  });
   const { showSuccess } = useNotification();
 
   const updateFirebaseData = async (values: IFirebaseValues) => {
@@ -21,17 +18,21 @@ const useFirebaseData = (mediaEntry: IMediaData) => {
 
     if (!Object.keys(values).length) return;
 
-    await setMediaData(firebaseUser!.uid, mediaEntry.mediaId, values);
-    setFirebaseData(prev => ({ ...prev, ...values }));
+    await setMediaData(firebaseUser!.uid, entry.mediaId, values);
+    updateEntry(entry.mediaId, values);
   };
 
   const updatePreordered = async (preordered: number) => {
-    if (preordered === firebaseData.preordered) return;
+    if (
+      preordered === entry.preordered ||
+      (!entry.preordered && preordered === entry.progressVolumes)
+    )
+      return;
     await updateFirebaseData({ preordered });
-    showSuccess(`${mediaEntry.media.title.userPreferred} entry updated`);
+    showSuccess(`${entry.media.title.userPreferred} entry updated`);
   };
 
-  return { firebaseData, updateFirebaseData, updatePreordered };
+  return { firebaseData: entry, updateFirebaseData, updatePreordered };
 };
 
 export default useFirebaseData;

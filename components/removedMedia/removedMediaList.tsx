@@ -16,8 +16,6 @@ import Link from 'next/link';
 import React, { useEffect, useRef, useState } from 'react';
 import { IoArrowBackOutline, IoChevronDownOutline } from 'react-icons/io5';
 import { areEqual, FixedSizeList as List } from 'react-window';
-//@ts-ignore
-import { ReactWindowScroller } from 'react-window-scroller';
 import updateMangaEntry, {
   UpdateMangaEntryVariables
 } from '../../apollo/mutations/updateMangaEntry';
@@ -41,6 +39,7 @@ import { getBorderRadius } from '../../lib/helper/radius';
 import { useUser } from '../../lib/hooks/provider/userProvider';
 import useNotification from '../../lib/hooks/useNotification';
 import LoadingIndicator from '../common/loadingIndicator';
+import VirtualizedWindow from '../common/virtualizedWindow';
 import SearchInput from '../home/toolbar/searchInput';
 
 const titles: (keyof Title)[] = ['romaji', 'english', 'native'];
@@ -292,8 +291,8 @@ const RemovedMediaList = () => {
         <SearchInput searchFn={search} />
       </Group>
       {(removedMedia.length || null) && (
-        <ReactWindowScroller>
-          {({ ref, outerRef, style, onScroll }: any) => (
+        <VirtualizedWindow>
+          {({ ref, outerRef, style }) => (
             <Paper pt={6} withBorder={theme.colorScheme === 'light'}>
               <List
                 ref={ref}
@@ -304,13 +303,12 @@ const RemovedMediaList = () => {
                 itemSize={55}
                 width={0}
                 itemData={removedMedia}
-                onScroll={onScroll}
               >
                 {Row}
               </List>
             </Paper>
           )}
-        </ReactWindowScroller>
+        </VirtualizedWindow>
       )}
     </div>
   ) : null;

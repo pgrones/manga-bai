@@ -1,5 +1,6 @@
 import React, { Suspense, useEffect, useRef, useState } from 'react';
 import { CURRENT, WAITING } from '../../lib/helper/constants';
+import { isCurrentMedia, isWaitingMedia } from '../../lib/helper/mediaHelper';
 import { useMedia } from '../../lib/hooks/provider/mediaProvider';
 import LoadingIndicator from '../common/loadingIndicator';
 import StatusTitle from './statusTitle';
@@ -14,15 +15,21 @@ const VirtualizedGrid = React.lazy(
 );
 
 const MangaList: React.FC = () => {
-  const { current, waiting, layout } = useMedia();
+  const { media, status, layout } = useMedia();
+  const current =
+    status !== 'Waiting For New Volumes' &&
+    media?.filter(m => isCurrentMedia(m) && !m.hidden).length;
+  const waiting =
+    status !== 'Currently Reading' &&
+    media?.filter(m => isWaitingMedia(m) && !m.hidden).length;
   const toolbarRef = useRef<HTMLDivElement>(null);
   const isList = layout === 'list';
   const [title, setTitle] = useState(
-    waiting?.length ? WAITING : current?.length ? CURRENT : ''
+    waiting ? WAITING : current ? CURRENT : ''
   );
 
   useEffect(() => {
-    setTitle(waiting?.length ? WAITING : current?.length ? CURRENT : '');
+    setTitle(waiting ? WAITING : current ? CURRENT : '');
   }, [current, waiting]);
 
   return (

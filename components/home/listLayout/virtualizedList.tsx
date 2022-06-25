@@ -2,10 +2,13 @@ import { useMantineTheme } from '@mantine/core';
 import { useMediaQuery } from '@mantine/hooks';
 import React from 'react';
 import { areEqual, FixedSizeList as List } from 'react-window';
-//@ts-ignore
-import { ReactWindowScroller } from 'react-window-scroller';
 import { MediaList } from '../../../apollo/queries/mediaListQuery';
+import {
+  isCurrentMedia,
+  isWaitingMedia
+} from '../../../lib/helper/mediaHelper';
 import { useMedia } from '../../../lib/hooks/provider/mediaProvider';
+import VirtualizedWindow from '../../common/virtualizedWindow';
 import ListEntry from './listEntry';
 
 const Row: React.FC<{
@@ -36,9 +39,12 @@ const Row: React.FC<{
 const VirtualizedList: React.FC<{
   statusTitle: JSX.Element;
 }> = React.memo(({ statusTitle }) => {
-  const { current, waiting } = useMedia();
+  const { media } = useMedia();
   const theme = useMantineTheme();
   const matches = useMediaQuery(`(min-width: ${theme.breakpoints.xs}px)`);
+
+  const current = media?.filter(isCurrentMedia);
+  const waiting = media?.filter(isWaitingMedia);
 
   const itemData: (MediaList | JSX.Element)[] = [
     ...(waiting ?? []),
@@ -47,30 +53,24 @@ const VirtualizedList: React.FC<{
   ];
 
   return (
-    <div
-      key={
-        (current?.length ?? 0) +
-        (waiting?.length ?? 0) +
-        (matches ? 'true' : 'false')
-      }
-    >
-      <ReactWindowScroller>
-        {({ ref, outerRef, style, onScroll }: any) => (
+    <div key={Math.random()}>
+      <VirtualizedWindow>
+        {({ ref, outerRef, style }) => (
           <List
             ref={ref}
             outerRef={outerRef}
             style={style}
             height={window.innerHeight}
+            width={0}
+            overscanCount={10}
             itemCount={itemData.length}
             itemSize={matches ? 55 : 75}
-            width={0}
             itemData={itemData}
-            onScroll={onScroll}
           >
             {Row}
           </List>
         )}
-      </ReactWindowScroller>
+      </VirtualizedWindow>
     </div>
   );
 });

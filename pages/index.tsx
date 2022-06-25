@@ -68,7 +68,8 @@ const LandingPage: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({
             theme.spacing.md * 2
           }px)`
         })}
-        py="xs"
+        pt="xs"
+        pb="xl"
         justify="space-between"
       >
         <Heading manga={manga} />

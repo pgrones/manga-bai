@@ -7,13 +7,12 @@ import {
   Text
 } from '@mantine/core';
 import AmazonLink from '../common/amazonLink';
-import { ColorPicker } from '../header/colorPicker';
 import Logo from '../header/logo';
 
 const Footer = () => {
   return (
-    <Container size="xl" px={0} pt="md" pb="xl" style={{ height: '100%' }}>
-      <Stack style={{ height: '100%' }} justify="space-around" pb="xl">
+    <Container size="xl" px={0} pt="xl" pb="xl" style={{ height: '100%' }}>
+      <Stack style={{ height: '100%' }} justify="space-around">
         <Group position="apart" align="flex-start">
           <MediaQuery smallerThan="md" styles={{ display: 'none' }}>
             <Stack spacing="xs">
@@ -23,6 +22,7 @@ const Footer = () => {
               </Text>
             </Stack>
           </MediaQuery>
+
           <Group spacing={48} align="flex-start">
             <Stack spacing={8}>
               <Text weight="bold" pb={5}>
@@ -40,38 +40,40 @@ const Footer = () => {
               <AmazonLink title="Amazon.com" href="https://amzn.to/3lEKHwX" />
               <AmazonLink title="Amazon.co.jp" href="https://amzn.to/3QGxmmi" />
             </Stack>
-            <Stack spacing={8}>
-              <Text weight="bold" pb={5}>
-                Links
-              </Text>
-              <Text
-                component="a"
-                href="https://anilist.co/"
-                target="_blank"
-                referrerPolicy="no-referrer"
-                size="sm"
-              >
-                AniList
-              </Text>
-              <Text
-                component="a"
-                href="https://github.com/pgr3931/manga-bai"
-                target="_blank"
-                referrerPolicy="no-referrer"
-                size="sm"
-              >
-                Github
-              </Text>
-              <Text
-                component="a"
-                href="/sitemap.xml"
-                target="_blank"
-                referrerPolicy="no-referrer"
-                size="sm"
-              >
-                Sitemap
-              </Text>
-            </Stack>
+            <MediaQuery smallerThan="xs" styles={{ display: 'none' }}>
+              <Stack spacing={8}>
+                <Text weight="bold" pb={5}>
+                  Links
+                </Text>
+                <Text
+                  component="a"
+                  href="https://anilist.co/"
+                  target="_blank"
+                  referrerPolicy="no-referrer"
+                  size="sm"
+                >
+                  AniList
+                </Text>
+                <Text
+                  component="a"
+                  href="https://github.com/pgr3931/manga-bai"
+                  target="_blank"
+                  referrerPolicy="no-referrer"
+                  size="sm"
+                >
+                  Github
+                </Text>
+                <Text
+                  component="a"
+                  href="/sitemap.xml"
+                  target="_blank"
+                  referrerPolicy="no-referrer"
+                  size="sm"
+                >
+                  Sitemap
+                </Text>
+              </Stack>
+            </MediaQuery>
             <Stack spacing={8}>
               <Text weight="bold" pb={5}>
                 Contact
@@ -98,15 +100,9 @@ const Footer = () => {
         </Group>
         <div>
           <Divider mb={5} />
-          <Group position="apart">
-            <Text size="sm">
-              As an Amazon Associate I earn from qualifying purchases.
-            </Text>
-            <Group>
-              <Text size="sm">Site color</Text>
-              <ColorPicker />
-            </Group>
-          </Group>
+          <Text size="sm">
+            As an Amazon Associate I earn from qualifying purchases.
+          </Text>
         </div>
       </Stack>
     </Container>

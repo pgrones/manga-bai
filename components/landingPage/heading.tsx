@@ -16,7 +16,15 @@ const useStyles = createStyles(theme => ({
     width: 200,
     position: 'relative',
     transformStyle: 'preserve-3d',
+    [`@media (max-width: ${theme.breakpoints.xl}px)`]: {
+      height: 260 + 'px !important',
+      width: 173 + 'px !important'
+    },
     [`@media (max-width: ${theme.breakpoints.lg}px)`]: {
+      height: 220 + 'px !important',
+      width: 147 + 'px !important'
+    },
+    [`@media (max-width: ${theme.breakpoints.md}px)`]: {
       height: 180 + 'px !important',
       width: 120 + 'px !important'
     }
@@ -30,8 +38,11 @@ const useStyles = createStyles(theme => ({
     [`@media (min-width: ${theme.breakpoints.md}px)`]: {
       fontSize: 28
     },
+    [`@media (min-width: ${theme.breakpoints.lg}px)`]: {
+      fontSize: 34
+    },
     [`@media (min-width: ${theme.breakpoints.xl}px)`]: {
-      fontSize: 36
+      fontSize: 40
     }
   }
 }));

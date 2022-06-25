@@ -27,10 +27,12 @@ const Header = () => {
             />
           </Group>
         </MediaQuery>
-        <Group style={{ width: 200 }} position="right">
-          <ThemeToggle />
-          <User />
-        </Group>
+        <MediaQuery smallerThan="xs" styles={{ width: 'auto !important' }}>
+          <Group style={{ width: 200 }} position="right">
+            <ThemeToggle />
+            <User />
+          </Group>
+        </MediaQuery>
       </Group>
     </Container>
   );

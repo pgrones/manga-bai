@@ -12,7 +12,7 @@ import { useOnboarding } from '../../lib/hooks/provider/onboardingProvider';
 const MangaImage = () => {
   const { mediaData } = useOnboarding();
   const theme = useMantineTheme();
-  useScrollLock(true, { disableBodyPadding: true });
+  useScrollLock(true);
 
   const { data } = useQuery<PopularMangaQueryData>(popularMangaQuery, {
     skip:

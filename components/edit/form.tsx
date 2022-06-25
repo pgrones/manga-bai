@@ -5,17 +5,13 @@ import {
   Group,
   NumberInput,
   Select,
-  Textarea,
-  Text
+  Text,
+  Textarea
 } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { useModals } from '@mantine/modals';
-import { useRef } from 'react';
-import {
-  CURRENT,
-  WAITING,
-  WAITING_CUSTOM_LIST
-} from '../../lib/helper/constants';
+import { CURRENT, WAITING } from '../../lib/helper/constants';
+import { isWaitingMedia } from '../../lib/helper/mediaHelper';
 import useNotification from '../../lib/hooks/useNotification';
 import { FormProps } from './formTypes';
 
@@ -26,24 +22,21 @@ const Form: React.FC<FormProps> = props => {
     updateAniListData,
     updateFirebaseData,
     removeFromList,
-    removeCurrentEntry,
-    removeWaitingEntry,
+    removeEntry,
     close
   } = props;
   const { openConfirmModal, closeAll, closeModal } = useModals();
   const { showSuccess } = useNotification();
   const { progressVolumes, status, progress, media } = aniListData;
 
-  const formValues = useRef({
-    progressVolumes,
-    progress,
-    status,
-    notes: firebaseData?.notes ?? '',
-    preordered: firebaseData?.preordered ?? progressVolumes
-  });
-
   const form = useForm({
-    initialValues: formValues.current
+    initialValues: {
+      progressVolumes,
+      progress,
+      status,
+      notes: firebaseData?.notes ?? '',
+      preordered: firebaseData?.preordered ?? progressVolumes
+    }
   });
 
   const handleSubmit = async (values: typeof form.values) => {
@@ -51,30 +44,26 @@ const Form: React.FC<FormProps> = props => {
       await Promise.all([
         updateAniListData({
           progress:
-            values.progress === formValues.current.progress
+            values.progress === aniListData.progress
               ? undefined
               : values.progress,
           progressVolumes:
-            values.progressVolumes === formValues.current.progressVolumes
+            values.progressVolumes === aniListData.progressVolumes
               ? undefined
               : values.progressVolumes,
           status:
-            values.status === formValues.current.status
-              ? undefined
-              : values.status
+            values.status === aniListData.status ? undefined : values.status
         }),
         updateFirebaseData({
           notes:
-            values.notes === formValues.current.notes
-              ? undefined
-              : values.notes,
+            values.notes === firebaseData?.notes ? undefined : values.notes,
           preordered:
-            values.preordered === formValues.current.preordered
+            values.preordered === firebaseData?.preordered
               ? undefined
               : values.preordered
         })
       ]);
-      formValues.current = values;
+
       showSuccess(`${media.title.userPreferred} entry updated`);
       close();
     } catch (error) {
@@ -99,11 +88,10 @@ const Form: React.FC<FormProps> = props => {
       confirmProps: { color: 'red' },
       onConfirm: async () => {
         try {
-          if (aniListData.customLists?.[WAITING_CUSTOM_LIST]) {
-            removeWaitingEntry(aniListData.mediaId);
+          removeEntry(aniListData.mediaId);
+
+          if (isWaitingMedia(aniListData)) {
             await removeFromList();
-          } else if (aniListData.status === 'CURRENT') {
-            removeCurrentEntry(aniListData.mediaId);
           }
 
           await updateFirebaseData({ removed: true });

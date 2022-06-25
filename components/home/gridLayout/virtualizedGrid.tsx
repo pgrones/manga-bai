@@ -2,10 +2,13 @@ import { Group, useMantineTheme } from '@mantine/core';
 import { useMediaQuery } from '@mantine/hooks';
 import React from 'react';
 import { areEqual, VariableSizeList as List } from 'react-window';
-//@ts-ignore
-import { ReactWindowScroller } from 'react-window-scroller';
 import { MediaList } from '../../../apollo/queries/mediaListQuery';
+import {
+  isCurrentMedia,
+  isWaitingMedia
+} from '../../../lib/helper/mediaHelper';
 import { useMedia } from '../../../lib/hooks/provider/mediaProvider';
+import VirtualizedWindow from '../../common/virtualizedWindow';
 import GridEntry from './gridEntry';
 
 const isReactElement = (item: any): item is JSX.Element =>
@@ -38,7 +41,7 @@ const Row: React.FC<{
 const VirtualizedGrid: React.FC<{
   statusTitle: JSX.Element;
 }> = React.memo(({ statusTitle }) => {
-  const { current, waiting } = useMedia();
+  const { media, status } = useMedia();
   const theme = useMantineTheme();
   const xs = 1;
   const sm = useMediaQuery(`(min-width: ${theme.breakpoints.xs}px)`) && 2;
@@ -49,6 +52,15 @@ const VirtualizedGrid: React.FC<{
   const itemData: ((MediaList | string)[] | JSX.Element)[] = [];
   const itemsPerRow = xl || md || sm || xs;
   let statusIndex = -1;
+
+  const current =
+    status !== 'Waiting For New Volumes'
+      ? media?.filter(m => isCurrentMedia(m) && !m.hidden)
+      : undefined;
+  const waiting =
+    status !== 'Currently Reading'
+      ? media?.filter(m => isWaitingMedia(m) && !m.hidden)
+      : undefined;
 
   if (waiting?.length) {
     for (let i = 0; i < waiting.length; i += itemsPerRow) {
@@ -78,14 +90,13 @@ const VirtualizedGrid: React.FC<{
     // Hack to rerender the list on window size changes
     <div
       key={
-        itemsPerRow +
         (current?.length ?? 0) +
         (waiting?.length ?? 0) +
         (lg ? 'true' : 'false')
       }
     >
-      <ReactWindowScroller>
-        {({ ref, outerRef, style, onScroll }: any) => (
+      <VirtualizedWindow>
+        {({ ref, outerRef, style }) => (
           <List
             ref={ref}
             outerRef={outerRef}
@@ -93,14 +104,15 @@ const VirtualizedGrid: React.FC<{
             height={window.innerHeight}
             width={0}
             itemCount={itemData.length}
-            itemSize={index => (index === statusIndex ? 60 : !lg ? 144 : 194)}
+            itemSize={index =>
+              index === statusIndex ? 60 : (!lg ? 144 : 170) + theme.spacing.xl
+            }
             itemData={itemData}
-            onScroll={onScroll}
           >
             {Row}
           </List>
         )}
-      </ReactWindowScroller>
+      </VirtualizedWindow>
     </div>
   );
 });

@@ -23,7 +23,7 @@ const Layout: React.FC<PropsWithChildren<{ is404?: boolean }>> = ({
       }
       footer={
         <Footer
-          height={350}
+          height={250}
           sx={theme => ({
             paddingRight: `calc(var(--removed-scroll-width, 0px) + ${theme.spacing.md}px)`,
             paddingLeft: theme.spacing.md,

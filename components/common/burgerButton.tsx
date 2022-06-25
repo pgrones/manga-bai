@@ -24,7 +24,7 @@ const BurgerButton = () => {
             position: 'fixed',
             bottom: theme.spacing.xl,
             right: theme.spacing.md,
-            zIndex: 5,
+            zIndex: 10,
             width: 50,
             height: 50
           })}
