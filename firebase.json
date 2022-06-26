@@ -2,32 +2,9 @@
   "database": {
     "rules": "database.rules.json"
   },
-  "hosting": {
-    "public": "public",
-    "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
-    "rewrites": [
-      {
-        "source": "**/**",
-        "function": "nextjs-server"
-      }
-    ]
-  },
-  "functions": {
-    "source": ".",
-    "ignore": [
-      ".firebase/**",
-      ".firebaserc",
-      "firebase.json",
-      "**/node_modules/**",
-      "**/public/**"
-    ]
-  },
   "emulators": {
     "database": {
       "port": 9000
-    },
-    "hosting": {
-      "port": 6100
     },
     "ui": {
       "enabled": true
