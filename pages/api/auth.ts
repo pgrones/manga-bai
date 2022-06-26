@@ -1,10 +1,13 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import admin, { ServiceAccount } from 'firebase-admin';
-import serviceAccount from '../../lib/firebase/ServiceAccountKey.json';
+import admin from 'firebase-admin';
 
 admin.apps[0] ??
   admin.initializeApp({
-    credential: admin.credential.cert(serviceAccount as ServiceAccount)
+    credential: admin.credential.cert({
+      projectId: process.env.projectId,
+      clientEmail: process.env.clientEmail,
+      privateKey: process.env.privateKey
+    })
   });
 
 export default async function handler(
