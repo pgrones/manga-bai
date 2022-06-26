@@ -1,7 +1,9 @@
 import { MediaList } from '../../apollo/queries/mediaListQuery';
 import { IFirebaseValues } from './firebase';
 
-export type IMediaData = MediaList & IFirebaseValues & { hidden?: boolean };
+export interface IMediaData extends MediaList, IFirebaseValues {
+  hidden?: boolean;
+}
 
 export interface IMediaLists {
   paused?: MediaList[];

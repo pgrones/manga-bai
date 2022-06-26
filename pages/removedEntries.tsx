@@ -1,9 +1,8 @@
-import { Container } from '@mantine/core';
 import { NextPage } from 'next';
 import Head from 'next/head';
 import AuthCheck from '../components/common/authCheck';
 import Layout from '../components/common/layout';
-import RemovedMediaList from '../components/removedMedia/removedMediaList';
+import RemovedMedia from '../components/removedMedia/removedMedia';
 
 const RemovedEntries: NextPage = () => {
   return (
@@ -13,9 +12,7 @@ const RemovedEntries: NextPage = () => {
       </Head>
       <Layout>
         <AuthCheck>
-          <Container size="xs" p={0}>
-            <RemovedMediaList />
-          </Container>
+          <RemovedMedia />
         </AuthCheck>
       </Layout>
     </>

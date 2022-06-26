@@ -2,5 +2,8 @@ export interface ProgressProps {
   text: string;
   progress: number;
   buttonVisible: boolean;
-  updateProgress: (progress: number) => void | Promise<void>;
+  updateProgress: (
+    progress: number,
+    originalProgress: number
+  ) => void | Promise<void>;
 }

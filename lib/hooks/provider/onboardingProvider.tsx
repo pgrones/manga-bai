@@ -1,13 +1,12 @@
-import React, {
+import {
   createContext,
+  FC,
   PropsWithChildren,
   useContext,
   useState
 } from 'react';
-import { MediaListQueryData } from '../../../apollo/queries/mediaListQuery';
 import { setUserData } from '../../firebase/db';
-import { IMediaLists } from '../../types/entry';
-import { IOnboardingContext } from './onboardingProviderTypes';
+import { IOnboardingContext, OnboardingProps } from './onboardingProviderTypes';
 import { useUser } from './userProvider';
 
 const OnboardingContext = createContext<IOnboardingContext>(
@@ -16,15 +15,8 @@ const OnboardingContext = createContext<IOnboardingContext>(
 
 export const useOnboarding = () => useContext(OnboardingContext);
 
-const OnboardingProvider: React.FC<
-  PropsWithChildren<{
-    setMediaLists: React.Dispatch<
-      React.SetStateAction<IMediaLists | undefined>
-    >;
-    mediaData: MediaListQueryData | undefined;
-    customLists: string[] | undefined;
-  }>
-> = ({ children, setMediaLists, mediaData, customLists }) => {
+const OnboardingProvider: FC<PropsWithChildren<OnboardingProps>> = props => {
+  const { children, setMediaLists, mediaData, customLists } = props;
   const { firebaseUser } = useUser();
   const [step, setStep] = useState(1);
   const [loading, setLoading] = useState(false);

@@ -1,6 +1,6 @@
 import { useMantineTheme } from '@mantine/core';
 import { useMediaQuery } from '@mantine/hooks';
-import React from 'react';
+import React, { FC, isValidElement, memo } from 'react';
 import { areEqual, FixedSizeList as List } from 'react-window';
 import { MediaList } from '../../../apollo/queries/mediaListQuery';
 import {
@@ -9,21 +9,21 @@ import {
 } from '../../../lib/helper/mediaHelper';
 import { useMedia } from '../../../lib/hooks/provider/mediaProvider';
 import VirtualizedWindow from '../../common/virtualizedWindow';
+import {
+  ListRowProps,
+  VirtualizedProps
+} from '../../common/virtualizedWindowTypes';
 import ListEntry from './listEntry';
 
-const Row: React.FC<{
-  data: (MediaList | JSX.Element)[];
-  index: number;
-  style: React.CSSProperties;
-}> = React.memo(({ data, index, style }) => {
+const Row: FC<ListRowProps> = memo(({ data, index, style }) => {
   const item = data[index];
-  const topRadius = index === 0 || React.isValidElement(data[index - 1]);
+  const topRadius = index === 0 || isValidElement(data[index - 1]);
   const bottomRadius =
-    index === data.length - 1 || React.isValidElement(data[index + 1]);
+    index === data.length - 1 || isValidElement(data[index + 1]);
 
   return (
     <div style={style}>
-      {React.isValidElement(item) ? (
+      {isValidElement(item) ? (
         item
       ) : (
         <ListEntry
@@ -36,15 +36,19 @@ const Row: React.FC<{
   );
 }, areEqual);
 
-const VirtualizedList: React.FC<{
-  statusTitle: JSX.Element;
-}> = React.memo(({ statusTitle }) => {
-  const { media } = useMedia();
+const VirtualizedList: FC<VirtualizedProps> = memo(({ statusTitle }) => {
+  const { media, status } = useMedia();
   const theme = useMantineTheme();
   const matches = useMediaQuery(`(min-width: ${theme.breakpoints.xs}px)`);
 
-  const current = media?.filter(isCurrentMedia);
-  const waiting = media?.filter(isWaitingMedia);
+  const current =
+    status !== 'Waiting For New Volumes'
+      ? media?.filter(m => isCurrentMedia(m) && !m.hidden)
+      : undefined;
+  const waiting =
+    status !== 'Currently Reading'
+      ? media?.filter(m => isWaitingMedia(m) && !m.hidden)
+      : undefined;
 
   const itemData: (MediaList | JSX.Element)[] = [
     ...(waiting ?? []),
@@ -53,7 +57,13 @@ const VirtualizedList: React.FC<{
   ];
 
   return (
-    <div key={Math.random()}>
+    <div
+      key={
+        (current?.length ?? 0) +
+        (waiting?.length ?? 0) +
+        (matches ? 'true' : 'false')
+      }
+    >
       <VirtualizedWindow>
         {({ ref, outerRef, style }) => (
           <List

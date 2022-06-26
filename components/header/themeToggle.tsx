@@ -1,7 +1,7 @@
 import { ActionIcon, useMantineColorScheme } from '@mantine/core';
 import { IoMoonOutline, IoSunnyOutline } from 'react-icons/io5';
 
-const ThemeToggle: React.FC = () => {
+const ThemeToggle = () => {
   const { colorScheme, toggleColorScheme } = useMantineColorScheme();
 
   return (

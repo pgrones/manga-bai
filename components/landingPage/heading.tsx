@@ -7,7 +7,9 @@ import {
   useMantineTheme
 } from '@mantine/core';
 import Image from 'next/image';
+import { FC } from 'react';
 import { getBorderRadius } from '../../lib/helper/radius';
+import { HeadingProps } from './headingTypes';
 
 const useStyles = createStyles(theme => ({
   image: {
@@ -47,15 +49,7 @@ const useStyles = createStyles(theme => ({
   }
 }));
 
-const Heading: React.FC<{
-  manga: {
-    id: number;
-    title: string;
-    src: string;
-    transform: string;
-    zIndex: number;
-  }[];
-}> = ({ manga }) => {
+const Heading: FC<HeadingProps> = ({ manga }) => {
   const theme = useMantineTheme();
   const { classes } = useStyles();
 

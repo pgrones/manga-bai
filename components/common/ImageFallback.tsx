@@ -1,11 +1,9 @@
-import Image, { ImageProps, StaticImageData } from 'next/image';
-import React, { useEffect, useState } from 'react';
+import Image from 'next/image';
+import { FC, useEffect, useState } from 'react';
+import { ImageFallbackProps, StaticImport } from './ImageFallbackTypes';
 
-type StaticImport = { default: StaticImageData } | StaticImageData;
-
-const ImageFallback: React.FC<
-  ImageProps & { alt: string; fallBackSrc: string }
-> = ({ src, fallBackSrc, alt, ...rest }) => {
+const ImageFallback: FC<ImageFallbackProps> = props => {
+  const { src, fallBackSrc, alt, ...rest } = props;
   const [imageSrc, setImageSrc] = useState<string | StaticImport>(src);
 
   useEffect(() => {

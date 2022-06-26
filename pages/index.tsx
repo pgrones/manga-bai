@@ -105,8 +105,8 @@ export const getStaticProps: GetStaticProps<{
     });
 
     const manga: { media: Media; transform: string; zIndex: number }[] = [];
-    for (let i = 0; i < data.Page.media.length; i++) {
-      const m = data.Page.media[i];
+    for (let i = 0; i < data.popularManga.media.length; i++) {
+      const m = data.popularManga.media[i];
       const even = i % 2 === 0;
       const index = Math.ceil(i / 2);
       const zIndex = index && -index;

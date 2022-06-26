@@ -1,4 +1,4 @@
-import React, { Suspense, useEffect, useRef, useState } from 'react';
+import { lazy, Suspense, useEffect, useRef, useState } from 'react';
 import { CURRENT, WAITING } from '../../lib/helper/constants';
 import { isCurrentMedia, isWaitingMedia } from '../../lib/helper/mediaHelper';
 import { useMedia } from '../../lib/hooks/provider/mediaProvider';
@@ -6,15 +6,11 @@ import LoadingIndicator from '../common/loadingIndicator';
 import StatusTitle from './statusTitle';
 import Toolbar from './toolbar/toolbar';
 
-const VirtualizedList = React.lazy(
-  () => import('./listLayout/virtualizedList')
-);
+const VirtualizedList = lazy(() => import('./listLayout/virtualizedList'));
 
-const VirtualizedGrid = React.lazy(
-  () => import('./gridLayout/virtualizedGrid')
-);
+const VirtualizedGrid = lazy(() => import('./gridLayout/virtualizedGrid'));
 
-const MangaList: React.FC = () => {
+const MangaList = () => {
   const { media, status, layout } = useMedia();
   const current =
     status !== 'Waiting For New Volumes' &&

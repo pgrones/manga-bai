@@ -1,6 +1,6 @@
 import { useMutation } from '@apollo/client';
 import { Button, Progress, Stack, Switch, Text } from '@mantine/core';
-import { useEffect, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import updateCustomLists, {
   UpdateCustomListsVariables
 } from '../../apollo/mutations/updateCustomLists';
@@ -8,16 +8,13 @@ import updateMangaEntry, {
   UpdateMangaEntryVariables
 } from '../../apollo/mutations/updateMangaEntry';
 import { WAITING, WAITING_CUSTOM_LIST } from '../../lib/helper/constants';
-import {
-  createMediaLists,
-  createMutation
-} from '../../lib/helper/onboardingHelper';
+import { createMediaLists } from '../../lib/helper/mediaHelper';
+import { createMutation } from '../../lib/helper/onboardingHelper';
 import { useOnboarding } from '../../lib/hooks/provider/onboardingProvider';
 import useNotification from '../../lib/hooks/useNotification';
+import { CCLStepProps } from './createCustomListStepTypes';
 
-const CreateCustomListStep: React.FC<{
-  scrollableRef: React.RefObject<HTMLDivElement>;
-}> = ({ scrollableRef }) => {
+const CreateCustomListStep: FC<CCLStepProps> = ({ scrollableRef }) => {
   const {
     mediaData,
     setMediaLists,

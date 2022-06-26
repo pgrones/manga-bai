@@ -4,35 +4,8 @@ import {
   MediaListQueryData
 } from '../../apollo/queries/mediaListQuery';
 import { PopularMangaQueryData } from '../../apollo/queries/popularManga';
-import { IMediaLists } from '../types/entry';
-import { IFirebaseValues } from '../types/firebase';
 import { WAITING_CUSTOM_LIST } from './constants';
-
-export const createMediaLists = (
-  mediaData?: MediaListQueryData,
-  customLists?: string[],
-  firebaseData?: { [key: number]: IFirebaseValues } | null
-): IMediaLists => {
-  const mediaLists = mediaData?.MediaListCollection.lists;
-  const waiting = mediaLists
-    ?.find(l => l.entries?.every(e => e.customLists?.[WAITING_CUSTOM_LIST]))
-    ?.entries?.map(m => ({ ...m, ...firebaseData?.[m.mediaId] }))
-    .filter(m => !m.removed);
-
-  return {
-    paused: mediaLists?.find(l => l.entries?.every(e => e.status === 'PAUSED'))
-      ?.entries,
-    current: mediaLists
-      ?.find(l => l.entries?.every(e => e.status === 'CURRENT'))
-      ?.entries?.map(m => ({ ...m, ...firebaseData?.[m.mediaId] }))
-      .filter(
-        m =>
-          !m.removed && waiting?.findIndex(w => w.mediaId === m.mediaId) === -1
-      ),
-    waiting,
-    hasCustomList: !!customLists?.includes(WAITING_CUSTOM_LIST)
-  };
-};
+import { createMediaLists } from './mediaHelper';
 
 export const delay = (ms: number) =>
   new Promise(resolve => setTimeout(resolve, ms));
@@ -91,7 +64,7 @@ export const getCovers = (
       }));
       covers = [...pausedCovers, ...currentCovers.reverse()];
     } else {
-      covers = mediaData.Page.media.map(m => ({
+      covers = mediaData.popularManga.media.map(m => ({
         id: m.id,
         coverImage: m.coverImage.extraLarge
       }));

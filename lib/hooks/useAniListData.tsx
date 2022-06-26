@@ -12,7 +12,7 @@ import useNotification from './useNotification';
 
 export const useAniListData = (entry: MediaList) => {
   const { updateEntry: updateLocalEntry } = useMedia();
-  const { showSuccess, showError } = useNotification();
+  const { showError } = useNotification();
 
   const [updateEntry, { error }] = useMutation<
     UpdateMangaEntryData,
@@ -55,12 +55,6 @@ export const useAniListData = (entry: MediaList) => {
     updateLocalEntry(data.SaveMediaListEntry.mediaId, data.SaveMediaListEntry);
   };
 
-  const updateProgress = async (progress: number, key: keyof MediaList) => {
-    if (progress === entry[key]) return;
-    await updateAniListData({ [key]: progress });
-    showSuccess(`${entry.media.title.userPreferred} entry updated`);
-  };
-
   const removeFromList = async () => {
     await updateEntry({
       variables: {
@@ -83,7 +77,6 @@ export const useAniListData = (entry: MediaList) => {
   return {
     aniListData: entry,
     updateAniListData,
-    updateProgress,
     removeFromList
   };
 };

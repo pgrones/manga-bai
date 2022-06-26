@@ -8,6 +8,7 @@ import {
 } from '@mantine/core';
 import AmazonLink from '../common/amazonLink';
 import Logo from '../header/logo';
+import ExternalLink from './externalLink';
 
 const Footer = () => {
   return (
@@ -28,15 +29,9 @@ const Footer = () => {
               <Text weight="bold" pb={5}>
                 Support the site
               </Text>
-              <Text
-                component="a"
-                href="https://www.buymeacoffee.com/alzariel"
-                target="_blank"
-                referrerPolicy="no-referrer"
-                size="sm"
-              >
+              <ExternalLink href="https://www.buymeacoffee.com/alzariel">
                 Buy me a coffee
-              </Text>
+              </ExternalLink>
               <AmazonLink title="Amazon.com" href="https://amzn.to/3lEKHwX" />
               <AmazonLink title="Amazon.co.jp" href="https://amzn.to/3QGxmmi" />
             </Stack>
@@ -45,48 +40,20 @@ const Footer = () => {
                 <Text weight="bold" pb={5}>
                   Links
                 </Text>
-                <Text
-                  component="a"
-                  href="https://anilist.co/"
-                  target="_blank"
-                  referrerPolicy="no-referrer"
-                  size="sm"
-                >
-                  AniList
-                </Text>
-                <Text
-                  component="a"
-                  href="https://github.com/pgr3931/manga-bai"
-                  target="_blank"
-                  referrerPolicy="no-referrer"
-                  size="sm"
-                >
+                <ExternalLink href="https://anilist.co/">AniList</ExternalLink>
+                <ExternalLink href="https://github.com/pgr3931/manga-bai">
                   Github
-                </Text>
-                <Text
-                  component="a"
-                  href="/sitemap.xml"
-                  target="_blank"
-                  referrerPolicy="no-referrer"
-                  size="sm"
-                >
-                  Sitemap
-                </Text>
+                </ExternalLink>
+                <ExternalLink href="/sitemap.xml">Sitemap</ExternalLink>
               </Stack>
             </MediaQuery>
             <Stack spacing={8}>
               <Text weight="bold" pb={5}>
                 Contact
               </Text>
-              <Text
-                component="a"
-                href="https://anilist.co/user/Alzariel/"
-                target="_blank"
-                referrerPolicy="no-referrer"
-                size="sm"
-              >
+              <ExternalLink href="https://anilist.co/user/Alzariel/">
                 AniList
-              </Text>
+              </ExternalLink>
               <Text
                 component="a"
                 href="mailto:animeappsmadereal@gmail.com"
@@ -95,9 +62,13 @@ const Footer = () => {
               >
                 E-Mail
               </Text>
+              <ExternalLink href="https://github.com/pgr3931/manga-bai/issues/new">
+                Bug Report
+              </ExternalLink>
             </Stack>
           </Group>
         </Group>
+
         <div>
           <Divider mb={5} />
           <Text size="sm">

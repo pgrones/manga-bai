@@ -31,7 +31,7 @@ const HomePage: NextPage = () => {
 
 export default HomePage;
 
-const HomeComponent: React.FC = () => {
+const HomeComponent = () => {
   const [mediaLists, setMediaLists] = useState<IMediaLists>();
   const initialData = useInitialization(setMediaLists);
   const { error, loading, onboardingDone } = initialData;

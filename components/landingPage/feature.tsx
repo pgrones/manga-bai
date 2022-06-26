@@ -6,12 +6,10 @@ import {
   Title,
   useMantineTheme
 } from '@mantine/core';
+import { FC } from 'react';
+import { FeatureProps } from './featureTypes';
 
-const Feature: React.FC<{
-  icon: React.ReactNode;
-  title: string;
-  text: string;
-}> = ({ icon, title, text }) => {
+const Feature: FC<FeatureProps> = ({ icon, title, text }) => {
   const theme = useMantineTheme();
 
   return (

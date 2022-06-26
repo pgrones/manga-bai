@@ -10,12 +10,13 @@ import {
 } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { useModals } from '@mantine/modals';
+import { FC } from 'react';
 import { CURRENT, WAITING } from '../../lib/helper/constants';
 import { isWaitingMedia } from '../../lib/helper/mediaHelper';
 import useNotification from '../../lib/hooks/useNotification';
 import { FormProps } from './formTypes';
 
-const Form: React.FC<FormProps> = props => {
+const Form: FC<FormProps> = props => {
   const {
     aniListData,
     firebaseData,
@@ -166,6 +167,7 @@ const Form: React.FC<FormProps> = props => {
         <Grid.Col xs={6} sm={4}>
           <Group position="right">
             <Anchor
+              size="sm"
               href={media.siteUrl}
               referrerPolicy="no-referrer"
               target="_blank"

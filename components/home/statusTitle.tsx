@@ -1,11 +1,9 @@
 import { Title } from '@mantine/core';
-import React, { useEffect, useRef } from 'react';
+import { FC, useEffect, useRef } from 'react';
 import { CURRENT, WAITING } from '../../lib/helper/constants';
+import { StatusTitleProps } from './statusTitleTypes';
 
-const StatusTitle: React.FC<{
-  setTitle: React.Dispatch<React.SetStateAction<string>>;
-  toolbarRef: React.RefObject<HTMLDivElement>;
-}> = ({ toolbarRef, setTitle }) => {
+const StatusTitle: FC<StatusTitleProps> = ({ toolbarRef, setTitle }) => {
   const titleRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {

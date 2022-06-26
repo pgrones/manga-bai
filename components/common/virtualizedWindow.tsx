@@ -1,36 +1,21 @@
 import throttle from 'lodash.throttle';
-import React, { CSSProperties, useEffect, useRef } from 'react';
+import { FC, useEffect, useRef } from 'react';
+import { VirtualizedWindowProps } from './virtualizedWindowTypes';
 
-const windowScrollPositionKey = {
-  y: 'pageYOffset',
-  x: 'pageXOffset'
-};
-
-const documentScrollPositionKey = {
-  y: 'scrollTop',
-  x: 'scrollLeft'
-};
-
-const getScrollPosition = (axis: keyof typeof windowScrollPositionKey) =>
-  window[windowScrollPositionKey[axis] as keyof typeof window] ||
-  document.documentElement[
-    documentScrollPositionKey[axis] as keyof typeof document.documentElement
-  ] ||
-  document.body[
-    documentScrollPositionKey[axis] as keyof typeof document.documentElement
-  ] ||
+const getScrollPosition = () =>
+  window.pageYOffset ||
+  document.documentElement.scrollTop ||
+  document.body.scrollTop ||
   0;
 
-const VirtualizedWindow: React.FC<{
-  children: React.FC<{ ref: any; outerRef: any; style: CSSProperties }>;
-}> = ({ children }) => {
+const VirtualizedWindow: FC<VirtualizedWindowProps> = ({ children }) => {
   const ref = useRef<any>(null);
   const outerRef = useRef<any>(null);
 
   useEffect(() => {
     const handleWindowScroll = throttle(() => {
       const { offsetTop = 0 } = outerRef.current || {};
-      const scrollTop = getScrollPosition('y') - offsetTop;
+      const scrollTop = getScrollPosition() - offsetTop;
       ref.current && ref.current.scrollTo(scrollTop);
     }, 10);
 

@@ -1,12 +1,11 @@
 import { CloseButton, MediaQuery, Text, TextInput } from '@mantine/core';
 import { useHotkeys, useInputState, useOs } from '@mantine/hooks';
-import { useEffect, useRef } from 'react';
+import { FC, useEffect, useRef } from 'react';
 import { IoSearchOutline } from 'react-icons/io5';
 import { useMedia } from '../../../lib/hooks/provider/mediaProvider';
 
-const SearchInput: React.FC<{ searchFn?: (value: string) => void }> = ({
-  searchFn
-}) => {
+const SearchInput: FC<{ searchFn?: (value: string) => void }> = props => {
+  const { searchFn } = props;
   const os = useOs();
   const phone = ['ios', 'android'].includes(os);
   const { search } = useMedia();

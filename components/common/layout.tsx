@@ -1,13 +1,12 @@
 import { AppShell, Container, Footer, Header } from '@mantine/core';
-import React, { PropsWithChildren } from 'react';
-import AppHeader from '../header/header';
+import { FC, PropsWithChildren } from 'react';
 import AppFooter from '../footer/footer';
+import AppHeader from '../header/header';
 import BurgerButton from './burgerButton';
 
-const Layout: React.FC<PropsWithChildren<{ is404?: boolean }>> = ({
-  children,
-  is404
-}) => {
+const Layout: FC<PropsWithChildren<{ is404?: boolean }>> = props => {
+  const { children, is404 } = props;
+
   return (
     <AppShell
       header={

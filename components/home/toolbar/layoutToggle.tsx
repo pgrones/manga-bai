@@ -1,9 +1,10 @@
 import { Box, Center, SegmentedControl } from '@mantine/core';
 import { useLocalStorage } from '@mantine/hooks';
+import { FC } from 'react';
 import { IoGrid, IoList } from 'react-icons/io5';
 import { Layout } from '../../../lib/types/user';
 
-const LayoutToggle: React.FC<{ labels?: boolean }> = ({ labels }) => {
+const LayoutToggle: FC<{ labels?: boolean }> = ({ labels }) => {
   const [layout, setLayout] = useLocalStorage<Layout>({
     key: 'media-layout',
     defaultValue: 'grid',

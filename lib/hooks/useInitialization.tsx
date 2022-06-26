@@ -1,5 +1,5 @@
 import { useQuery } from '@apollo/client';
-import React, { useEffect } from 'react';
+import { Dispatch, SetStateAction, useEffect } from 'react';
 import customListQuery, {
   CustomListQueryData,
   CustomListQueryVariables
@@ -9,13 +9,13 @@ import mediaListQuery, {
   MediaListQueryVariables
 } from '../../apollo/queries/mediaListQuery';
 import { getMediaData } from '../firebase/db';
-import { createMediaLists } from '../helper/onboardingHelper';
+import { createMediaLists } from '../helper/mediaHelper';
 import { IMediaLists } from '../types/entry';
 import { useUser } from './provider/userProvider';
 import useNotification from './useNotification';
 
 const useInitialization = (
-  setMediaLists: React.Dispatch<React.SetStateAction<IMediaLists | undefined>>
+  setMediaLists: Dispatch<SetStateAction<IMediaLists | undefined>>
 ) => {
   const { userData, aniListUser, firebaseUser } = useUser();
   const { showError } = useNotification();

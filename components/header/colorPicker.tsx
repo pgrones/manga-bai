@@ -6,10 +6,11 @@ import {
   useMantineTheme
 } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
-import React, { useEffect } from 'react';
+import { FC, useEffect } from 'react';
 import { IoCheckmarkOutline, IoColorPaletteOutline } from 'react-icons/io5';
+import { ColorPickerProps } from './colorPickerTypes';
 
-export const ColorPicker: React.FC = () => {
+export const ColorPicker: FC = () => {
   const theme = useMantineTheme();
 
   return (
@@ -30,13 +31,11 @@ export const ColorPicker: React.FC = () => {
   );
 };
 
-const ColorPickerPopover: React.FC<{
-  setCloseOnClickOutside: React.Dispatch<React.SetStateAction<boolean>>;
-}> = ({ setCloseOnClickOutside }) => {
+const ColorPickerPopover: FC<ColorPickerProps> = props => {
   const [opened, { toggle, close }] = useDisclosure(false);
 
   useEffect(() => {
-    setCloseOnClickOutside(!opened);
+    props.setCloseOnClickOutside(!opened);
   }, [opened]);
 
   return (

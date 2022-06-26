@@ -2,7 +2,7 @@ import { gql } from '@apollo/client';
 
 const popularMangaQuery = gql`
   query getPopularManga {
-    Page(perPage: 9) {
+    popularManga: Page(perPage: 9) {
       media(type: MANGA, sort: [TRENDING_DESC, POPULARITY_DESC]) {
         id
         title {
@@ -19,7 +19,7 @@ const popularMangaQuery = gql`
 export default popularMangaQuery;
 
 export interface PopularMangaQueryData {
-  Page: Page;
+  popularManga: Page;
 }
 
 export interface Page {

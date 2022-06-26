@@ -8,6 +8,7 @@ const removedMediaQuery = gql`
       }
       media(type: MANGA, id_in: $ids) {
         id
+        format
         title {
           userPreferred
           romaji
@@ -46,6 +47,7 @@ export interface Media {
   id: number;
   title: Title;
   coverImage: Image;
+  format: Format;
 }
 
 export interface Image {
@@ -58,3 +60,5 @@ export interface Title {
   english: string;
   native: string;
 }
+
+export type Format = 'MANGA' | 'NOVEL' | 'ONE_SHOT';

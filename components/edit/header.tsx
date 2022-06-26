@@ -6,12 +6,12 @@ import {
   useMantineTheme
 } from '@mantine/core';
 import Image from 'next/image';
-import React from 'react';
+import { FC } from 'react';
 import { getBorderRadius } from '../../lib/helper/radius';
 import ImageFallback from '../common/ImageFallback';
 import { HeaderProps } from './headerTypes';
 
-const Header: React.FC<HeaderProps> = props => {
+const Header: FC<HeaderProps> = props => {
   const { bannerImage, coverImage, title, close } = props;
   const theme = useMantineTheme();
 

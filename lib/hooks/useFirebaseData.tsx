@@ -3,12 +3,10 @@ import { IMediaData } from '../types/entry';
 import { IFirebaseValues } from '../types/firebase';
 import { useMedia } from './provider/mediaProvider';
 import { useUser } from './provider/userProvider';
-import useNotification from './useNotification';
 
 const useFirebaseData = (entry: IMediaData) => {
   const { updateEntry } = useMedia();
   const { firebaseUser } = useUser();
-  const { showSuccess } = useNotification();
 
   const updateFirebaseData = async (values: IFirebaseValues) => {
     Object.keys(values).forEach(key => {
@@ -22,17 +20,7 @@ const useFirebaseData = (entry: IMediaData) => {
     updateEntry(entry.mediaId, values);
   };
 
-  const updatePreordered = async (preordered: number) => {
-    if (
-      preordered === entry.preordered ||
-      (!entry.preordered && preordered === entry.progressVolumes)
-    )
-      return;
-    await updateFirebaseData({ preordered });
-    showSuccess(`${entry.media.title.userPreferred} entry updated`);
-  };
-
-  return { firebaseData: entry, updateFirebaseData, updatePreordered };
+  return { firebaseData: entry, updateFirebaseData };
 };
 
 export default useFirebaseData;

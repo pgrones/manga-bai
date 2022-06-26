@@ -1,7 +1,8 @@
 import Head from 'next/head';
+import { FC } from 'react';
 import { MetaTagsProps } from './metaTagsTypes';
 
-const MetaTags: React.FC<MetaTagsProps> = ({ title, description }) => {
+const MetaTags: FC<MetaTagsProps> = ({ title, description }) => {
   return (
     <Head>
       <title>{title}</title>

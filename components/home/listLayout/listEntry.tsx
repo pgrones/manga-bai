@@ -10,33 +10,23 @@ import {
 } from '@mantine/core';
 import { useHover } from '@mantine/hooks';
 import Image from 'next/image';
-import React from 'react';
+import { FC } from 'react';
 import { IoEllipsisHorizontal } from 'react-icons/io5';
-import { Format } from '../../../apollo/queries/mediaListQuery';
+import { formatMap } from '../../../lib/helper/constants';
 import { getBorderRadius } from '../../../lib/helper/radius';
 import EntryProvider from '../../../lib/hooks/provider/entryProvider';
-import { IMediaData } from '../../../lib/types/entry';
 import EditModal from '../../edit/modal';
 import PreorderedProgress from '../../edit/progress/preorderedProgress';
 import VolumeProgress from '../../edit/progress/volumeProgress';
+import { ListEntryProps } from './listEntryTypes';
 
-const formatMap: { [key in Format]: string } = {
-  ONE_SHOT: 'One Shot',
-  MANGA: 'Manga',
-  NOVEL: 'Light Novel'
-};
-
-const ListEntry: React.FC<
-  IMediaData & { topRadius: boolean; bottomRadius: boolean }
-> = props => {
+const ListEntry: FC<ListEntryProps> = props => {
   const { topRadius, bottomRadius } = props;
   const { title, coverImage, format } = props.media;
   const { hovered, ref } = useHover();
   const { hovered: imgHovered, ref: imgRef } = useHover();
   const theme = useMantineTheme();
   const borderRadius = getBorderRadius(theme).borderRadius;
-
-  // const newVolumeAvailable = Math.random() > 0.7;
 
   return (
     <EntryProvider entry={props}>
@@ -112,6 +102,7 @@ const ListEntry: React.FC<
                     style={{ borderRadius }}
                     sizes="40px"
                   />
+
                   {imgHovered && (
                     <EditModal>
                       <ActionIcon
@@ -159,8 +150,10 @@ const ListEntry: React.FC<
                   </div>
                 </div>
               </MediaQuery>
+
               <VolumeProgress buttonVisible={hovered} />
               <PreorderedProgress buttonVisible={hovered} />
+
               <MediaQuery smallerThan="md" styles={{ display: 'none' }}>
                 <Center style={{ flex: 2 }}>
                   <Text size="sm" title="Format">
@@ -168,6 +161,7 @@ const ListEntry: React.FC<
                   </Text>
                 </Center>
               </MediaQuery>
+
               <MediaQuery smallerThan="md" styles={{ display: 'none' }}>
                 <div>
                   <EditModal>
@@ -177,24 +171,6 @@ const ListEntry: React.FC<
                   </EditModal>
                 </div>
               </MediaQuery>
-              {/* 
-        {newVolumeAvailable && (
-          <Stack spacing={2}>
-            <Anchor
-              size="sm"
-              href="https://amzn.to/3lEKHwX"
-              target="_blank"
-              referrerPolicy="no-referrer"
-              style={{ lineHeight: 1 }}
-            >
-              Buy on Amazon
-            </Anchor>
-            <Text size="xs" color="dimmed" style={{ lineHeight: 1 }}>
-              (Affiliate Link)
-            </Text>
-          </Stack>
-        )}
-       */}
             </Group>
           </MediaQuery>
         </Paper>

@@ -7,9 +7,19 @@
     "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
     "rewrites": [
       {
-        "source": "**",
-        "destination": "/index.html"
+        "source": "**/**",
+        "function": "nextjs-server"
       }
+    ]
+  },
+  "functions": {
+    "source": ".",
+    "ignore": [
+      ".firebase/**",
+      ".firebaserc",
+      "firebase.json",
+      "**/node_modules/**",
+      "**/public/**"
     ]
   },
   "emulators": {

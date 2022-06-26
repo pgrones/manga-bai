@@ -1,26 +1,26 @@
 import { useLocalStorage } from '@mantine/hooks';
-import React, {
+import {
   createContext,
+  FC,
   PropsWithChildren,
   useContext,
   useState
 } from 'react';
-import { Title } from '../../../apollo/queries/mediaListQuery';
+import { titles } from '../../helper/constants';
 import { IAniListValues } from '../../types/aniList';
 import { IMediaLists } from '../../types/entry';
 import { IFirebaseValues } from '../../types/firebase';
 import { Layout } from '../../types/user';
 import { IMediaContext, Status } from './mediaProviderTypes';
 
-const titles: (keyof Title)[] = ['romaji', 'english', 'native'];
-
 const MediaContext = createContext<IMediaContext>({} as IMediaContext);
 
 export const useMedia = () => useContext(MediaContext);
 
-const MediaProvider: React.FC<
-  PropsWithChildren<{ mediaLists: IMediaLists }>
-> = ({ children, mediaLists }) => {
+const MediaProvider: FC<PropsWithChildren<{ mediaLists: IMediaLists }>> = ({
+  children,
+  mediaLists
+}) => {
   const [media, setMedia] = useState([
     ...(mediaLists.current ?? []),
     ...(mediaLists.waiting ?? [])

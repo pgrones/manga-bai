@@ -1,11 +1,10 @@
-import { Button, MantineSize } from '@mantine/core';
+import { Button } from '@mantine/core';
 import { useOs } from '@mantine/hooks';
 import Link from 'next/link';
+import { FC } from 'react';
+import { LoginButtonProps } from './loginButtonTypes';
 
-const LoginButton: React.FC<{ size: MantineSize; fullWidth?: boolean }> = ({
-  size,
-  fullWidth
-}) => {
+const LoginButton: FC<LoginButtonProps> = ({ size, fullWidth }) => {
   const os = useOs();
   const phone = ['ios', 'android'].includes(os);
 

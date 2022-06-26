@@ -6,7 +6,7 @@ import CreateCustomListStep from './createCustomListStep';
 import CustomizeStep from './customizeStep';
 import MangaImage from './mangaImage';
 
-const Steps: React.FC = () => {
+const Steps = () => {
   const { step, loading } = useOnboarding();
   const scrollableRef = useRef<HTMLDivElement>(null);
 
@@ -45,6 +45,7 @@ const Steps: React.FC = () => {
           </Stepper.Step>
         </Stepper>
       </Container>
+
       <MediaQuery smallerThan="xl" styles={{ display: 'none' }}>
         <div>
           <MangaImage />

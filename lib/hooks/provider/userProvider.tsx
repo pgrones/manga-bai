@@ -5,8 +5,9 @@ import { useNotifications } from '@mantine/notifications';
 import axios from 'axios';
 import { signInWithCustomToken, Unsubscribe } from 'firebase/auth';
 import { useRouter } from 'next/router';
-import React, {
+import {
   createContext,
+  FC,
   PropsWithChildren,
   useContext,
   useEffect,
@@ -33,7 +34,7 @@ const UserContext = createContext<IUserContext>({
 
 export const useUser = () => useContext(UserContext);
 
-const UserProvider: React.FC<PropsWithChildren<unknown>> = ({ children }) => {
+const UserProvider: FC<PropsWithChildren<unknown>> = ({ children }) => {
   const { showError } = useNotification();
   const { cleanQueue, showNotification } = useNotifications();
   const apolloClient = useApolloClient();
@@ -87,6 +88,30 @@ const UserProvider: React.FC<PropsWithChildren<unknown>> = ({ children }) => {
   const fullyAuthenticated =
     loading || firebaseLoading ? 'loading' : !!user && !!data?.Viewer;
 
+  const signOut = async () => {
+    setAccessToken('');
+    await auth.signOut();
+    await apolloClient.resetStore();
+    cleanQueue();
+    showNotification({
+      title: (
+        <>
+          Remember to revoke the access token from your{' '}
+          <Anchor
+            href="https://anilist.co/settings/apps"
+            target="_blank"
+            referrerPolicy="no-referrer"
+          >
+            Apps page
+          </Anchor>{' '}
+          on AniList
+        </>
+      ),
+      message: '',
+      autoClose: 20000
+    });
+  };
+
   return (
     <UserContext.Provider
       value={{
@@ -94,29 +119,7 @@ const UserProvider: React.FC<PropsWithChildren<unknown>> = ({ children }) => {
         aniListUser: data?.Viewer ?? null,
         firebaseUser: user ?? null,
         userData,
-        signOut: async () => {
-          setAccessToken('');
-          await auth.signOut();
-          await apolloClient.resetStore();
-          cleanQueue();
-          showNotification({
-            title: (
-              <>
-                Remember to revoke the access token from your{' '}
-                <Anchor
-                  href="https://anilist.co/settings/apps"
-                  target="_blank"
-                  referrerPolicy="no-referrer"
-                >
-                  Apps page
-                </Anchor>{' '}
-                on AniList
-              </>
-            ),
-            message: '',
-            autoClose: 20000
-          });
-        }
+        signOut
       }}
     >
       {children}

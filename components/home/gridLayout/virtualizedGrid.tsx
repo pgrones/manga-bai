@@ -1,6 +1,6 @@
 import { Group, useMantineTheme } from '@mantine/core';
 import { useMediaQuery } from '@mantine/hooks';
-import React from 'react';
+import { FC, isValidElement, memo } from 'react';
 import { areEqual, VariableSizeList as List } from 'react-window';
 import { MediaList } from '../../../apollo/queries/mediaListQuery';
 import {
@@ -9,16 +9,15 @@ import {
 } from '../../../lib/helper/mediaHelper';
 import { useMedia } from '../../../lib/hooks/provider/mediaProvider';
 import VirtualizedWindow from '../../common/virtualizedWindow';
+import {
+  GridRowProps,
+  VirtualizedProps
+} from '../../common/virtualizedWindowTypes';
 import GridEntry from './gridEntry';
 
-const isReactElement = (item: any): item is JSX.Element =>
-  React.isValidElement(item);
+const isReactElement = (item: any): item is JSX.Element => isValidElement(item);
 
-const Row: React.FC<{
-  data: ((MediaList | string)[] | JSX.Element)[];
-  index: number;
-  style: React.CSSProperties;
-}> = React.memo(({ data, index, style }) => {
+const Row: FC<GridRowProps> = memo(({ data, index, style }) => {
   const item = data[index];
 
   return (
@@ -38,9 +37,7 @@ const Row: React.FC<{
   );
 }, areEqual);
 
-const VirtualizedGrid: React.FC<{
-  statusTitle: JSX.Element;
-}> = React.memo(({ statusTitle }) => {
+const VirtualizedGrid: FC<VirtualizedProps> = memo(({ statusTitle }) => {
   const { media, status } = useMedia();
   const theme = useMantineTheme();
   const xs = 1;
@@ -105,7 +102,11 @@ const VirtualizedGrid: React.FC<{
             width={0}
             itemCount={itemData.length}
             itemSize={index =>
-              index === statusIndex ? 60 : (!lg ? 144 : 170) + theme.spacing.xl
+              index === statusIndex
+                ? 60
+                : !lg
+                ? 120 + theme.spacing.md
+                : 170 + theme.spacing.xl
             }
             itemData={itemData}
           >

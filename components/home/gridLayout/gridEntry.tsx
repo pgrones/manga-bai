@@ -10,7 +10,7 @@ import {
 } from '@mantine/core';
 import { useHover } from '@mantine/hooks';
 import Image from 'next/image';
-import React from 'react';
+import { FC, memo } from 'react';
 import { IoEllipsisHorizontal } from 'react-icons/io5';
 import { getBorderRadius } from '../../../lib/helper/radius';
 import EntryProvider from '../../../lib/hooks/provider/entryProvider';
@@ -19,19 +19,16 @@ import EditModal from '../../edit/modal';
 import PreorderedProgress from '../../edit/progress/preorderedProgress';
 import VolumeProgress from '../../edit/progress/volumeProgress';
 
-const GridEntry: React.FC<IMediaData> = React.memo(props => {
+const GridEntry: FC<IMediaData> = memo(props => {
   const { coverImage, title } = props.media;
   const { hovered, ref } = useHover();
   const { hovered: imgHovered, ref: imgRef } = useHover();
   const theme = useMantineTheme();
 
-  // const newVolumeAvailable = Math.random() > 0.7;
-
   return (
     <EntryProvider entry={props}>
       <Paper
         radius="sm"
-        mb="xl"
         withBorder={theme.colorScheme === 'light'}
         style={{ flex: 1 }}
       >
@@ -62,6 +59,7 @@ const GridEntry: React.FC<IMediaData> = React.memo(props => {
                 style={getBorderRadius(theme)}
                 sizes="120px"
               />
+
               {imgHovered && (
                 <EditModal>
                   <ActionIcon
@@ -82,13 +80,6 @@ const GridEntry: React.FC<IMediaData> = React.memo(props => {
                   </ActionIcon>
                 </EditModal>
               )}
-              {/* {newVolumeAvailable && (
-            <div className="new-volumes-available">
-              <Text size="sm" sx={theme => ({ color: theme.colors.gray[0] })}>
-                New Volume Available
-              </Text>
-            </div>
-          )} */}
             </div>
           </MediaQuery>
           <MediaQuery
@@ -123,6 +114,7 @@ const GridEntry: React.FC<IMediaData> = React.memo(props => {
                   </Text>
                 </div>
               </div>
+
               <Stack spacing={8} pb={5}>
                 <VolumeProgress buttonVisible={hovered} />
                 <PreorderedProgress buttonVisible={hovered} />

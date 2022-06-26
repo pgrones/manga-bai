@@ -5,10 +5,10 @@ import {
   InMemoryCache,
   NormalizedCacheObject
 } from '@apollo/client';
-import { GraphQLError } from 'graphql';
 import { setContext } from '@apollo/client/link/context';
 import { onError } from '@apollo/client/link/error';
 import { RetryLink } from '@apollo/client/link/retry';
+import { GraphQLError } from 'graphql';
 import { useMemo } from 'react';
 import { auth } from '../lib/firebase/firebase';
 
@@ -72,7 +72,11 @@ const createApolloClient = () => {
   return new ApolloClient({
     ssrMode: typeof window === 'undefined',
     link: from([errorLink, retryLink, authLink.concat(httpLink)]),
-    cache: new InMemoryCache()
+    cache: new InMemoryCache({
+      typePolicies: {
+        Page: { keyFields: [] }
+      }
+    })
   });
 };
 
