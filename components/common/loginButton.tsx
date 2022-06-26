@@ -1,12 +1,11 @@
 import { Button } from '@mantine/core';
-import { useOs } from '@mantine/hooks';
 import Link from 'next/link';
 import { FC } from 'react';
+import useDevice from '../../lib/hooks/useDevice';
 import { LoginButtonProps } from './loginButtonTypes';
 
 const LoginButton: FC<LoginButtonProps> = ({ size, fullWidth }) => {
-  const os = useOs();
-  const phone = ['ios', 'android'].includes(os);
+  const phone = useDevice() === 'phone';
 
   return phone ? (
     <Link href="/signin" passHref>

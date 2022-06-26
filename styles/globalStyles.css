@@ -40,3 +40,8 @@ img[alt]:after {
 td {
   border-bottom: none !important;
 }
+
+input[type='search'] {
+  -webkit-appearance: none;
+  border-radius: 4px;
+}

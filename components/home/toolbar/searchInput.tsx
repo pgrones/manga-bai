@@ -3,12 +3,13 @@ import { useHotkeys, useInputState, useOs } from '@mantine/hooks';
 import { FC, useEffect, useRef } from 'react';
 import { IoSearchOutline } from 'react-icons/io5';
 import { useMedia } from '../../../lib/hooks/provider/mediaProvider';
+import useDevice from '../../../lib/hooks/useDevice';
 
 const SearchInput: FC<{ searchFn?: (value: string) => void }> = props => {
   const { searchFn } = props;
-  const os = useOs();
-  const phone = ['ios', 'android'].includes(os);
   const { search } = useMedia();
+  const phone = useDevice() === 'phone';
+  const os = useOs();
   const searchRef = useRef<HTMLInputElement>(null);
   const [searchValue, setSearchValue] = useInputState('');
   useHotkeys([
