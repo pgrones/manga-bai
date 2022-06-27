@@ -41,6 +41,7 @@ td {
   border-bottom: none !important;
 }
 
+/* Prevent Safari from rounding out corners */
 input[type='search'] {
   -webkit-appearance: none;
   border-radius: 4px;

@@ -1,3 +1,4 @@
+import { useDisclosure } from '@mantine/hooks';
 import { lazy, Suspense, useEffect, useRef, useState } from 'react';
 import { CURRENT, WAITING } from '../../lib/helper/constants';
 import { isCurrentMedia, isWaitingMedia } from '../../lib/helper/mediaHelper';
@@ -19,7 +20,7 @@ const MangaList = () => {
     status !== 'Currently Reading' &&
     media?.filter(m => isWaitingMedia(m) && !m.hidden).length;
   const toolbarRef = useRef<HTMLDivElement>(null);
-  const isList = layout === 'list';
+  const [recalculate, { toggle }] = useDisclosure(true);
   const [title, setTitle] = useState(
     waiting ? WAITING : current ? CURRENT : ''
   );
@@ -30,12 +31,16 @@ const MangaList = () => {
 
   return (
     <>
-      <Toolbar title={title} ref={toolbarRef} />
-      {isList ? (
+      <Toolbar title={title} ref={toolbarRef} recalculate={toggle} />
+      {layout === 'list' ? (
         <Suspense fallback={<LoadingIndicator />}>
           <VirtualizedList
             statusTitle={
-              <StatusTitle setTitle={setTitle} toolbarRef={toolbarRef} />
+              <StatusTitle
+                setTitle={setTitle}
+                toolbarRef={toolbarRef}
+                recalculate={recalculate}
+              />
             }
           />
         </Suspense>
@@ -43,7 +48,11 @@ const MangaList = () => {
         <Suspense fallback={<LoadingIndicator />}>
           <VirtualizedGrid
             statusTitle={
-              <StatusTitle setTitle={setTitle} toolbarRef={toolbarRef} />
+              <StatusTitle
+                setTitle={setTitle}
+                toolbarRef={toolbarRef}
+                recalculate={recalculate}
+              />
             }
           />
         </Suspense>

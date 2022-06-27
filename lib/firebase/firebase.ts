@@ -16,7 +16,10 @@ const firebaseConfig = {
 const app = getApps()[0] ?? initializeApp(firebaseConfig);
 export const analytics = () => getAnalytics(app);
 export const auth = getAuth(app);
-export const db = getDatabase(app, 'https://mangabai-default-rtdb.europe-west1.firebasedatabase.app');
+export const db = getDatabase(
+  app,
+  'https://mangabai-default-rtdb.europe-west1.firebasedatabase.app'
+);
 
 if (process.env.NODE_ENV === 'development') {
   try {

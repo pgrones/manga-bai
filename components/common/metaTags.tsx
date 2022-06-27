@@ -7,7 +7,10 @@ const MetaTags: FC<MetaTagsProps> = ({ title, description }) => {
     <Head>
       <title>{title}</title>
       <link rel="icon" href="/favicon.ico" />
-      <meta name="viewport" content="width=device-width,initial-scale=1" />
+      <meta
+        name="viewport"
+        content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no"
+      />
       <meta name="description" content={description} />
 
       <meta name="twitter:card" content="summary" />

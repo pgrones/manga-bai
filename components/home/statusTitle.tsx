@@ -3,7 +3,8 @@ import { FC, useEffect, useRef } from 'react';
 import { CURRENT, WAITING } from '../../lib/helper/constants';
 import { StatusTitleProps } from './statusTitleTypes';
 
-const StatusTitle: FC<StatusTitleProps> = ({ toolbarRef, setTitle }) => {
+const StatusTitle: FC<StatusTitleProps> = props => {
+  const { toolbarRef, setTitle, recalculate } = props;
   const titleRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -50,7 +51,7 @@ const StatusTitle: FC<StatusTitleProps> = ({ toolbarRef, setTitle }) => {
 
       return () => observer.disconnect();
     }
-  }, []);
+  }, [recalculate]);
 
   return (
     <Title ref={titleRef} pt="xl" order={4}>

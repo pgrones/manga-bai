@@ -4,9 +4,10 @@ import { FC, useEffect, useRef } from 'react';
 import { IoSearchOutline } from 'react-icons/io5';
 import { useMedia } from '../../../lib/hooks/provider/mediaProvider';
 import useDevice from '../../../lib/hooks/useDevice';
+import { SearchInputProps } from './searchInputTypes';
 
-const SearchInput: FC<{ searchFn?: (value: string) => void }> = props => {
-  const { searchFn } = props;
+const SearchInput: FC<SearchInputProps> = props => {
+  const { searchFn, className } = props;
   const { search } = useMedia();
   const phone = useDevice() === 'phone';
   const os = useOs();
@@ -23,7 +24,7 @@ const SearchInput: FC<{ searchFn?: (value: string) => void }> = props => {
   return (
     <MediaQuery
       query="(max-width: 410px)"
-      styles={{ width: searchFn ? 'auto !important' : '100% !important' }}
+      styles={{ width: '100% !important' }}
     >
       <MediaQuery
         smallerThan="sm"
@@ -40,6 +41,7 @@ const SearchInput: FC<{ searchFn?: (value: string) => void }> = props => {
           placeholder="Search"
           icon={<IoSearchOutline size={16} />}
           rightSectionWidth={searchValue ? 25 : 62}
+          className={className}
           styles={{
             root: { width: 270 },
             rightSection: { pointerEvents: searchValue ? 'auto' : 'none' }

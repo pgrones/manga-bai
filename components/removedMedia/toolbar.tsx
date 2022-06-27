@@ -1,4 +1,4 @@
-import { Group, Button, Center, Box } from '@mantine/core';
+import { Group, Button, Center, Box, MediaQuery } from '@mantine/core';
 import Link from 'next/link';
 import { FC } from 'react';
 import { IoArrowBackOutline } from 'react-icons/io5';
@@ -17,14 +17,19 @@ const Toolbar: FC<{ searchFn: (value: string) => void }> = ({ searchFn }) => {
         backgroundColor: theme.other.getThemeBg(theme)
       })}
     >
-      <Link href="/home" passHref>
-        <Button component="a" size="xs" variant="default">
-          <Center inline>
-            <IoArrowBackOutline />
-            <Box ml={5}>Home</Box>
-          </Center>
-        </Button>
-      </Link>
+      <MediaQuery query="(max-width: 410px)" styles={{ display: 'none' }}>
+        <Box>
+          <Link href="/home" passHref>
+            <Button component="a" size="xs" variant="default">
+              <Center inline>
+                <IoArrowBackOutline />
+                <Box ml={5}>Home</Box>
+              </Center>
+            </Button>
+          </Link>
+        </Box>
+      </MediaQuery>
+
       <SearchInput searchFn={searchFn} />
     </Group>
   );
