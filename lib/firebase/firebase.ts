@@ -4,13 +4,13 @@ import { getDatabase, connectDatabaseEmulator } from 'firebase/database';
 import { connectAuthEmulator, getAuth } from 'firebase/auth';
 
 const firebaseConfig = {
-  apiKey: 'AIzaSyDgQApdVZbg7OPmtrsOAf5U5lsFNu5u21g',
-  authDomain: 'mangabai.firebaseapp.com',
-  projectId: 'mangabai',
-  storageBucket: 'mangabai.appspot.com',
-  messagingSenderId: '956180902451',
-  appId: '1:956180902451:web:9ccce705e32ac4dfef6946',
-  measurementId: 'G-854K4MFB8T'
+  apiKey: process.env.apiKey,
+  authDomain: process.env.authDomain,
+  projectId: process.env.projectId,
+  storageBucket: process.env.storageBucket,
+  messagingSenderId: process.env.messagingSenderId,
+  appId: process.env.appId,
+  measurementId: process.env.measurementId
 };
 
 const app = getApps()[0] ?? initializeApp(firebaseConfig);
