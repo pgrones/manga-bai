@@ -4,7 +4,7 @@
 
 #
 
-<img src="mangabai.png" />
+<img src="promotionalImages/mangabai.png" />
 
 #
 
