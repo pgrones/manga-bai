@@ -4,6 +4,8 @@ import {
   FC,
   PropsWithChildren,
   useContext,
+  useEffect,
+  useRef,
   useState
 } from 'react';
 import { titles } from '../../helper/constants';
@@ -17,22 +19,6 @@ const MediaContext = createContext<IMediaContext>({} as IMediaContext);
 
 export const useMedia = () => useContext(MediaContext);
 
-const MediaProviderWrapper: FC<
-  PropsWithChildren<{ mediaLists: IMediaLists }>
-> = props => {
-  return (
-    <MediaProvider
-      key={
-        JSON.stringify(props.mediaLists.current) +
-        JSON.stringify(props.mediaLists.waiting)
-      }
-      {...props}
-    >
-      {props.children}
-    </MediaProvider>
-  );
-};
-
 const MediaProvider: FC<PropsWithChildren<{ mediaLists: IMediaLists }>> = ({
   children,
   mediaLists
@@ -42,6 +28,12 @@ const MediaProvider: FC<PropsWithChildren<{ mediaLists: IMediaLists }>> = ({
     ...(mediaLists.waiting ?? [])
   ]);
   const [status, setStatus] = useState<Status>(null);
+  const searchValue = useRef<string>();
+
+  useEffect(() => {
+    setMedia([...(mediaLists.current ?? []), ...(mediaLists.waiting ?? [])]);
+    if (searchValue.current) search(searchValue.current);
+  }, [mediaLists]);
 
   const [layout] = useLocalStorage<Layout>({
     key: 'media-layout',
@@ -72,6 +64,7 @@ const MediaProvider: FC<PropsWithChildren<{ mediaLists: IMediaLists }>> = ({
 
   const search = (value: string) => {
     value = value.trim().toLowerCase();
+    searchValue.current = value;
     if (!value && !media.some(m => m.hidden)) return;
 
     if (!value && media.some(m => m.hidden)) {
@@ -106,4 +99,4 @@ const MediaProvider: FC<PropsWithChildren<{ mediaLists: IMediaLists }>> = ({
   );
 };
 
-export default MediaProviderWrapper;
+export default MediaProvider;
