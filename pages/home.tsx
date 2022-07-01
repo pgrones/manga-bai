@@ -1,6 +1,5 @@
 import type { NextPage } from 'next';
 import Head from 'next/head';
-import { useState } from 'react';
 import AuthCheck from '../components/common/authCheck';
 import Layout from '../components/common/layout';
 import LoadingIndicator from '../components/common/loadingIndicator';
@@ -11,7 +10,6 @@ import Steps from '../components/onboarding/steps';
 import MediaProvider from '../lib/hooks/provider/mediaProvider';
 import OnboardingProvider from '../lib/hooks/provider/onboardingProvider';
 import useInitialization from '../lib/hooks/useInitialization';
-import { IMediaLists } from '../lib/types/entry';
 
 const HomePage: NextPage = () => {
   return (
@@ -32,19 +30,23 @@ const HomePage: NextPage = () => {
 export default HomePage;
 
 const HomeComponent = () => {
-  const [mediaLists, setMediaLists] = useState<IMediaLists>();
-  const initialData = useInitialization(setMediaLists);
-  const { error, loading, onboardingDone } = initialData;
+  const initialData = useInitialization();
+  const { error, loading, onboardingDone, mediaLists } = initialData;
 
-  return error ? null : loading || (onboardingDone && !mediaLists) ? (
-    <LoadingIndicator />
-  ) : !onboardingDone ? (
-    <OnboardingProvider setMediaLists={setMediaLists} {...initialData}>
-      <Steps />
-    </OnboardingProvider>
-  ) : !mediaLists?.current?.length && !mediaLists?.waiting?.length ? (
-    <NoData />
-  ) : (
+  if (error) return null;
+  if (loading || (onboardingDone && !mediaLists)) return <LoadingIndicator />;
+
+  if (!onboardingDone)
+    return (
+      <OnboardingProvider {...initialData}>
+        <Steps />
+      </OnboardingProvider>
+    );
+
+  if (!mediaLists?.current?.length && !mediaLists?.waiting?.length)
+    return <NoData />;
+
+  return (
     <MediaProvider mediaLists={mediaLists}>
       <MangaList />
     </MediaProvider>

@@ -20,7 +20,7 @@ export const useAniListData = (entry: MediaList) => {
   >(updateMangaEntry);
 
   useEffect(() => {
-    if (error) showError();
+    if (error) showError(error);
   }, [error]);
 
   const updateAniListData = async (values: IAniListValues) => {

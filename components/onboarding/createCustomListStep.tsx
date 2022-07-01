@@ -15,16 +15,9 @@ import useNotification from '../../lib/hooks/useNotification';
 import { CCLStepProps } from './createCustomListStepTypes';
 
 const CreateCustomListStep: FC<CCLStepProps> = ({ scrollableRef }) => {
-  const {
-    mediaData,
-    setMediaLists,
-    customLists,
-    loading,
-    setLoading,
-    nextStep
-  } = useOnboarding();
+  const { mediaData, customLists, loading, setLoading, nextStep } =
+    useOnboarding();
   const { showError } = useNotification();
-  const [createCustomList, setCreateCustomList] = useState(true);
   const [importPaused, setImportPaused] = useState(true);
   const [progress, setProgress] = useState<number>();
   const [ratio, setRatio] = useState<string>();
@@ -47,7 +40,7 @@ const CreateCustomListStep: FC<CCLStepProps> = ({ scrollableRef }) => {
   useEffect(() => {
     if (error || fillError) {
       setLoading(false);
-      showError(error, 'Unable to create custom list');
+      showError(error ?? fillError, 'Unable to create custom list');
     }
   }, [error, fillError]);
 
@@ -65,89 +58,80 @@ const CreateCustomListStep: FC<CCLStepProps> = ({ scrollableRef }) => {
     // Group the data by status
     const mangaLists = createMediaLists(mediaData, customLists);
 
-    if (createCustomList) {
-      if (!mangaLists.hasCustomList) {
-        await updateLists({
-          variables: {
-            customLists: Array.from(
-              new Set([...(customLists ?? []), WAITING_CUSTOM_LIST])
-            )
-          }
-        });
-      }
-
-      if (importPaused) {
-        const onMutation = async (options: any) => {
-          await updateEntry(options);
-          setProgress(
-            prev => (prev ?? 0) + 100 / (mangaLists.paused ?? []).length
-          );
-          setRatio(
-            prev =>
-              `${!prev ? 1 : parseInt(prev.split('/')[0]) + 1}/${
-                (mangaLists.paused ?? []).length
-              }`
-          );
-        };
-
-        const chunks: Promise<void>[] = [];
-        const itemsPerMinute = 75;
-
-        if ((mangaLists.paused ?? []).length <= itemsPerMinute) {
-          chunks.push(
-            ...createMutation(mangaLists.paused ?? [], 200, onMutation)
-          );
-        } else {
-          setHasManyEntries(true);
-          const timeUntilNextMinute = (60 - new Date().getSeconds()) * 1000;
-
-          let requestsPossibleInFirstMinute = Math.min(
-            itemsPerMinute,
-            (timeUntilNextMinute - 1000) / 205
-          );
-          if (requestsPossibleInFirstMinute < 0)
-            requestsPossibleInFirstMinute = 0;
-
-          const delayInFirstMinute =
-            timeUntilNextMinute / requestsPossibleInFirstMinute;
-
-          const firstChunk = (mangaLists.paused ?? []).slice(
-            0,
-            requestsPossibleInFirstMinute
-          );
-          const remainingChunks = (mangaLists.paused ?? []).slice(
-            requestsPossibleInFirstMinute
-          );
-
-          chunks.push(
-            ...createMutation(firstChunk, delayInFirstMinute, onMutation)
-          );
-
-          for (let i = 0; i < remainingChunks.length; i += itemsPerMinute) {
-            const lastChunk = i + itemsPerMinute >= remainingChunks.length;
-            const chunk = remainingChunks.slice(i, i + itemsPerMinute);
-            const chunkDelay =
-              timeUntilNextMinute + (60 * 1000 * i) / itemsPerMinute;
-
-            chunks.push(
-              ...createMutation(
-                chunk,
-                lastChunk ? 200 : 760,
-                onMutation,
-                chunkDelay
-              )
-            );
-          }
+    if (!mangaLists.hasCustomList) {
+      await updateLists({
+        variables: {
+          customLists: Array.from(
+            new Set([...(customLists ?? []), WAITING_CUSTOM_LIST])
+          )
         }
+      });
+    }
 
-        await Promise.allSettled(chunks);
+    if (importPaused && mangaLists.paused?.length) {
+      const onMutation = async (options: any) => {
+        await updateEntry(options);
+        setProgress(prev => (prev ?? 0) + 100 / mangaLists.paused!.length);
+        setRatio(
+          prev =>
+            `${!prev ? 1 : parseInt(prev.split('/')[0]) + 1}/${
+              mangaLists.paused!.length
+            }`
+        );
+      };
 
-        mangaLists.waiting = mangaLists.paused;
+      const chunks: Promise<void>[] = [];
+      const itemsPerMinute = 75;
+
+      if (mangaLists.paused.length <= itemsPerMinute) {
+        chunks.push(...createMutation(mangaLists.paused, 200, onMutation));
+      } else {
+        setHasManyEntries(true);
+        const timeUntilNextMinute = (60 - new Date().getSeconds()) * 1000;
+
+        let requestsPossibleInFirstMinute = Math.min(
+          itemsPerMinute,
+          (timeUntilNextMinute - 1000) / 205
+        );
+        if (requestsPossibleInFirstMinute < 0)
+          requestsPossibleInFirstMinute = 0;
+
+        const delayInFirstMinute =
+          timeUntilNextMinute / requestsPossibleInFirstMinute;
+
+        const firstChunk = mangaLists.paused.slice(
+          0,
+          requestsPossibleInFirstMinute
+        );
+        const remainingChunks = mangaLists.paused.slice(
+          requestsPossibleInFirstMinute
+        );
+
+        chunks.push(
+          ...createMutation(firstChunk, delayInFirstMinute, onMutation)
+        );
+
+        for (let i = 0; i < remainingChunks.length; i += itemsPerMinute) {
+          const lastChunk = i + itemsPerMinute >= remainingChunks.length;
+          const chunk = remainingChunks.slice(i, i + itemsPerMinute);
+          const chunkDelay =
+            timeUntilNextMinute + (60 * 1000 * i) / itemsPerMinute;
+
+          chunks.push(
+            ...createMutation(
+              chunk,
+              lastChunk ? 200 : 760,
+              onMutation,
+              chunkDelay
+            )
+          );
+        }
       }
+
+      await Promise.allSettled(chunks);
     }
 
     if (!error && !fillError) {
-      setMediaLists(mangaLists);
       setLoading(false);
       nextStep();
     }
@@ -155,37 +139,23 @@ const CreateCustomListStep: FC<CCLStepProps> = ({ scrollableRef }) => {
 
   return (
     <Stack py="xl" spacing="xl" align="flex-start">
-      <Stack>
-        <Text>
-          Manga Bai creates a custom list called &quot;{WAITING}&quot; on
-          AniList to keep track of all the entries that don&apos;t have a next
-          volume yet. If you don&apos;t want to create this list, Manga Bai will
-          only track entries you&apos;re currently reading.
-        </Text>
-        <Switch
-          label={`Create the custom list "${WAITING}"`}
-          checked={createCustomList}
-          onChange={e => {
-            const value = e.currentTarget.checked;
-            setCreateCustomList(value);
-            if (!value) setImportPaused(false);
-          }}
-          disabled={loading}
-        />
-      </Stack>
-      <Stack pt="xl">
-        <Text>
-          Manga Bai imports all of your paused entries into &quot;{WAITING}
-          &quot;. If you don&apos;t want to import those entries, you&apos;ll
-          have to populate the list yourself on AniList.
-        </Text>
-        <Switch
-          label={`Import paused entries into "${WAITING}"`}
-          checked={importPaused}
-          onChange={e => setImportPaused(e.currentTarget.checked)}
-          disabled={loading || !createCustomList}
-        />
-      </Stack>
+      <Text>
+        Manga Bai creates a custom list called &quot;{WAITING}&quot; on AniList
+        to keep track of all the entries that don&apos;t have a next volume yet.
+        If you want, you can let Manga Bai import all of your paused entries
+        into &quot;{WAITING}&quot;.
+      </Text>
+
+      <Text>
+        If you don&apos;t want to import your paused entries, you&apos;ll have
+        to populate the list yourself on AniList.
+      </Text>
+      <Switch
+        label={`Import paused entries into "${WAITING}"`}
+        checked={importPaused}
+        onChange={e => setImportPaused(e.currentTarget.checked)}
+        disabled={loading}
+      />
       {progress !== undefined ? (
         <div style={{ alignSelf: 'stretch' }}>
           <Text mt="xl" mb="xs">

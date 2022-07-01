@@ -1,6 +1,6 @@
 import { CloseButton, MediaQuery, Text, TextInput } from '@mantine/core';
-import { useHotkeys, useInputState, useOs } from '@mantine/hooks';
-import { FC, useEffect, useRef } from 'react';
+import { useHotkeys, useOs } from '@mantine/hooks';
+import { FC, useRef, useState } from 'react';
 import { IoSearchOutline } from 'react-icons/io5';
 import { useMedia } from '../../../lib/hooks/provider/mediaProvider';
 import useDevice from '../../../lib/hooks/useDevice';
@@ -12,14 +12,15 @@ const SearchInput: FC<SearchInputProps> = props => {
   const phone = useDevice() === 'phone';
   const os = useOs();
   const searchRef = useRef<HTMLInputElement>(null);
-  const [searchValue, setSearchValue] = useInputState('');
+  const [searchValue, setSearchValue] = useState('');
   useHotkeys([
     ['mod+S', () => searchRef.current?.focus() || searchRef.current?.select()]
   ]);
 
-  useEffect(() => {
+  const onSearchValueChange = (searchValue: string) => {
+    setSearchValue(searchValue);
     (searchFn ?? search)(searchValue);
-  }, [searchValue]);
+  };
 
   return (
     <MediaQuery
@@ -35,7 +36,7 @@ const SearchInput: FC<SearchInputProps> = props => {
         <TextInput
           ref={searchRef}
           value={searchValue}
-          onChange={setSearchValue}
+          onChange={e => onSearchValueChange(e.currentTarget.value)}
           type="search"
           size="xs"
           placeholder="Search"
@@ -51,7 +52,7 @@ const SearchInput: FC<SearchInputProps> = props => {
               <CloseButton
                 size="xs"
                 variant="transparent"
-                onClick={() => setSearchValue('')}
+                onClick={() => onSearchValueChange('')}
               />
             ) : (
               !phone && (

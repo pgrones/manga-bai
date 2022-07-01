@@ -8,6 +8,7 @@ const getScrollPosition = () =>
   document.body.scrollTop ||
   0;
 
+// Synchronize window scroll with virtualized list
 const VirtualizedWindow: FC<VirtualizedWindowProps> = ({ children }) => {
   const ref = useRef<any>(null);
   const outerRef = useRef<any>(null);

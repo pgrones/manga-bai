@@ -16,7 +16,7 @@ const OnboardingContext = createContext<IOnboardingContext>(
 export const useOnboarding = () => useContext(OnboardingContext);
 
 const OnboardingProvider: FC<PropsWithChildren<OnboardingProps>> = props => {
-  const { children, setMediaLists, mediaData, customLists } = props;
+  const { children, mediaData, customLists } = props;
   const { firebaseUser } = useUser();
   const [step, setStep] = useState(1);
   const [loading, setLoading] = useState(false);
@@ -34,7 +34,6 @@ const OnboardingProvider: FC<PropsWithChildren<OnboardingProps>> = props => {
         setLoading,
         mediaData,
         customLists,
-        setMediaLists,
         done
       }}
     >

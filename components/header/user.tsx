@@ -8,6 +8,7 @@ import { CgPlayListRemove } from 'react-icons/cg';
 import { IoChevronDownOutline, IoLogOutOutline } from 'react-icons/io5';
 import { hasRemovedMediaData } from '../../lib/firebase/db';
 import { useUser } from '../../lib/hooks/provider/userProvider';
+import useNotification from '../../lib/hooks/useNotification';
 import ColorPickerPopover from './colorPicker';
 
 const LoginButton = dynamic(() => import('../common/loginButton'), {
@@ -19,6 +20,7 @@ const User = () => {
   const [opened, { toggle, close }] = useDisclosure(false);
   const [closeOnClickOutside, setCloseOnClickOutside] = useState(true);
   const [removedMediaData, setRemovedMediaData] = useState(false);
+  const { showError } = useNotification();
 
   useEffect(() => {
     let unsubscribe: Unsubscribe | void;
@@ -29,7 +31,7 @@ const User = () => {
           setRemovedMediaData
         );
       } catch (error) {
-        console.log(error);
+        showError(error);
       }
     } else {
       setRemovedMediaData(false);

@@ -1,10 +1,10 @@
-import { Button, Stack, Title } from '@mantine/core';
+import { Anchor, Button, Stack, Text, Title } from '@mantine/core';
 import { NextPage } from 'next';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import Layout from '../components/common/layout';
 
-const NotFound: NextPage = () => {
+const ServerError: NextPage = () => {
   const [kaomoji, setKaomoji] = useState<string>();
 
   useEffect(() => {
@@ -35,7 +35,18 @@ const NotFound: NextPage = () => {
             'calc(100vh - var(--mantine-header-height, 0px) - var(--mantine-footer-height, 0px))'
         })}
       >
-        <Title>404 - Not Found {kaomoji}</Title>
+        <Title>500 - Server Error {kaomoji}</Title>
+        <Text>
+          If the error persists contact me on{' '}
+          <Anchor
+            href="https://anilist.co/user/Alzariel/"
+            target="_blank"
+            referrerPolicy="no-referrer"
+          >
+            AniList
+          </Anchor>
+          . Thanks!
+        </Text>
         <Link href="/home" passHref>
           <Button component="a">Let&apos;s get you back home</Button>
         </Link>
@@ -44,4 +55,4 @@ const NotFound: NextPage = () => {
   );
 };
 
-export default NotFound;
+export default ServerError;

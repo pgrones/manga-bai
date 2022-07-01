@@ -72,7 +72,7 @@ const UserProvider: FC<PropsWithChildren<unknown>> = ({ children }) => {
         unsubscribe = getUserData(user.uid, setUserData);
       } catch (error) {
         setHasError(error);
-        console.log(error);
+        showError(error);
       }
     } else {
       setUserData(undefined);
@@ -82,7 +82,8 @@ const UserProvider: FC<PropsWithChildren<unknown>> = ({ children }) => {
   }, [user]);
 
   useEffect(() => {
-    if (error || firebaseError || hasError) showError();
+    if (error || firebaseError || hasError)
+      showError(error ?? firebaseError ?? hasError);
   }, [error, firebaseError, hasError]);
 
   const fullyAuthenticated =

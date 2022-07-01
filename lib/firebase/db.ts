@@ -1,4 +1,4 @@
-import { get, onValue, ref, update } from 'firebase/database';
+import { child, get, onValue, push, ref, update } from 'firebase/database';
 import { IUserData } from '../hooks/provider/userProviderTypes';
 import { IFirebaseValues } from '../types/firebase';
 import { db } from './firebase';
@@ -26,7 +26,7 @@ export const setMediaData = async (
   mediaId: number,
   values: IFirebaseValues
 ) => {
-  update(ref(db, uid + '/media/' + mediaId), values);
+  return update(ref(db, uid + '/media/' + mediaId), values);
 };
 
 export const getMediaData = async (
@@ -44,4 +44,9 @@ export const hasRemovedMediaData = (
     const data: { [key: number]: IFirebaseValues } | null = snapshot.val();
     if (data) onChange(Object.values(data).some(d => d.removed));
   });
+};
+
+export const logError = async (error: any) => {
+  const key = push(child(ref(db), 'errors')).key;
+  return update(ref(db, 'errors/' + key), JSON.parse(JSON.stringify(error)));
 };

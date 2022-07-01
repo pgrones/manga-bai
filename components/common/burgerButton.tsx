@@ -40,6 +40,7 @@ const BurgerButton = () => {
           </Center>
         </Paper>
       </MediaQuery>
+
       {opened && (
         <MediaQuery largerThan="md" styles={{ display: 'none' }}>
           <Paper

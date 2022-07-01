@@ -13,6 +13,7 @@ import popularMangaQuery, {
 import Layout from '../components/common/layout';
 import Features from '../components/landingPage/features';
 import Heading from '../components/landingPage/heading';
+import { logError } from '../lib/firebase/db';
 import { useUser } from '../lib/hooks/provider/userProvider';
 
 const LoginButton = dynamic(() => import('../components/common/loginButton'), {
@@ -140,7 +141,7 @@ export const getStaticProps: GetStaticProps<{
       revalidate: 60 * 60 * 24
     };
   } catch (error) {
-    console.log(JSON.stringify(error, null, 2));
+    logError(error);
     return {
       props: {
         manga: []

@@ -1,5 +1,5 @@
 import { useQuery } from '@apollo/client';
-import { Dispatch, SetStateAction, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import customListQuery, {
   CustomListQueryData,
   CustomListQueryVariables
@@ -14,17 +14,17 @@ import { IMediaLists } from '../types/entry';
 import { useUser } from './provider/userProvider';
 import useNotification from './useNotification';
 
-const useInitialization = (
-  setMediaLists: Dispatch<SetStateAction<IMediaLists | undefined>>
-) => {
+const useInitialization = () => {
   const { userData, aniListUser, firebaseUser } = useUser();
   const { showError } = useNotification();
+  const [mediaLists, setMediaLists] = useState<IMediaLists>();
 
   // Query for all the paused and current media of a user
   const {
     data: mediaData,
     loading,
-    error
+    error,
+    refetch
   } = useQuery<MediaListQueryData, MediaListQueryVariables>(mediaListQuery, {
     variables: { userId: aniListUser!.id },
     skip: !aniListUser
@@ -34,7 +34,8 @@ const useInitialization = (
   const {
     data: customListsData,
     loading: customListsLoading,
-    error: customListsError
+    error: customListsError,
+    refetch: refetchCustomLists
   } = useQuery<CustomListQueryData, CustomListQueryVariables>(customListQuery, {
     variables: { id: aniListUser!.id },
     skip: !aniListUser
@@ -49,9 +50,11 @@ const useInitialization = (
   }, [error, customListsError]);
 
   useEffect(() => {
-    if (userData?.onboardingDone && mediaData && customListsData) {
+    if (userData?.onboardingDone) {
       (async () => {
         const firebaseData = await getMediaData(firebaseUser!.uid);
+        const mediaData = (await refetch()).data;
+        const customListsData = (await refetchCustomLists()).data;
         setMediaLists(
           createMediaLists(
             mediaData,
@@ -61,7 +64,7 @@ const useInitialization = (
         );
       })();
     }
-  }, [userData?.onboardingDone, mediaData, customListsData]);
+  }, [userData?.onboardingDone]);
 
   return {
     firebaseUser,
@@ -69,7 +72,8 @@ const useInitialization = (
     mediaData,
     customLists: customListsData?.User.mediaListOptions.mangaList.customLists,
     loading: loading || customListsLoading || userData === undefined,
-    error: error || customListsError
+    error: error || customListsError,
+    mediaLists
   };
 };
 

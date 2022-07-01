@@ -1,6 +1,7 @@
 import { Anchor, Text } from '@mantine/core';
 import { useNotifications } from '@mantine/notifications';
 import { IoCheckmark, IoClose } from 'react-icons/io5';
+import { logError } from '../firebase/db';
 
 const useNotification = () => {
   const { showNotification } = useNotifications();
@@ -14,7 +15,7 @@ const useNotification = () => {
     });
 
   const showError = (error?: any, message?: string) => {
-    console.log(error);
+    error !== undefined && error !== null && logError(error);
     showNotification({
       title: 'An Error Occurred (ᗒᗣᗕ)՞',
       message: (

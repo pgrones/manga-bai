@@ -1,6 +1,6 @@
 import { useMantineTheme } from '@mantine/core';
 import { useMediaQuery } from '@mantine/hooks';
-import React, { FC, isValidElement, memo } from 'react';
+import { FC, isValidElement, memo } from 'react';
 import { areEqual, FixedSizeList as List } from 'react-window';
 import { MediaList } from '../../../apollo/queries/mediaListQuery';
 import {

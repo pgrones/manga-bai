@@ -18,6 +18,7 @@ const httpLink = createHttpLink({
   uri: 'https://graphql.anilist.co'
 });
 
+// Log User out on invalid or expired token
 const errorLink = onError(({ graphQLErrors }) => {
   if (graphQLErrors && typeof window !== 'undefined') {
     const invalidToken =
@@ -34,6 +35,8 @@ const errorLink = onError(({ graphQLErrors }) => {
   }
 });
 
+// Retry after errors
+// Delay waits for x-ratelimit-reset
 const retryLink = new RetryLink({
   attempts: (count, _, error) =>
     !!error &&

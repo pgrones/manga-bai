@@ -1,11 +1,6 @@
 import { Card } from '@mantine/core';
 import { useModals } from '@mantine/modals';
-import React, {
-  cloneElement,
-  FC,
-  isValidElement,
-  PropsWithChildren
-} from 'react';
+import { cloneElement, FC, isValidElement, PropsWithChildren } from 'react';
 import { useEntry } from '../../lib/hooks/provider/entryProvider';
 import { useMedia } from '../../lib/hooks/provider/mediaProvider';
 import Form from './form';

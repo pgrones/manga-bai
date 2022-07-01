@@ -15,6 +15,7 @@ const VolumeProgress: FC<{ buttonVisible: boolean }> = props => {
   const updateProgress = async (progress: number, originalProgress: number) => {
     if (progress !== aniListData.progressVolumes) {
       await updateAniListData({ progressVolumes: progress });
+      // Update firebase too, if the value has never been saved before
       if (!firebaseData?.preordered)
         await updateFirebaseData({ preordered: originalProgress });
       showSuccess(`${aniListData.media.title.userPreferred} entry updated`);

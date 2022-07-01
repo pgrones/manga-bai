@@ -27,7 +27,7 @@ const Form: FC<FormProps> = props => {
     close
   } = props;
   const { openConfirmModal, closeAll, closeModal } = useModals();
-  const { showSuccess } = useNotification();
+  const { showSuccess, showError } = useNotification();
   const { progressVolumes, status, progress, media } = aniListData;
 
   const form = useForm({
@@ -68,7 +68,7 @@ const Form: FC<FormProps> = props => {
       showSuccess(`${media.title.userPreferred} entry updated`);
       close();
     } catch (error) {
-      console.log(error);
+      showError(error);
     }
   };
 
@@ -77,8 +77,10 @@ const Form: FC<FormProps> = props => {
       title: 'Are you sure you want to remove this entry?',
       children: (
         <Text size="sm">
-          This will remove the entry from the custom list &quot;{WAITING}&quot;
-          on AniList and the entry will not show up on Manga Bai anymore.
+          {isWaitingMedia(aniListData)
+            ? `This will remove the entry from the custom list "${WAITING}" on AniList and t`
+            : 'T'}
+          he entry will not show up on Manga Bai anymore.
           <br />
           <br />
           You can always undo this action in the settings in the top right
@@ -98,7 +100,7 @@ const Form: FC<FormProps> = props => {
           await updateFirebaseData({ removed: true });
           closeAll();
         } catch (error) {
-          console.log(error);
+          showError(error);
           closeModal(id);
         }
       },
