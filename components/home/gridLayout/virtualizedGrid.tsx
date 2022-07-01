@@ -87,8 +87,9 @@ const VirtualizedGrid: FC<VirtualizedProps> = memo(({ statusTitle }) => {
     // Hack to rerender the list on window size changes
     <div
       key={
-        (current?.length ?? 0) +
-        (waiting?.length ?? 0) +
+        (current?.length ?? 0).toString() +
+        (waiting?.length ?? 0).toString() +
+        (itemData.length ?? 0).toString() +
         (lg ? 'true' : 'false')
       }
     >
