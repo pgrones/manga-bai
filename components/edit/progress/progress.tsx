@@ -1,5 +1,4 @@
 import { ActionIcon, Group, MediaQuery, Text } from '@mantine/core';
-import { useDebouncedValue } from '@mantine/hooks';
 import { FC, memo, useEffect, useRef, useState } from 'react';
 import { IoAddOutline } from 'react-icons/io5';
 import useDevice from '../../../lib/hooks/useDevice';
@@ -8,7 +7,6 @@ import { ProgressProps } from './progressTypes';
 const Progress: FC<ProgressProps> = memo(
   ({ progress, buttonVisible, updateProgress, text }) => {
     const [progressLocal, setProgressLocal] = useState(progress);
-    const [debouncedProgressVolumes] = useDebouncedValue(progressLocal, 500);
     const originalProgress = useRef<number>();
     const phone = useDevice() === 'phone';
 
@@ -18,10 +16,10 @@ const Progress: FC<ProgressProps> = memo(
 
     useEffect(() => {
       if (originalProgress.current !== undefined) {
-        updateProgress(debouncedProgressVolumes, originalProgress.current);
+        updateProgress(progressLocal, originalProgress.current);
         originalProgress.current = undefined;
       }
-    }, [debouncedProgressVolumes]);
+    }, [progressLocal]);
 
     return (
       <MediaQuery smallerThan="sm" styles={{ flex: 'none !important' }}>

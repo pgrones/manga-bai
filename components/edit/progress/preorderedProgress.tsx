@@ -5,6 +5,8 @@ import { useEntry } from '../../../lib/hooks/provider/entryProvider';
 import useNotification from '../../../lib/hooks/useNotification';
 import Progress from './progress';
 
+let timeout: NodeJS.Timeout;
+
 const PreorderedProgress: FC<{ buttonVisible: boolean }> = props => {
   const { aniListData, firebaseData, updateFirebaseData } = useEntry();
   const theme = useMantineTheme();
@@ -13,8 +15,13 @@ const PreorderedProgress: FC<{ buttonVisible: boolean }> = props => {
 
   const updateProgress = async (progress: number) => {
     if (progress !== firebaseData?.preordered) {
+      clearTimeout(timeout);
       await updateFirebaseData({ preordered: progress });
-      showSuccess(`${aniListData.media.title.userPreferred} entry updated`);
+      timeout = setTimeout(
+        () =>
+          showSuccess(`${aniListData.media.title.userPreferred} entry updated`),
+        500
+      );
     }
   };
 
