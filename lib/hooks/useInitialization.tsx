@@ -1,5 +1,5 @@
 import { useQuery } from '@apollo/client';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useSyncExternalStore } from 'react';
 import customListQuery, {
   CustomListQueryData,
   CustomListQueryVariables
@@ -14,10 +14,25 @@ import { IMediaLists } from '../types/entry';
 import { useUser } from './provider/userProvider';
 import useNotification from './useNotification';
 
+const subscribe = (callback: () => void) => {
+  document.addEventListener('visibilitychange', callback);
+
+  return () => document.removeEventListener('visibilitychange', callback);
+};
+
+const useVisibilityState = () => {
+  return useSyncExternalStore(
+    subscribe,
+    () => document.visibilityState === 'visible',
+    () => true
+  );
+};
+
 const useInitialization = () => {
   const { userData, aniListUser, firebaseUser } = useUser();
   const { showError } = useNotification();
   const [mediaLists, setMediaLists] = useState<IMediaLists>();
+  const isVisible = useVisibilityState();
 
   // Query for all the paused and current media of a user
   const {
@@ -50,7 +65,7 @@ const useInitialization = () => {
   }, [error, customListsError]);
 
   useEffect(() => {
-    if (userData?.onboardingDone) {
+    if (userData?.onboardingDone && isVisible) {
       (async () => {
         const firebaseData = await getMediaData(firebaseUser!.uid);
         const mediaData = (await refetch()).data;
@@ -64,7 +79,7 @@ const useInitialization = () => {
         );
       })();
     }
-  }, [userData?.onboardingDone]);
+  }, [userData?.onboardingDone, isVisible]);
 
   return {
     firebaseUser,

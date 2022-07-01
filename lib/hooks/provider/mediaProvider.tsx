@@ -17,6 +17,22 @@ const MediaContext = createContext<IMediaContext>({} as IMediaContext);
 
 export const useMedia = () => useContext(MediaContext);
 
+const MediaProviderWrapper: FC<
+  PropsWithChildren<{ mediaLists: IMediaLists }>
+> = props => {
+  return (
+    <MediaProvider
+      key={
+        JSON.stringify(props.mediaLists.current) +
+        JSON.stringify(props.mediaLists.waiting)
+      }
+      {...props}
+    >
+      {props.children}
+    </MediaProvider>
+  );
+};
+
 const MediaProvider: FC<PropsWithChildren<{ mediaLists: IMediaLists }>> = ({
   children,
   mediaLists
@@ -90,4 +106,4 @@ const MediaProvider: FC<PropsWithChildren<{ mediaLists: IMediaLists }>> = ({
   );
 };
 
-export default MediaProvider;
+export default MediaProviderWrapper;
