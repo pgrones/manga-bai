@@ -28,7 +28,8 @@ export const createMediaLists = (
       ?.entries?.map(m => ({ ...m, ...firebaseData?.[m.mediaId] }))
       .filter(
         m =>
-          !m.removed && waiting?.findIndex(w => w.mediaId === m.mediaId) === -1
+          !m.removed &&
+          (waiting ?? []).findIndex(w => w.mediaId === m.mediaId) === -1
       ),
     waiting,
     hasCustomList: !!customLists?.includes(WAITING_CUSTOM_LIST)
