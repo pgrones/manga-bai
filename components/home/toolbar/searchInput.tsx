@@ -41,11 +41,16 @@ const SearchInput: FC<SearchInputProps> = props => {
           size="xs"
           placeholder="Search"
           icon={<IoSearchOutline size={16} />}
-          rightSectionWidth={searchValue ? 25 : 62}
+          rightSectionWidth={searchValue ? 30 : 62}
           className={className}
           styles={{
             root: { width: 270 },
-            rightSection: { pointerEvents: searchValue ? 'auto' : 'none' }
+            input: { fontSize: 14 },
+            rightSection: {
+              pointerEvents: searchValue ? 'auto' : 'none',
+              button: { width: 30, height: '100%' },
+              svg: { width: 16, height: 16 }
+            }
           }}
           rightSection={
             searchValue ? (

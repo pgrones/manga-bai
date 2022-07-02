@@ -15,9 +15,10 @@ const Row: FC<RemovedRowProps> = memo(({ data, index, style }) => {
   );
 }, areEqual);
 
-const RemovedMediaList: FC<RemovedMediaListProps> = ({ removedMedia }) => {
+const RemovedMediaList: FC<RemovedMediaListProps> = props => {
   const theme = useMantineTheme();
   const matches = useMediaQuery(`(min-width: ${theme.breakpoints.xs}px)`);
+  const removedMedia = props.removedMedia.filter(r => !r.hidden);
 
   return (
     <div key={removedMedia.length + (matches ? 'true' : 'false')}>

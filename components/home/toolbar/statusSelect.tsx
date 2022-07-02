@@ -13,12 +13,20 @@ const StatusSelect = () => {
     >
       <MediaQuery
         smallerThan="sm"
-        styles={{ width: 'min(203px, 48%) !important' }}
+        styles={{ width: 'min(210px, 48%) !important' }}
       >
         <Select
           size="xs"
           placeholder="Status"
-          style={{ width: 203 }}
+          styles={{
+            root: { width: 210 },
+            input: { fontSize: 14 },
+            rightSection: {
+              width: status ? 30 : undefined,
+              button: { width: 30, height: '100%' },
+              svg: { width: 16, height: 16 }
+            }
+          }}
           clearable
           value={status}
           onChange={(v: Status) => changeStatus(v)}

@@ -75,9 +75,9 @@ const MediaProvider: FC<PropsWithChildren<{ mediaLists: IMediaLists }>> = ({
     setMedia(prev =>
       prev.map(m => ({
         ...m,
-        hidden: !titles.some(t =>
-          m.media.title[t]?.toLowerCase().includes(value)
-        )
+        hidden:
+          !titles.some(t => m.media.title[t]?.toLowerCase().includes(value)) &&
+          !m.media.synonyms.some(s => s.toLowerCase().includes(value))
       }))
     );
   };

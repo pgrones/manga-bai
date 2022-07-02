@@ -109,7 +109,9 @@ const RemovedMedia = () => {
     setRemovedMedia(prev =>
       (prev as RemovedMediaEntry[]).map(m => ({
         ...m,
-        hidden: !titles.some(t => m.title[t]?.toLowerCase().includes(value))
+        hidden:
+          !titles.some(t => m.title[t]?.toLowerCase().includes(value)) &&
+          !m.synonyms.some(s => s.toLowerCase().includes(value))
       }))
     );
   };

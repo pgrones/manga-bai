@@ -30,6 +30,7 @@ const mediaListQuery = gql`
         large
         extraLarge
       }
+      synonyms
       title {
         userPreferred
         romaji
@@ -68,6 +69,7 @@ export interface Media {
   format: Format;
   coverImage: Image;
   bannerImage: string;
+  synonyms: string[];
   title: Title;
 }
 

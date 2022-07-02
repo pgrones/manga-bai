@@ -9,6 +9,7 @@ const removedMediaQuery = gql`
       media(type: MANGA, id_in: $ids) {
         id
         format
+        synonyms
         title {
           userPreferred
           romaji
@@ -45,6 +46,7 @@ export interface PageInfo {
 
 export interface Media {
   id: number;
+  synonyms: string[];
   title: Title;
   coverImage: Image;
   format: Format;
