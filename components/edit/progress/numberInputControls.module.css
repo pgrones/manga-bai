@@ -1,0 +1,75 @@
+.control {
+  margin: 0;
+  position: relative;
+  -webkit-flex: 0 0 50%;
+  -ms-flex: 0 0 50%;
+  flex: 0 0 50%;
+  box-sizing: border-box;
+  width: 24px;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+  border-bottom: 1px solid #373a40;
+  border-left: 1px solid #373a40;
+  border-top: 0;
+  border-right: 0;
+  background-color: transparent;
+  margin-right: 1px;
+  border-top-right-radius: 7px;
+}
+
+.control:not(:disabled):hover {
+  background-color: #25262b;
+}
+
+.control-light {
+  border-color: #ced4da;
+}
+
+.control-light:not(:disabled):hover {
+  background-color: #f8f9fa;
+}
+
+.control-light.control-up::after {
+  border-color: transparent transparent #000 transparent;
+}
+
+.control-light.control-down::after {
+  border-color: #000 transparent transparent transparent;
+}
+
+.control::after {
+  position: absolute;
+  top: calc(50% - 2.5px);
+  left: calc(50% - 4.5px);
+  content: '';
+  display: block;
+  width: 0;
+  height: 0;
+  border-style: solid;
+}
+
+.control-up::after {
+  border-width: 0 5px 5px 5px;
+  border-color: transparent transparent #c1c2c5 transparent;
+}
+
+.control-down::after {
+  border-width: 5px 5px 0 5px;
+  border-color: #c1c2c5 transparent transparent transparent;
+}
+
+.control-down {
+  border-bottom: 0;
+}
+
+.wrapper {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  height: 100%;
+  margin-right: -1px;
+}

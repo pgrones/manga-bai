@@ -4,17 +4,19 @@ import {
   Grid,
   Group,
   NumberInput,
+  NumberInputHandlers,
   Select,
   Text,
   Textarea
 } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { useModals } from '@mantine/modals';
-import { FC } from 'react';
+import { FC, useRef } from 'react';
 import { CURRENT, WAITING } from '../../lib/helper/constants';
 import { isWaitingMedia } from '../../lib/helper/mediaHelper';
 import useNotification from '../../lib/hooks/useNotification';
 import { FormProps } from './formTypes';
+import NumberInputControls from './progress/numberInputControls';
 
 const Form: FC<FormProps> = props => {
   const {
@@ -29,6 +31,9 @@ const Form: FC<FormProps> = props => {
   const { openConfirmModal, closeAll, closeModal } = useModals();
   const { showSuccess, showError } = useNotification();
   const { progressVolumes, status, progress, media } = aniListData;
+  const volumeProgressHandlers = useRef<NumberInputHandlers>();
+  const chapterProgressHandlers = useRef<NumberInputHandlers>();
+  const preorderedHandlers = useRef<NumberInputHandlers>();
 
   const form = useForm({
     initialValues: {
@@ -128,6 +133,11 @@ const Form: FC<FormProps> = props => {
             min={0}
             variant="filled"
             label="Volume Progress"
+            hideControls
+            handlersRef={volumeProgressHandlers}
+            rightSection={
+              <NumberInputControls handlers={volumeProgressHandlers} />
+            }
           />
         </Grid.Col>
         <Grid.Col xs={6} sm={4}>
@@ -136,6 +146,11 @@ const Form: FC<FormProps> = props => {
             min={0}
             variant="filled"
             label="Chapter Progress"
+            hideControls
+            handlersRef={chapterProgressHandlers}
+            rightSection={
+              <NumberInputControls handlers={chapterProgressHandlers} />
+            }
           />
         </Grid.Col>
         <Grid.Col xs={6} sm={4}>
@@ -146,6 +161,9 @@ const Form: FC<FormProps> = props => {
             label="Preordered Up To"
             description="Preordered, bought or owned volumes"
             styles={{ description: { whiteSpace: 'nowrap' } }}
+            hideControls
+            handlersRef={preorderedHandlers}
+            rightSection={<NumberInputControls handlers={preorderedHandlers} />}
           />
         </Grid.Col>
         <Grid.Col xs={6} sm={4}>
