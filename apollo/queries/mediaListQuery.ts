@@ -37,6 +37,17 @@ const mediaListQuery = gql`
         english
         native
       }
+      staff {
+        edges {
+          role
+          node {
+            name {
+              native
+              full
+            }
+          }
+        }
+      }
     }
   }
 `;
@@ -71,6 +82,7 @@ export interface Media {
   bannerImage: string;
   synonyms: string[];
   title: Title;
+  staff: Staff;
 }
 
 export interface Image {
@@ -83,6 +95,18 @@ export interface Title {
   romaji: string;
   english: string;
   native: string;
+}
+
+export interface Staff {
+  edges: {
+    role: string;
+    node: {
+      name: {
+        native: string;
+        full: string;
+      };
+    };
+  }[];
 }
 
 export interface CustomLists {

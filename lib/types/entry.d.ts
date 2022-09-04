@@ -3,6 +3,7 @@ import { IFirebaseValues } from './firebase';
 
 export interface IMediaData extends MediaList, IFirebaseValues {
   hidden?: boolean;
+  hasNewVolume?: string;
 }
 
 export interface IMediaLists {

@@ -18,7 +18,7 @@ const RouterTransition = () => {
       // Event fires too fast -> bit of a timeout
       setTimeout(() => {
         setNavigationProgress(100);
-        setTimeout(() => resetNavigationProgress(), 200);
+        setTimeout(() => resetNavigationProgress(), 400);
       }, 50);
     };
 

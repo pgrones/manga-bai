@@ -21,7 +21,7 @@ const Row: FC<GridRowProps> = memo(({ data, index, style }) => {
   const item = data[index];
 
   return (
-    <div style={style}>
+    <div style={{ ...style, left: 4, width: 'calc(100% - 4px)' }}>
       <Group noWrap spacing="xl">
         {isReactElement(item)
           ? item
@@ -98,7 +98,7 @@ const VirtualizedGrid: FC<VirtualizedProps> = memo(({ statusTitle }) => {
           <List
             ref={ref}
             outerRef={outerRef}
-            style={style}
+            style={{ ...style, marginLeft: -4, width: 'calc(100% + 4px)' }}
             height={window.innerHeight}
             width={0}
             itemCount={itemData.length}

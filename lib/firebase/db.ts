@@ -1,4 +1,12 @@
-import { child, get, onValue, push, ref, update } from 'firebase/database';
+import {
+  child,
+  get,
+  onValue,
+  push,
+  ref,
+  serverTimestamp,
+  update
+} from 'firebase/database';
 import { IUserData } from '../hooks/provider/userProviderTypes';
 import { IFirebaseValues } from '../types/firebase';
 import { db } from './firebase';
@@ -8,6 +16,10 @@ import { db } from './firebase';
  */
 export const setUserData = async (uid: string, userData: IUserData) => {
   update(ref(db, uid + '/user'), userData);
+};
+
+export const setLastVolumeCheck = async (uid: string) => {
+  update(ref(db, uid + '/user'), { lastVolumeCheck: serverTimestamp() });
 };
 
 /**

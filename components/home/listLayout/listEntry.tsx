@@ -1,7 +1,7 @@
 import {
   ActionIcon,
+  Badge,
   Button,
-  Center,
   Group,
   MediaQuery,
   Paper,
@@ -129,7 +129,7 @@ const ListEntry: FC<ListEntryProps> = props => {
                 smallerThan="xs"
                 styles={{ flexBasis: '100% !important' }}
               >
-                <div style={{ flex: 3 }}>
+                <Group noWrap position="apart" style={{ flex: 3 }}>
                   <div style={{ display: 'table' }}>
                     <MediaQuery
                       smallerThan="xs"
@@ -144,22 +144,27 @@ const ListEntry: FC<ListEntryProps> = props => {
                         lineClamp={2}
                         style={{ wordBreak: 'break-word', fontSize: 15 }}
                       >
-                        {title.userPreferred}
+                        {title.userPreferred}{' '}
                       </Text>
                     </MediaQuery>
                   </div>
-                </div>
+                  {props.hasNewVolume && (
+                    <div style={{ width: 170 }}>
+                      <Badge fullWidth>New Volume Available</Badge>
+                    </div>
+                  )}
+                </Group>
               </MediaQuery>
 
               <VolumeProgress buttonVisible={hovered} />
               <PreorderedProgress buttonVisible={hovered} />
 
               <MediaQuery smallerThan="md" styles={{ display: 'none' }}>
-                <Center style={{ flex: 2 }}>
+                <Group style={{ flex: 2, justifyContent: 'space-around' }}>
                   <Text size="sm" title="Format">
                     {formatMap[format]}
                   </Text>
-                </Center>
+                </Group>
               </MediaQuery>
 
               <MediaQuery smallerThan="md" styles={{ display: 'none' }}>

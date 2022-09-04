@@ -1,5 +1,6 @@
 import {
   ActionIcon,
+  Box,
   Button,
   Group,
   MediaQuery,
@@ -59,7 +60,34 @@ const GridEntry: FC<IMediaData> = memo(props => {
                 style={getBorderRadius(theme)}
                 sizes="120px"
               />
-
+              {props.hasNewVolume && (
+                <Box
+                  sx={theme => ({
+                    backgroundColor:
+                      theme.colorScheme === 'light'
+                        ? theme.white
+                        : theme.colors.dark[7]
+                  })}
+                  className="new-volumes-available"
+                >
+                  <Text
+                    component="a"
+                    href={props.hasNewVolume}
+                    referrerPolicy="no-referrer"
+                    target="_blank"
+                    size="sm"
+                    align="center"
+                    weight={500}
+                    color={
+                      theme.colors[theme.primaryColor][
+                        theme.colorScheme === 'dark' ? 3 : 6
+                      ]
+                    }
+                  >
+                    New Volume Available
+                  </Text>
+                </Box>
+              )}
               {imgHovered && (
                 <EditModal>
                   <ActionIcon
@@ -115,7 +143,7 @@ const GridEntry: FC<IMediaData> = memo(props => {
                 </div>
               </div>
 
-              <Stack spacing={8} pb={5}>
+              <Stack align="flex-start" spacing={8} pb={5}>
                 <VolumeProgress buttonVisible={hovered} />
                 <PreorderedProgress buttonVisible={hovered} />
               </Stack>
