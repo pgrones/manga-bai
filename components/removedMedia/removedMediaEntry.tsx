@@ -127,7 +127,10 @@ const RemovedMediaEntry: FC<RemovedMediaEntryProps> = props => {
             opened={opened}
             onClose={close}
             transition="scale-y"
-            target={
+            position="bottom"
+            withArrow
+          >
+            <Popover.Target>
               <Button
                 size="xs"
                 variant="light"
@@ -138,32 +141,30 @@ const RemovedMediaEntry: FC<RemovedMediaEntryProps> = props => {
               >
                 Undo Removal
               </Button>
-            }
-            styles={{ inner: { padding: '10px 0 5px 0' } }}
-            position="bottom"
-            withArrow
-          >
-            <Stack spacing={0}>
-              <Text px={18} pb={5} size="sm">
-                Put this entry back into
-              </Text>
-              <Button
-                variant="subtle"
-                color="gray"
-                onClick={() => undoRemoval(true)}
-                styles={{ inner: { justifyContent: 'flex-start' } }}
-              >
-                {WAITING}
-              </Button>
-              <Button
-                variant="subtle"
-                color="gray"
-                onClick={() => undoRemoval(false)}
-                styles={{ inner: { justifyContent: 'flex-start' } }}
-              >
-                {CURRENT}
-              </Button>
-            </Stack>
+            </Popover.Target>
+            <Popover.Dropdown>
+              <Stack spacing={0}>
+                <Text px={18} pb={5} size="sm">
+                  Put this entry back into
+                </Text>
+                <Button
+                  variant="subtle"
+                  color="gray"
+                  onClick={() => undoRemoval(true)}
+                  styles={{ inner: { justifyContent: 'flex-start' } }}
+                >
+                  {WAITING}
+                </Button>
+                <Button
+                  variant="subtle"
+                  color="gray"
+                  onClick={() => undoRemoval(false)}
+                  styles={{ inner: { justifyContent: 'flex-start' } }}
+                >
+                  {CURRENT}
+                </Button>
+              </Stack>
+            </Popover.Dropdown>
           </Popover>
         </MediaQuery>
       </Group>

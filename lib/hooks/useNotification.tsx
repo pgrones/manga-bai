@@ -1,11 +1,9 @@
 import { Anchor, Text } from '@mantine/core';
-import { useNotifications } from '@mantine/notifications';
+import { showNotification } from '@mantine/notifications';
 import { IoCheckmark, IoClose } from 'react-icons/io5';
 import { logError } from '../firebase/db';
 
 const useNotification = () => {
-  const { showNotification } = useNotifications();
-
   const showSuccess = (title?: string, message?: string) =>
     showNotification({
       title,

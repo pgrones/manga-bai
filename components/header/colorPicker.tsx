@@ -39,28 +39,46 @@ const ColorPickerPopover: FC<ColorPickerProps> = props => {
   }, [opened]);
 
   return (
-    <Popover
-      opened={opened}
-      onClose={close}
-      target={
+    <Popover opened={opened} onClose={close} position="bottom" withArrow>
+      <Popover.Target>
         <Button
-          variant="subtle"
-          color="gray"
           leftIcon={<IoColorPaletteOutline size={16} />}
           onClick={toggle}
-          styles={{
-            root: { width: '100%' },
-            inner: { justifyContent: 'flex-start' }
-          }}
+          styles={theme => ({
+            root: {
+              'width': '100%',
+              'backgroundColor': 'transparent ',
+              '&:hover': {
+                backgroundColor:
+                  theme.colorScheme === 'dark'
+                    ? theme.fn.rgba(theme.colors.dark[3], 0.35)
+                    : theme.colors.gray[0]
+              }
+            },
+            inner: {
+              'justifyContent': 'flex-start',
+              'fontWeight': 400,
+              'color':
+                theme.colorScheme === 'dark'
+                  ? theme.colors.dark[0]
+                  : theme.black,
+              '&:disabled': {
+                color:
+                  theme.colorScheme === 'dark'
+                    ? theme.colors.dark[3]
+                    : theme.colors.gray[5],
+                pointerEvents: 'none',
+                userSelect: 'none'
+              }
+            }
+          })}
         >
           Site color
         </Button>
-      }
-      styles={{ inner: { padding: 5 } }}
-      position="bottom"
-      withArrow
-    >
-      <ColorPicker />
+      </Popover.Target>
+      <Popover.Dropdown>
+        <ColorPicker />
+      </Popover.Dropdown>
     </Popover>
   );
 };

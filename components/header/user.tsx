@@ -1,8 +1,7 @@
-import { Avatar, Button, Popover, Stack } from '@mantine/core';
-import { useDisclosure } from '@mantine/hooks';
+import { Avatar, Button, Menu } from '@mantine/core';
+import { NextLink } from '@mantine/next';
 import { Unsubscribe } from 'firebase/database';
 import dynamic from 'next/dynamic';
-import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { CgPlayListRemove } from 'react-icons/cg';
 import { IoChevronDownOutline, IoLogOutOutline } from 'react-icons/io5';
@@ -17,7 +16,6 @@ const LoginButton = dynamic(() => import('../common/loginButton'), {
 
 const User = () => {
   const { fullyAuthenticated, aniListUser, firebaseUser, signOut } = useUser();
-  const [opened, { toggle, close }] = useDisclosure(false);
   const [closeOnClickOutside, setCloseOnClickOutside] = useState(true);
   const [removedMediaData, setRemovedMediaData] = useState(false);
   const { showError } = useNotification();
@@ -41,18 +39,12 @@ const User = () => {
   }, [firebaseUser]);
 
   return fullyAuthenticated === true ? (
-    <Popover
-      opened={opened}
-      onClose={close}
-      transition="scale-y"
-      closeOnClickOutside={closeOnClickOutside}
-      target={
+    <Menu closeOnClickOutside={closeOnClickOutside}>
+      <Menu.Target>
         <Button
           variant="subtle"
           p={0}
-          mt={5}
           color="gray"
-          onClick={toggle}
           rightIcon={<IoChevronDownOutline size={18} />}
           title="Settings"
         >
@@ -62,40 +54,24 @@ const User = () => {
             style={{ height: 34 }}
           />
         </Button>
-      }
-      styles={{ inner: { padding: 5 } }}
-      position="bottom"
-      withArrow
-    >
-      <Stack spacing={0}>
+      </Menu.Target>
+
+      <Menu.Dropdown>
         {removedMediaData && (
-          <Link href="/removedEntries" passHref>
-            <Button
-              variant="subtle"
-              color="gray"
-              component="a"
-              leftIcon={<CgPlayListRemove size={20} />}
-              styles={{
-                inner: { justifyContent: 'flex-start' },
-                leftIcon: { marginLeft: -2, marginRight: 8 }
-              }}
-            >
-              Removed entries
-            </Button>
-          </Link>
+          <Menu.Item
+            component={NextLink}
+            href="/removedEntries"
+            icon={<CgPlayListRemove size={20} />}
+          >
+            Removed entries
+          </Menu.Item>
         )}
         <ColorPickerPopover setCloseOnClickOutside={setCloseOnClickOutside} />
-        <Button
-          variant="subtle"
-          color="gray"
-          leftIcon={<IoLogOutOutline size={16} />}
-          onClick={signOut}
-          styles={{ inner: { justifyContent: 'flex-start' } }}
-        >
+        <Menu.Item icon={<IoLogOutOutline size={16} />} onClick={signOut}>
           Logout
-        </Button>
-      </Stack>
-    </Popover>
+        </Menu.Item>
+      </Menu.Dropdown>
+    </Menu>
   ) : (
     <LoginButton size="xs" />
   );

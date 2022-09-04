@@ -1,7 +1,10 @@
 import { useApolloClient, useQuery } from '@apollo/client';
 import { Anchor } from '@mantine/core';
 import { useLocalStorage } from '@mantine/hooks';
-import { useNotifications } from '@mantine/notifications';
+import {
+  showNotification,
+  cleanNotificationsQueue
+} from '@mantine/notifications';
 import axios from 'axios';
 import { signInWithCustomToken, Unsubscribe } from 'firebase/auth';
 import { useRouter } from 'next/router';
@@ -36,7 +39,6 @@ export const useUser = () => useContext(UserContext);
 
 const UserProvider: FC<PropsWithChildren<unknown>> = ({ children }) => {
   const { showError } = useNotification();
-  const { cleanQueue, showNotification } = useNotifications();
   const apolloClient = useApolloClient();
   const { pathname } = useRouter();
   const [user, firebaseLoading, firebaseError] = useAuthState(auth);
@@ -93,7 +95,7 @@ const UserProvider: FC<PropsWithChildren<unknown>> = ({ children }) => {
     setAccessToken('');
     await auth.signOut();
     await apolloClient.resetStore();
-    cleanQueue();
+    cleanNotificationsQueue();
     showNotification({
       title: (
         <>

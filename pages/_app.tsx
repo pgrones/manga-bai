@@ -14,6 +14,7 @@ import { AppProps } from 'next/app';
 import { useEffect } from 'react';
 import { useApollo } from '../apollo/client';
 import MetaTags from '../components/common/metaTags';
+import RouterTransition from '../components/common/RouterTransition';
 import { analytics } from '../lib/firebase/firebase';
 import UserProvider from '../lib/hooks/provider/userProvider';
 import '../styles/globalStyles.css';
@@ -94,6 +95,7 @@ export default function App({ Component, pageProps }: AppProps) {
           withGlobalStyles
           withNormalizeCSS
         >
+          <RouterTransition />
           <NotificationsProvider>
             <ModalsProvider>
               <ApolloProvider client={apolloClient}>

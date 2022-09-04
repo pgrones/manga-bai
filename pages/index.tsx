@@ -1,6 +1,9 @@
 import { useApolloClient } from '@apollo/client';
 import { Anchor, Center, MediaQuery, Stack } from '@mantine/core';
-import { useNotifications } from '@mantine/notifications';
+import {
+  cleanNotificationsQueue,
+  showNotification
+} from '@mantine/notifications';
 import { GetStaticProps, InferGetStaticPropsType, NextPage } from 'next';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
@@ -25,7 +28,6 @@ const LandingPage: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({
 }) => {
   const { fullyAuthenticated } = useUser();
   const { push, query } = useRouter();
-  const { showNotification, cleanQueue } = useNotifications();
   const apolloClient = useApolloClient();
 
   useEffect(() => {
@@ -38,7 +40,7 @@ const LandingPage: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({
     if (query.reason === 'InvalidToken') {
       window.close();
       apolloClient.resetStore();
-      cleanQueue();
+      cleanNotificationsQueue();
       showNotification({
         title: 'Invalid or expired token',
         message: (
