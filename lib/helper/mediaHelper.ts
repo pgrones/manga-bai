@@ -15,9 +15,18 @@ export const createMediaLists = (
   firebaseData?: { [key: number]: IFirebaseValues } | null
 ): IMediaLists => {
   const mediaLists = mediaData?.MediaListCollection.lists;
-  const waiting = mediaLists
-    ?.find(l => l.entries?.every(e => e.customLists?.[WAITING_CUSTOM_LIST]))
-    ?.entries?.map(m => ({ ...m, ...firebaseData?.[m.mediaId] }))
+  const mangaBaiCustomLists = mediaLists?.filter(l =>
+    l.entries?.every(e => e.customLists?.[WAITING_CUSTOM_LIST])
+  );
+
+  const waiting = mangaBaiCustomLists?.[
+    mangaBaiCustomLists
+      ?.map(a => a.entries?.length)
+      .indexOf(
+        Math.max(...mangaBaiCustomLists.map(a => a.entries?.length ?? 0))
+      )
+  ]?.entries
+    ?.map(m => ({ ...m, ...firebaseData?.[m.mediaId] }))
     .filter(m => !m.removed);
 
   return {
