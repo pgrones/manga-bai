@@ -24,7 +24,7 @@ const Progress: FC<ProgressProps> = memo(
     return (
       <MediaQuery smallerThan="sm" styles={{ flex: 'none !important' }}>
         <Group spacing={2} position="center" style={{ flex: 2 }} noWrap>
-          <Text size="sm" style={{ whiteSpace: 'nowrap' }}>
+          <Text size="sm" style={{ whiteSpace: 'nowrap' }} color="dimmed">
             {text}: {progressLocal}
           </Text>
           <ActionIcon

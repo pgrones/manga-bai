@@ -85,8 +85,7 @@ const useInitialization = () => {
         );
 
         if (
-          // TODO ! davor
-          userData.lastVolumeCheck ||
+          !userData.lastVolumeCheck ||
           new Date(userData.lastVolumeCheck).toDateString() !==
             new Date().toDateString()
         ) {

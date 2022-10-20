@@ -5,7 +5,7 @@ import { IMediaData } from '../types/entry';
 // TODO rate limit 100 per minute
 
 const hasNewerVolume = async (entry: IMediaData) => {
-  if (!entry.media.title.english) return '';
+  // if (!entry.media.title.english) return '';
 
   let res = await axios.get<Data>(createURL(entry));
   if (isPresent(res, entry)) return res.data.items[0].volumeInfo.previewLink;
@@ -56,7 +56,7 @@ const createURL = (
   }"+intitle:${
     (withoutQuotes ? '' : '"') +
     encodeURIComponent(
-      entry.media.title.english.substring(0, shortenTitle ? 8 : undefined)
+      entry.media.title.userPreferred.substring(0, shortenTitle ? 8 : undefined)
     ) +
     (withoutQuotes ? '' : '"')
   }+inauthor:${

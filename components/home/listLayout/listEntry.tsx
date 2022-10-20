@@ -143,6 +143,9 @@ const ListEntry: FC<ListEntryProps> = props => {
                         href={`https://anilist.co/manga/${props.mediaId}`}
                         lineClamp={2}
                         style={{ wordBreak: 'break-word', fontSize: 15 }}
+                        color={
+                          theme.colorScheme === 'dark' ? 'white' : undefined
+                        }
                       >
                         {title.userPreferred}{' '}
                       </Text>
@@ -161,7 +164,7 @@ const ListEntry: FC<ListEntryProps> = props => {
 
               <MediaQuery smallerThan="md" styles={{ display: 'none' }}>
                 <Group style={{ flex: 2, justifyContent: 'space-around' }}>
-                  <Text size="sm" title="Format">
+                  <Text size="sm" title="Format" color="dimmed">
                     {formatMap[format]}
                   </Text>
                 </Group>

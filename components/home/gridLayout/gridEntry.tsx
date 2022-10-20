@@ -62,6 +62,7 @@ const GridEntry: FC<IMediaData> = memo(props => {
               />
               {props.hasNewVolume && (
                 <Box
+                  px={8}
                   sx={theme => ({
                     backgroundColor:
                       theme.colorScheme === 'light'
@@ -70,22 +71,30 @@ const GridEntry: FC<IMediaData> = memo(props => {
                   })}
                   className="new-volumes-available"
                 >
-                  <Text
-                    component="a"
-                    href={props.hasNewVolume}
-                    referrerPolicy="no-referrer"
-                    target="_blank"
-                    size="sm"
-                    align="center"
-                    weight={500}
-                    color={
-                      theme.colors[theme.primaryColor][
-                        theme.colorScheme === 'dark' ? 3 : 6
-                      ]
-                    }
-                  >
-                    New Volume Available
-                  </Text>
+                  <Group spacing="xs" noWrap>
+                    <Box
+                      sx={theme => ({
+                        minHeight: 10,
+                        minWidth: 10,
+                        borderRadius: 20,
+                        backgroundColor:
+                          theme.colors[theme.primaryColor][
+                            theme.colorScheme === 'dark' ? 3 : 6
+                          ]
+                      })}
+                    />
+                    <Text
+                      component="a"
+                      href={props.hasNewVolume}
+                      referrerPolicy="no-referrer"
+                      target="_blank"
+                      size="sm"
+                      weight={500}
+                      color={theme.colorScheme === 'dark' ? 'white' : undefined}
+                    >
+                      New Volume Available
+                    </Text>
+                  </Group>
                 </Box>
               )}
               {imgHovered && (
@@ -137,6 +146,7 @@ const GridEntry: FC<IMediaData> = memo(props => {
                     lineClamp={2}
                     size="sm"
                     mt={-4}
+                    color={theme.colorScheme === 'dark' ? 'white' : undefined}
                   >
                     {title.userPreferred}
                   </Text>

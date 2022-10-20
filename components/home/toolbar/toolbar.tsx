@@ -1,4 +1,10 @@
-import { ActionIcon, Group, MediaQuery, Title } from '@mantine/core';
+import {
+  ActionIcon,
+  Group,
+  MediaQuery,
+  Title,
+  useMantineTheme
+} from '@mantine/core';
 import { useDisclosure, useMediaQuery } from '@mantine/hooks';
 import { forwardRef, ForwardRefExoticComponent, useEffect } from 'react';
 import { IoEllipsisHorizontal } from 'react-icons/io5';
@@ -11,6 +17,7 @@ const Toolbar: ForwardRefExoticComponent<ToolbarProps> = forwardRef(
   ({ title, recalculate }, ref) => {
     const [opened, { toggle, close, open }] = useDisclosure(true);
     const matches = useMediaQuery('(max-width: 410px)');
+    const theme = useMantineTheme();
 
     useEffect(() => {
       if (matches) close();
@@ -46,6 +53,7 @@ const Toolbar: ForwardRefExoticComponent<ToolbarProps> = forwardRef(
               sx={theme => ({
                 width: `min(calc(100vw - 30px - ${theme.spacing.md}px * 3), 225px)`
               })}
+              color={theme.colorScheme === 'dark' ? 'white' : undefined}
             >
               {title}
             </Title>
