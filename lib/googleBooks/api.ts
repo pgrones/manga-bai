@@ -1,76 +1,128 @@
 import axios, { AxiosResponse } from 'axios';
 import { IMediaData } from '../types/entry';
 
-// TODO subjectinQ nicht bei japanese
 // TODO rate limit 100 per minute
 
+const japaneseNumbers = new Map<string, string>(
+  Array.from(Array(10).keys()).map(i => [
+    i.toString(),
+    String.fromCharCode(0xff10 + i)
+  ])
+);
+
 const hasNewerVolume = async (entry: IMediaData) => {
-  // if (!entry.media.title.english) return '';
+  // if (!entry.media.title.english) return false;
+  const title = entry.media.title.userPreferred;
 
-  let res = await axios.get<Data>(createURL(entry));
-  if (isPresent(res, entry)) return res.data.items[0].volumeInfo.previewLink;
+  let res = await axios.get<Data>(
+    `https://www.googleapis.com/books/v1/volumes?q=intitle:${title} ${
+      (entry.preordered ?? entry.progressVolumes) + 1
+    }&maxResults=40&fields=items(volumeInfo/title)`
+  );
 
-  res = await axios.get<Data>(createURL(entry, true));
-  if (isPresent(res, entry)) return res.data.items[0].volumeInfo.previewLink;
+  if (isPresent(res, entry)) return true;
 
-  res = await axios.get<Data>(createURL(entry, false, true));
-  if (isPresent(res, entry)) return res.data.items[0].volumeInfo.previewLink;
+  // Order by newest helps sometimes
+  res = await axios.get<Data>(
+    `https://www.googleapis.com/books/v1/volumes?q=intitle:${title} ${
+      (entry.preordered ?? entry.progressVolumes) + 1
+    }&maxResults=40&orderBy=newest`
+  );
 
-  res = await axios.get<Data>(createURL(entry, true, true));
-  if (isPresent(res, entry)) return res.data.items[0].volumeInfo.previewLink;
+  if (isPresent(res, entry)) return true;
 
-  res = await axios.get<Data>(createURL(entry, true, true));
-  if (isPresent(res, entry)) return res.data.items[0].volumeInfo.previewLink;
+  const shortTitleLastIndex = title
+    .split('')
+    .findIndex(
+      (s, i) =>
+        i > 5 && s.codePointAt(0)! >= 0x4e00 && s.codePointAt(0)! <= 0x9faf
+    );
 
-  res = await axios.get<Data>(createURL(entry, false, false, true));
-  if (isPresent(res, entry)) return res.data.items[0].volumeInfo.previewLink;
+  // Sometimes the right results come back when the search term is shorter
+  if (shortTitleLastIndex >= 0) {
+    res = await axios.get<Data>(
+      `https://www.googleapis.com/books/v1/volumes?q=intitle:${title.substring(
+        0,
+        shortTitleLastIndex
+      )} ${(entry.preordered ?? entry.progressVolumes) + 1}&maxResults=40`
+    );
+    if (isPresent(res, entry)) return true;
+  }
 
-  return '';
+  // Remove particles
+  if (shortTitleLastIndex - 1 >= 0) {
+    res = await axios.get<Data>(
+      `https://www.googleapis.com/books/v1/volumes?q=intitle:${title.substring(
+        0,
+        shortTitleLastIndex - 1
+      )} ${(entry.preordered ?? entry.progressVolumes) + 1}&maxResults=40`
+    );
+    if (isPresent(res, entry)) return true;
+  }
+
+  // Fuck it, just search everything, maybe we're lucky
+  res = await axios.get<Data>(
+    `https://www.googleapis.com/books/v1/volumes?q=${title} ${
+      (entry.preordered ?? entry.progressVolumes) + 1
+    }&maxResults=40`
+  );
+  if (isPresent(res, entry)) return true;
+
+  return false;
 };
 
 export default hasNewerVolume;
 
+// A new volume is available when...
 const isPresent = (res: AxiosResponse<Data, any>, entry: IMediaData) => {
-  return (
+  const title = entry.media.title.userPreferred;
+
+  let correctedTitle = '';
+  for (let i = title.length - 1; i >= 0; i--) {
+    const unicode = title.codePointAt(i)?.toString(16);
+    if ((unicode === '3099' || unicode === '309a') && i - 1 >= 0) {
+      correctedTitle += String.fromCharCode(
+        title.codePointAt(i - 1)! + (unicode === '3099' ? 1 : 2)
+      );
+      i--;
+    } else {
+      correctedTitle += title[i];
+    }
+  }
+
+  correctedTitle = correctedTitle.split('').reverse().join('');
+
+  const regex =
+    '(' +
+    title +
+    '|' +
+    correctedTitle +
+    ')(.{0,4}|.+Vol.*)(' +
+    ((entry.preordered ?? entry.progressVolumes) + 1).toString() +
+    '|' +
+    ((entry.preordered ?? entry.progressVolumes) + 1)
+      .toString()
+      .replaceAll(/./g, match => japaneseNumbers.get(match)!) +
+    ')';
+
+  const result =
+    // There is data at all
     !!res.data?.items?.length &&
     res.data?.items.some(i =>
-      new RegExp(
-        ((entry.preordered ?? entry.progressVolumes) + 1).toString()
-      ).test(i.volumeInfo.title)
-    )
-  );
-};
+      // The data has the correct volume number in the title
+      new RegExp(regex).test(i.volumeInfo.title)
+    );
 
-const createURL = (
-  entry: IMediaData,
-  subjectInQ?: boolean,
-  withoutQuotes?: boolean,
-  shortenTitle?: boolean
-) => {
-  return `https://www.googleapis.com/books/v1/volumes?q="${
-    (entry.preordered ?? entry.progressVolumes) + 1
-  }${
-    subjectInQ
-      ? ` ${entry.media.format === 'NOVEL' ? 'Light Novel' : 'Manga'}`
-      : ''
-  }"+intitle:${
-    (withoutQuotes ? '' : '"') +
-    encodeURIComponent(
-      entry.media.title.userPreferred.substring(0, shortenTitle ? 8 : undefined)
-    ) +
-    (withoutQuotes ? '' : '"')
-  }+inauthor:${
-    entry.media.staff.edges.find(edge => edge.role.includes('Story'))?.node.name
-      .full
-  }${
-    !subjectInQ
-      ? `+subject:${encodeURIComponent(
-          entry.media.format !== 'NOVEL'
-            ? '"Comics & Graphic Novels / Manga"'
-            : '"Young Adult Fiction / Light Novel (Ranobe)"'
-        )}`
-      : ''
-  }&showPreorders=true&fields=items(volumeInfo/title,volumeInfo/previewLink)&orderBy=relevance`;
+  if (result)
+    console.log(
+      title + ((entry.preordered ?? entry.progressVolumes) + 1),
+      res.data?.items.find(i =>
+        // The data has the correct volume number in the title
+        new RegExp(regex).test(i.volumeInfo.title)
+      )?.volumeInfo.title
+    );
+
+  return result;
 };
 
 export interface Data {

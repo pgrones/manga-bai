@@ -84,10 +84,6 @@ const GridEntry: FC<IMediaData> = memo(props => {
                       })}
                     />
                     <Text
-                      component="a"
-                      href={props.hasNewVolume}
-                      referrerPolicy="no-referrer"
-                      target="_blank"
                       size="sm"
                       weight={500}
                       color={theme.colorScheme === 'dark' ? 'white' : undefined}

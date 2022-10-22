@@ -46,7 +46,10 @@ const UserProvider: FC<PropsWithChildren<unknown>> = ({ children }) => {
   const [hasError, setHasError] = useState<unknown>();
   const [accessToken, setAccessToken] = useLocalStorage<string>({
     key: 'access_token',
-    defaultValue: undefined,
+    defaultValue:
+      process.env.NODE_ENV === 'development'
+        ? process.env.NEXT_PUBLIC_testToken
+        : undefined,
     getInitialValueInEffect: true
   });
 
@@ -55,7 +58,9 @@ const UserProvider: FC<PropsWithChildren<unknown>> = ({ children }) => {
   });
 
   const { data: authData } = useSWR(
-    data?.Viewer && !user && pathname.includes('signin')
+    data?.Viewer &&
+      !user &&
+      (process.env.NODE_ENV === 'development' || pathname.includes('signin'))
       ? ['/api/auth', data.Viewer.id]
       : null,
     fetcher

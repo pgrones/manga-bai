@@ -87,25 +87,60 @@ const useInitialization = () => {
         if (
           !userData.lastVolumeCheck ||
           new Date(userData.lastVolumeCheck).toDateString() !==
-            new Date().toDateString()
+            new Date().toDateString() ||
+          (userData.lastVolumeCheck &&
+            (lists.waiting?.some(w => w.hasNewVolume === undefined) ||
+              lists.current?.some(w => w.hasNewVolume === undefined)))
         ) {
           await Promise.allSettled([
-            ...(lists.waiting?.map((w, i) =>
-              (async () => {
-                lists.waiting![i].hasNewVolume = await hasNewerVolume(w);
-                await setMediaData(firebaseUser!.uid, w.mediaId, {
-                  hasNewVolume: lists.waiting![i].hasNewVolume
-                });
-              })()
-            ) ?? []),
-            ...(lists.current?.map((c, i) =>
-              (async () => {
-                lists.current![i].hasNewVolume = await hasNewerVolume(c);
-                await setMediaData(firebaseUser!.uid, c.mediaId, {
-                  hasNewVolume: lists.current![i].hasNewVolume
-                });
-              })()
-            ) ?? [])
+            ...(lists.waiting
+              ?.filter(
+                w =>
+                  w.hasNewVolume === undefined ||
+                  (userData.lastVolumeCheck &&
+                    new Date(userData.lastVolumeCheck).toDateString() !==
+                      new Date().toDateString() &&
+                    !w.hasNewVolume)
+              )
+              .map(w =>
+                (async () => {
+                  lists.waiting![
+                    lists.waiting!.findIndex(w2 => w2.mediaId === w.mediaId)!
+                  ].hasNewVolume = await hasNewerVolume(w);
+                  await setMediaData(firebaseUser!.uid, w.mediaId, {
+                    hasNewVolume:
+                      lists.waiting![
+                        lists.waiting!.findIndex(
+                          w2 => w2.mediaId === w.mediaId
+                        )!
+                      ].hasNewVolume
+                  });
+                })()
+              ) ?? []),
+            ...(lists.current
+              ?.filter(
+                c =>
+                  c.hasNewVolume === undefined ||
+                  (userData.lastVolumeCheck &&
+                    new Date(userData.lastVolumeCheck).toDateString() !==
+                      new Date().toDateString() &&
+                    !c.hasNewVolume)
+              )
+              .map(c =>
+                (async () => {
+                  lists.current![
+                    lists.waiting!.findIndex(c2 => c2.mediaId === c.mediaId)!
+                  ].hasNewVolume = await hasNewerVolume(c);
+                  await setMediaData(firebaseUser!.uid, c.mediaId, {
+                    hasNewVolume:
+                      lists.current![
+                        lists.waiting!.findIndex(
+                          c2 => c2.mediaId === c.mediaId
+                        )!
+                      ].hasNewVolume
+                  });
+                })()
+              ) ?? [])
           ]);
 
           await setLastVolumeCheck(firebaseUser!.uid);
