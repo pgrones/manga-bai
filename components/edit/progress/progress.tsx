@@ -16,7 +16,7 @@ const Progress: FC<ProgressProps> = memo(
 
     useEffect(() => {
       if (originalProgress.current !== undefined) {
-        updateProgress(progressLocal);
+        updateProgress(progressLocal, originalProgress.current);
         originalProgress.current = undefined;
       }
     }, [progressLocal]);

@@ -5,7 +5,7 @@ import {
   useContext,
   useState
 } from 'react';
-import { setUserData } from '../../firebase/db';
+import { setLastChangesCheck, setUserData } from '../../firebase/db';
 import { IOnboardingContext, OnboardingProps } from './onboardingProviderTypes';
 import { useUser } from './userProvider';
 
@@ -23,7 +23,12 @@ const OnboardingProvider: FC<PropsWithChildren<OnboardingProps>> = props => {
 
   const nextStep = () => setStep(prev => prev + 1);
 
-  const done = () => setUserData(firebaseUser!.uid, { onboardingDone: true });
+  const done = async () => {
+    await setLastChangesCheck(firebaseUser!.uid);
+    setUserData(firebaseUser!.uid, {
+      onboardingDone: true
+    });
+  };
 
   return (
     <OnboardingContext.Provider

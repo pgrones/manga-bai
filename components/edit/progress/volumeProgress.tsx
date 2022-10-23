@@ -19,7 +19,7 @@ const VolumeProgress: FC<{ buttonVisible: boolean }> = props => {
   const matches = useMediaQuery(`(min-width: ${theme.breakpoints.xs}px)`);
   const { showSuccess } = useNotification();
 
-  const updateProgress = async (progress: number) => {
+  const updateProgress = async (progress: number, originalProgress: number) => {
     if (progress !== aniListData.progressVolumes) {
       clearTimeout(timeout);
 
@@ -27,9 +27,9 @@ const VolumeProgress: FC<{ buttonVisible: boolean }> = props => {
 
       await updateAniListData({ progressVolumes: progress });
 
-      // Update firebase too, if the value is larger than the preorders
-      if ((firebaseData?.preordered ?? 0) < progress)
-        await updateFirebaseData({ preordered: progress, hasNewVolume: null });
+      // Update firebase too, if the value has never been saved before
+      if (!firebaseData?.preordered)
+        await updateFirebaseData({ preordered: originalProgress });
 
       timeout = setTimeout(() => {
         showSuccess(`${aniListData.media.title.userPreferred} entry updated`);

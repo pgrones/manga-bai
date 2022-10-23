@@ -14,12 +14,11 @@ const Features = () => {
           text="Remembering if and where you bought the newest volume of a manga or light novel can be quite difficult. With Manga Bai you'll never preorder a volume twice again."
         />
       </Grid.Col>
-      <Grid.Col sm={6} style={{ opacity: 0.5 }}>
+      <Grid.Col sm={6}>
         <Feature
           icon={<IoNotifications size={24} />}
-          title="Get notifications when new volumes are available"
-          text="Available as soon as the site has access to the Amazon API. Use the affiliate links at the top of the site make this possible."
-          // text="Manga Bai lets you know when a new volume of a series you're reading is on sale on Amazon. You can choose wether you prefer English or Japanese volumes."
+          title="BETA - Get notifications when new volumes are available"
+          text="Manga Bai lets you know when a new volume of a series you're reading is on sale. You can choose wether you prefer English or native volumes. (Since this feature is in beta, bugs are to be expected)"
         />
       </Grid.Col>
       <Grid.Col sm={6}>

@@ -12,4 +12,5 @@ export interface IUserContext {
 export interface IUserData {
   onboardingDone: boolean | null;
   lastVolumeCheck: number | null;
+  lastChangesCheck: number | null;
 }

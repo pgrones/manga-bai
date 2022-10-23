@@ -14,12 +14,19 @@ import { db } from './firebase';
 /**
  *  Writes the data to the corresponding uid (user)
  */
-export const setUserData = async (uid: string, userData: IUserData) => {
+export const setUserData = async (
+  uid: string,
+  userData: Partial<IUserData>
+) => {
   update(ref(db, uid + '/user'), userData);
 };
 
 export const setLastVolumeCheck = async (uid: string) => {
   update(ref(db, uid + '/user'), { lastVolumeCheck: serverTimestamp() });
+};
+
+export const setLastChangesCheck = async (uid: string) => {
+  update(ref(db, uid + '/user'), { lastChangesCheck: serverTimestamp() });
 };
 
 /**
@@ -60,5 +67,10 @@ export const hasRemovedMediaData = (
 
 export const logError = async (error: any) => {
   const key = push(child(ref(db), 'errors')).key;
-  return update(ref(db, 'errors/' + key), JSON.parse(JSON.stringify(error)));
+  const payload = JSON.parse(
+    JSON.stringify(error, Object.getOwnPropertyNames(error))
+  );
+  payload.timestamp = serverTimestamp();
+
+  return update(ref(db, 'errors/' + key), payload);
 };

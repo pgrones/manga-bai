@@ -2,8 +2,8 @@ import { useApolloClient, useQuery } from '@apollo/client';
 import { Anchor } from '@mantine/core';
 import { useLocalStorage } from '@mantine/hooks';
 import {
-  showNotification,
-  cleanNotificationsQueue
+  cleanNotificationsQueue,
+  showNotification
 } from '@mantine/notifications';
 import axios from 'axios';
 import { signInWithCustomToken, Unsubscribe } from 'firebase/auth';

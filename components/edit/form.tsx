@@ -11,17 +11,17 @@ import {
 } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { useModals } from '@mantine/modals';
+import {
+  resetNavigationProgress,
+  setNavigationProgress,
+  startNavigationProgress
+} from '@mantine/nprogress';
 import { FC, useRef } from 'react';
 import { CURRENT, WAITING } from '../../lib/helper/constants';
 import { isWaitingMedia } from '../../lib/helper/mediaHelper';
 import useNotification from '../../lib/hooks/useNotification';
 import { FormProps } from './formTypes';
 import NumberInputControls from './progress/numberInputControls';
-import {
-  resetNavigationProgress,
-  setNavigationProgress,
-  startNavigationProgress
-} from '@mantine/nprogress';
 
 const Form: FC<FormProps> = props => {
   const {
@@ -72,12 +72,9 @@ const Form: FC<FormProps> = props => {
           notes:
             values.notes === firebaseData?.notes ? undefined : values.notes,
           preordered:
-            firebaseData?.preordered !== undefined &&
-            values.preordered === firebaseData.preordered
+            values.preordered === firebaseData?.preordered
               ? undefined
-              : firebaseData?.preordered !== undefined
-              ? values.preordered
-              : values.progressVolumes,
+              : values.preordered,
           preorderLanguage:
             values.preorderLanguage === firebaseData?.preorderLanguage
               ? undefined
