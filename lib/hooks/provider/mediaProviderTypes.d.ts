@@ -1,5 +1,7 @@
-import { CURRENT, WAITING } from '../../helper/constants';
+import { CURRENT, NEW_VOLUMES, WAITING } from '../../helper/constants';
+import { IAniListValues } from '../../types/aniList';
 import { IMediaData } from '../../types/entry';
+import { IFirebaseValues } from '../../types/firebase';
 import { Layout } from '../../types/user';
 
 export interface IMediaContext {
@@ -15,4 +17,8 @@ export interface IMediaContext {
   layout: Layout;
 }
 
-export type Status = typeof CURRENT | typeof WAITING | null;
+export type Status =
+  | typeof CURRENT
+  | typeof WAITING
+  | typeof NEW_VOLUMES
+  | null;

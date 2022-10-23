@@ -1,4 +1,5 @@
 import { setMediaData } from '../firebase/db';
+import hasNewerVolume from '../googleBooks/api';
 import { IMediaData } from '../types/entry';
 import { IFirebaseValues } from '../types/firebase';
 import { useMedia } from './provider/mediaProvider';
@@ -16,8 +17,9 @@ const useFirebaseData = (entry: IMediaData) => {
 
     if (!Object.keys(values).length) return;
 
+    const hasNewVolume = await hasNewerVolume({ ...entry, ...values });
     await setMediaData(firebaseUser!.uid, entry.mediaId, values);
-    updateEntry(entry.mediaId, values);
+    updateEntry(entry.mediaId, { ...values, hasNewVolume });
   };
 
   return { firebaseData: entry, updateFirebaseData };

@@ -89,8 +89,12 @@ const useInitialization = () => {
           new Date(userData.lastVolumeCheck).toDateString() !==
             new Date().toDateString() ||
           (userData.lastVolumeCheck &&
-            (lists.waiting?.some(w => w.hasNewVolume === undefined) ||
-              lists.current?.some(w => w.hasNewVolume === undefined)))
+            (lists.waiting?.some(
+              w => w.hasNewVolume === undefined || w.hasNewVolume === null
+            ) ||
+              lists.current?.some(
+                c => c.hasNewVolume === undefined || c.hasNewVolume === null
+              )))
         ) {
           await Promise.allSettled([
             ...(lists.waiting
@@ -129,12 +133,12 @@ const useInitialization = () => {
               .map(c =>
                 (async () => {
                   lists.current![
-                    lists.waiting!.findIndex(c2 => c2.mediaId === c.mediaId)!
+                    lists.current!.findIndex(c2 => c2.mediaId === c.mediaId)!
                   ].hasNewVolume = await hasNewerVolume(c);
                   await setMediaData(firebaseUser!.uid, c.mediaId, {
                     hasNewVolume:
                       lists.current![
-                        lists.waiting!.findIndex(
+                        lists.current!.findIndex(
                           c2 => c2.mediaId === c.mediaId
                         )!
                       ].hasNewVolume

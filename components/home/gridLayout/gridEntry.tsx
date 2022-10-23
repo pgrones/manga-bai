@@ -62,7 +62,8 @@ const GridEntry: FC<IMediaData> = memo(props => {
               />
               {props.hasNewVolume && (
                 <Box
-                  px={8}
+                  pl={8}
+                  py={5}
                   sx={theme => ({
                     backgroundColor:
                       theme.colorScheme === 'light'
@@ -71,7 +72,7 @@ const GridEntry: FC<IMediaData> = memo(props => {
                   })}
                   className="new-volumes-available"
                 >
-                  <Group spacing="xs" noWrap>
+                  <Group spacing="xs" position="apart" noWrap>
                     <Box
                       sx={theme => ({
                         minHeight: 10,

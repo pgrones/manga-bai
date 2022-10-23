@@ -17,6 +17,11 @@ import { isWaitingMedia } from '../../lib/helper/mediaHelper';
 import useNotification from '../../lib/hooks/useNotification';
 import { FormProps } from './formTypes';
 import NumberInputControls from './progress/numberInputControls';
+import {
+  resetNavigationProgress,
+  setNavigationProgress,
+  startNavigationProgress
+} from '@mantine/nprogress';
 
 const Form: FC<FormProps> = props => {
   const {
@@ -40,6 +45,7 @@ const Form: FC<FormProps> = props => {
       progressVolumes,
       progress,
       status,
+      preorderLanguage: firebaseData?.preorderLanguage ?? 'english',
       notes: firebaseData?.notes ?? '',
       preordered: firebaseData?.preordered ?? progressVolumes
     }
@@ -47,6 +53,8 @@ const Form: FC<FormProps> = props => {
 
   const handleSubmit = async (values: typeof form.values) => {
     try {
+      startNavigationProgress();
+
       await Promise.all([
         updateAniListData({
           progress:
@@ -64,11 +72,26 @@ const Form: FC<FormProps> = props => {
           notes:
             values.notes === firebaseData?.notes ? undefined : values.notes,
           preordered:
-            values.preordered === firebaseData?.preordered
+            firebaseData?.preordered !== undefined &&
+            values.preordered === firebaseData.preordered
               ? undefined
-              : values.preordered
+              : firebaseData?.preordered !== undefined
+              ? values.preordered
+              : values.progressVolumes,
+          preorderLanguage:
+            values.preorderLanguage === firebaseData?.preorderLanguage
+              ? undefined
+              : values.preorderLanguage,
+          hasNewVolume:
+            values.preorderLanguage !== firebaseData?.preorderLanguage ||
+            values.preordered !== firebaseData?.preordered
+              ? null
+              : firebaseData.hasNewVolume
         })
       ]);
+
+      setNavigationProgress(100);
+      setTimeout(() => resetNavigationProgress(), 400);
 
       showSuccess(`${media.title.userPreferred} entry updated`);
       close();
@@ -167,6 +190,18 @@ const Form: FC<FormProps> = props => {
           />
         </Grid.Col>
         <Grid.Col xs={6} sm={4}>
+          <Select
+            {...form.getInputProps('preorderLanguage')}
+            variant="filled"
+            label="Language"
+            description="Look for new volumes in this language"
+            data={[
+              { label: 'English', value: 'english' },
+              { label: 'Native', value: 'native' }
+            ]}
+          />
+        </Grid.Col>
+        <Grid.Col xs={6} sm={4}>
           <Textarea
             {...form.getInputProps('notes')}
             autosize
@@ -184,7 +219,7 @@ const Form: FC<FormProps> = props => {
             placeholder="Links, Prices, etc."
           />
         </Grid.Col>
-        <Grid.Col xs={6} sm={4}>
+        <Grid.Col span={12} pb={0}>
           <Group position="right">
             <Anchor
               size="sm"

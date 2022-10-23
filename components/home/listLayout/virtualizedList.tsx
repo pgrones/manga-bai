@@ -3,6 +3,7 @@ import { useMediaQuery } from '@mantine/hooks';
 import { FC, isValidElement, memo } from 'react';
 import { areEqual, FixedSizeList as List } from 'react-window';
 import { MediaList } from '../../../apollo/queries/mediaListQuery';
+import { NEW_VOLUMES } from '../../../lib/helper/constants';
 import {
   isCurrentMedia,
   isWaitingMedia
@@ -43,11 +44,21 @@ const VirtualizedList: FC<VirtualizedProps> = memo(({ statusTitle }) => {
 
   const current =
     status !== 'Waiting For New Volumes'
-      ? media?.filter(m => isCurrentMedia(m) && !m.hidden)
+      ? media?.filter(
+          m =>
+            isCurrentMedia(m) &&
+            !m.hidden &&
+            (status === NEW_VOLUMES ? m.hasNewVolume : true)
+        )
       : undefined;
   const waiting =
     status !== 'Currently Reading'
-      ? media?.filter(m => isWaitingMedia(m) && !m.hidden)
+      ? media?.filter(
+          m =>
+            isWaitingMedia(m) &&
+            !m.hidden &&
+            (status === NEW_VOLUMES ? m.hasNewVolume : true)
+        )
       : undefined;
 
   const itemData: (MediaList | JSX.Element)[] = [
