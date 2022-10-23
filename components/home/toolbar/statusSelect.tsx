@@ -1,5 +1,5 @@
 import { MediaQuery, Select } from '@mantine/core';
-import { CURRENT, WAITING } from '../../../lib/helper/constants';
+import { CURRENT, NEW_VOLUMES, WAITING } from '../../../lib/helper/constants';
 import { useMedia } from '../../../lib/hooks/provider/mediaProvider';
 import { Status } from '../../../lib/hooks/provider/mediaProviderTypes';
 
@@ -30,7 +30,7 @@ const StatusSelect = () => {
           clearable
           value={status}
           onChange={(v: Status) => changeStatus(v)}
-          data={[WAITING, CURRENT]}
+          data={[WAITING, CURRENT, NEW_VOLUMES]}
         />
       </MediaQuery>
     </MediaQuery>

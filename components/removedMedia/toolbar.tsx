@@ -1,10 +1,20 @@
-import { Group, Button, Center, Box, MediaQuery } from '@mantine/core';
+import {
+  Group,
+  Button,
+  Center,
+  Box,
+  MediaQuery,
+  Title,
+  useMantineTheme
+} from '@mantine/core';
 import Link from 'next/link';
 import { FC } from 'react';
 import { IoArrowBackOutline } from 'react-icons/io5';
 import SearchInput from '../home/toolbar/searchInput';
 
 const Toolbar: FC<{ searchFn: (value: string) => void }> = ({ searchFn }) => {
+  const theme = useMantineTheme();
+
   return (
     <Group
       position="apart"
@@ -17,8 +27,8 @@ const Toolbar: FC<{ searchFn: (value: string) => void }> = ({ searchFn }) => {
         backgroundColor: theme.other.getThemeBg(theme)
       })}
     >
-      <MediaQuery query="(max-width: 410px)" styles={{ display: 'none' }}>
-        <Box>
+      <MediaQuery query="(max-width: 526px)" styles={{ display: 'none' }}>
+        <Group>
           <Link href="/home" passHref>
             <Button component="a" size="xs" variant="default">
               <Center inline>
@@ -27,7 +37,13 @@ const Toolbar: FC<{ searchFn: (value: string) => void }> = ({ searchFn }) => {
               </Center>
             </Button>
           </Link>
-        </Box>
+          <Title
+            order={4}
+            color={theme.colorScheme === 'dark' ? 'white' : undefined}
+          >
+            Removed Entries
+          </Title>
+        </Group>
       </MediaQuery>
 
       <SearchInput searchFn={searchFn} />

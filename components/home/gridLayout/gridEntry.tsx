@@ -1,5 +1,6 @@
 import {
   ActionIcon,
+  Box,
   Button,
   Group,
   MediaQuery,
@@ -59,7 +60,40 @@ const GridEntry: FC<IMediaData> = memo(props => {
                 style={getBorderRadius(theme)}
                 sizes="120px"
               />
-
+              {props.hasNewVolume && (
+                <Box
+                  pl={8}
+                  py={5}
+                  sx={theme => ({
+                    backgroundColor:
+                      theme.colorScheme === 'light'
+                        ? theme.white
+                        : theme.colors.dark[7]
+                  })}
+                  className="new-volumes-available"
+                >
+                  <Group spacing="xs" position="apart" noWrap>
+                    <Box
+                      sx={theme => ({
+                        minHeight: 10,
+                        minWidth: 10,
+                        borderRadius: 20,
+                        backgroundColor:
+                          theme.colors[theme.primaryColor][
+                            theme.colorScheme === 'dark' ? 3 : 6
+                          ]
+                      })}
+                    />
+                    <Text
+                      size="sm"
+                      weight={500}
+                      color={theme.colorScheme === 'dark' ? 'white' : undefined}
+                    >
+                      New Volume Available
+                    </Text>
+                  </Group>
+                </Box>
+              )}
               {imgHovered && (
                 <EditModal>
                   <ActionIcon
@@ -109,13 +143,14 @@ const GridEntry: FC<IMediaData> = memo(props => {
                     lineClamp={2}
                     size="sm"
                     mt={-4}
+                    color={theme.colorScheme === 'dark' ? 'white' : undefined}
                   >
                     {title.userPreferred}
                   </Text>
                 </div>
               </div>
 
-              <Stack spacing={8} pb={5}>
+              <Stack align="flex-start" spacing={8} pb={5}>
                 <VolumeProgress buttonVisible={hovered} />
                 <PreorderedProgress buttonVisible={hovered} />
               </Stack>

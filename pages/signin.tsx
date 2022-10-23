@@ -29,7 +29,7 @@ const SignInPage: NextPage = () => {
     }
 
     router.push(
-      'https://anilist.co/api/v2/oauth/authorize?client_id=8372&response_type=token'
+      `https://anilist.co/api/v2/oauth/authorize?client_id=${process.env.NEXT_PUBLIC_clientiId}&response_type=token`
     );
   }, [asPath, fullyAuthenticated]);
 

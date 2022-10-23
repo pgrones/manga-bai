@@ -1,4 +1,9 @@
 import { useQuery } from '@apollo/client';
+import {
+  resetNavigationProgress,
+  setNavigationProgress,
+  startNavigationProgress
+} from '@mantine/nprogress';
 import { useEffect, useState, useSyncExternalStore } from 'react';
 import customListQuery, {
   CustomListQueryData,
@@ -8,7 +13,8 @@ import mediaListQuery, {
   MediaListQueryData,
   MediaListQueryVariables
 } from '../../apollo/queries/mediaListQuery';
-import { getMediaData } from '../firebase/db';
+import { getMediaData, setLastVolumeCheck, setMediaData } from '../firebase/db';
+import hasNewerVolume from '../googleBooks/api';
 import { createMediaLists } from '../helper/mediaHelper';
 import { IMediaLists } from '../types/entry';
 import { useUser } from './provider/userProvider';
@@ -67,16 +73,87 @@ const useInitialization = () => {
   useEffect(() => {
     if (userData?.onboardingDone && isVisible) {
       (async () => {
+        startNavigationProgress();
         const firebaseData = await getMediaData(firebaseUser!.uid);
         const mediaData = (await refetch()).data;
         const customListsData = (await refetchCustomLists()).data;
-        setMediaLists(
-          createMediaLists(
-            mediaData,
-            customListsData?.User.mediaListOptions.mangaList.customLists,
-            firebaseData
-          )
+
+        const lists = createMediaLists(
+          mediaData,
+          customListsData?.User.mediaListOptions.mangaList.customLists,
+          firebaseData
         );
+
+        if (
+          !userData.lastVolumeCheck ||
+          new Date(userData.lastVolumeCheck).toDateString() !==
+            new Date().toDateString() ||
+          (userData.lastVolumeCheck &&
+            (lists.waiting?.some(
+              w => w.hasNewVolume === undefined || w.hasNewVolume === null
+            ) ||
+              lists.current?.some(
+                c => c.hasNewVolume === undefined || c.hasNewVolume === null
+              )))
+        ) {
+          await Promise.allSettled([
+            ...(lists.waiting
+              ?.filter(
+                w =>
+                  w.hasNewVolume === undefined ||
+                  (userData.lastVolumeCheck &&
+                    new Date(userData.lastVolumeCheck).toDateString() !==
+                      new Date().toDateString() &&
+                    !w.hasNewVolume)
+              )
+              .map(w =>
+                (async () => {
+                  lists.waiting![
+                    lists.waiting!.findIndex(w2 => w2.mediaId === w.mediaId)!
+                  ].hasNewVolume = await hasNewerVolume(w);
+                  await setMediaData(firebaseUser!.uid, w.mediaId, {
+                    hasNewVolume:
+                      lists.waiting![
+                        lists.waiting!.findIndex(
+                          w2 => w2.mediaId === w.mediaId
+                        )!
+                      ].hasNewVolume
+                  });
+                })()
+              ) ?? []),
+            ...(lists.current
+              ?.filter(
+                c =>
+                  c.hasNewVolume === undefined ||
+                  (userData.lastVolumeCheck &&
+                    new Date(userData.lastVolumeCheck).toDateString() !==
+                      new Date().toDateString() &&
+                    !c.hasNewVolume)
+              )
+              .map(c =>
+                (async () => {
+                  lists.current![
+                    lists.current!.findIndex(c2 => c2.mediaId === c.mediaId)!
+                  ].hasNewVolume = await hasNewerVolume(c);
+                  await setMediaData(firebaseUser!.uid, c.mediaId, {
+                    hasNewVolume:
+                      lists.current![
+                        lists.current!.findIndex(
+                          c2 => c2.mediaId === c.mediaId
+                        )!
+                      ].hasNewVolume
+                  });
+                })()
+              ) ?? [])
+          ]);
+
+          await setLastVolumeCheck(firebaseUser!.uid);
+        }
+
+        setMediaLists(lists);
+
+        setNavigationProgress(100);
+        setTimeout(() => resetNavigationProgress(), 400);
       })();
     }
   }, [userData?.onboardingDone, isVisible]);

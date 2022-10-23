@@ -1,4 +1,4 @@
-import { Title } from '@mantine/core';
+import { Title, useMantineTheme } from '@mantine/core';
 import { FC, useEffect, useRef } from 'react';
 import { CURRENT, WAITING } from '../../lib/helper/constants';
 import { StatusTitleProps } from './statusTitleTypes';
@@ -6,6 +6,7 @@ import { StatusTitleProps } from './statusTitleTypes';
 const StatusTitle: FC<StatusTitleProps> = props => {
   const { toolbarRef, setTitle, recalculate } = props;
   const titleRef = useRef<HTMLDivElement>(null);
+  const theme = useMantineTheme();
 
   useEffect(() => {
     if (titleRef.current && toolbarRef.current) {
@@ -54,7 +55,12 @@ const StatusTitle: FC<StatusTitleProps> = props => {
   }, [recalculate]);
 
   return (
-    <Title ref={titleRef} pt="xl" order={4}>
+    <Title
+      ref={titleRef}
+      pt="xl"
+      order={4}
+      color={theme.colorScheme === 'dark' ? 'white' : undefined}
+    >
       {CURRENT}
     </Title>
   );

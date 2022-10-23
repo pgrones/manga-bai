@@ -3,6 +3,7 @@ import { useMediaQuery } from '@mantine/hooks';
 import { FC, isValidElement, memo } from 'react';
 import { areEqual, VariableSizeList as List } from 'react-window';
 import { MediaList } from '../../../apollo/queries/mediaListQuery';
+import { CURRENT, NEW_VOLUMES, WAITING } from '../../../lib/helper/constants';
 import {
   isCurrentMedia,
   isWaitingMedia
@@ -21,7 +22,7 @@ const Row: FC<GridRowProps> = memo(({ data, index, style }) => {
   const item = data[index];
 
   return (
-    <div style={style}>
+    <div style={{ ...style, left: 4, width: 'calc(100% - 4px)' }}>
       <Group noWrap spacing="xl">
         {isReactElement(item)
           ? item
@@ -51,12 +52,22 @@ const VirtualizedGrid: FC<VirtualizedProps> = memo(({ statusTitle }) => {
   let statusIndex = -1;
 
   const current =
-    status !== 'Waiting For New Volumes'
-      ? media?.filter(m => isCurrentMedia(m) && !m.hidden)
+    status !== WAITING
+      ? media?.filter(
+          m =>
+            isCurrentMedia(m) &&
+            !m.hidden &&
+            (status === NEW_VOLUMES ? m.hasNewVolume : true)
+        )
       : undefined;
   const waiting =
-    status !== 'Currently Reading'
-      ? media?.filter(m => isWaitingMedia(m) && !m.hidden)
+    status !== CURRENT
+      ? media?.filter(
+          m =>
+            isWaitingMedia(m) &&
+            !m.hidden &&
+            (status === NEW_VOLUMES ? m.hasNewVolume : true)
+        )
       : undefined;
 
   if (waiting?.length) {
@@ -98,7 +109,7 @@ const VirtualizedGrid: FC<VirtualizedProps> = memo(({ statusTitle }) => {
           <List
             ref={ref}
             outerRef={outerRef}
-            style={style}
+            style={{ ...style, marginLeft: -4, width: 'calc(100% + 4px)' }}
             height={window.innerHeight}
             width={0}
             itemCount={itemData.length}

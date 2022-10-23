@@ -1,7 +1,10 @@
 import { useApolloClient, useQuery } from '@apollo/client';
 import { Anchor } from '@mantine/core';
 import { useLocalStorage } from '@mantine/hooks';
-import { useNotifications } from '@mantine/notifications';
+import {
+  cleanNotificationsQueue,
+  showNotification
+} from '@mantine/notifications';
 import axios from 'axios';
 import { signInWithCustomToken, Unsubscribe } from 'firebase/auth';
 import { useRouter } from 'next/router';
@@ -36,7 +39,6 @@ export const useUser = () => useContext(UserContext);
 
 const UserProvider: FC<PropsWithChildren<unknown>> = ({ children }) => {
   const { showError } = useNotification();
-  const { cleanQueue, showNotification } = useNotifications();
   const apolloClient = useApolloClient();
   const { pathname } = useRouter();
   const [user, firebaseLoading, firebaseError] = useAuthState(auth);
@@ -44,7 +46,10 @@ const UserProvider: FC<PropsWithChildren<unknown>> = ({ children }) => {
   const [hasError, setHasError] = useState<unknown>();
   const [accessToken, setAccessToken] = useLocalStorage<string>({
     key: 'access_token',
-    defaultValue: undefined,
+    defaultValue:
+      process.env.NODE_ENV === 'development'
+        ? process.env.NEXT_PUBLIC_testToken
+        : undefined,
     getInitialValueInEffect: true
   });
 
@@ -53,7 +58,9 @@ const UserProvider: FC<PropsWithChildren<unknown>> = ({ children }) => {
   });
 
   const { data: authData } = useSWR(
-    data?.Viewer && !user && pathname.includes('signin')
+    data?.Viewer &&
+      !user &&
+      (process.env.NODE_ENV === 'development' || pathname.includes('signin'))
       ? ['/api/auth', data.Viewer.id]
       : null,
     fetcher
@@ -93,7 +100,7 @@ const UserProvider: FC<PropsWithChildren<unknown>> = ({ children }) => {
     setAccessToken('');
     await auth.signOut();
     await apolloClient.resetStore();
-    cleanQueue();
+    cleanNotificationsQueue();
     showNotification({
       title: (
         <>

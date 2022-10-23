@@ -17,21 +17,33 @@ const Logo = () => {
             style={{ height: 35, width: 35 }}
           >
             <path
-              fill={theme.colors[theme.primaryColor][6]}
+              fill={
+                theme.colors[theme.primaryColor][
+                  theme.colorScheme === 'dark' ? 4 : 6
+                ]
+              }
               stroke="null"
               id="book1"
               d="m80.0932,10.23266l-68.23266,0c-6.25467,0 -11.3721,5.11745 -11.3721,11.3721l0,250.18641c0,6.25467 5.11745,11.3721 11.3721,11.3721l68.23266,0c6.25467,0 11.3721,-5.11745 11.3721,-11.3721l0,-250.18641c0,-6.25467 -5.11745,-11.3721 -11.3721,-11.3721zm-11.3721,68.23266l-45.48844,0l0,-22.74422l45.48844,0l0,22.74422z"
             />
             <path
               transform="rotate(90 195.682 291.5)"
-              fill={theme.colors[theme.primaryColor][6]}
+              fill={
+                theme.colors[theme.primaryColor][
+                  theme.colorScheme === 'dark' ? 4 : 6
+                ]
+              }
               stroke="null"
               id="book2"
               d="m179.49365,194.36803l-48.56598,0c-4.45189,0 -8.09433,3.64245 -8.09433,8.09432l0,178.07529c0,4.45188 3.64245,8.09432 8.09433,8.09432l48.56598,0c4.45189,0 8.09432,-3.64245 8.09432,-8.09432l0,-178.07529c0,-4.45189 -3.64245,-8.09432 -8.09432,-8.09432zm-8.09432,48.56599l-32.37733,0l0,-16.18866l32.37733,0l0,16.18866zm89.03764,-48.56599l-48.56599,0"
             />
             <g
               stroke="null"
-              fill={theme.colors[theme.primaryColor][6]}
+              fill={
+                theme.colors[theme.primaryColor][
+                  theme.colorScheme === 'dark' ? 4 : 6
+                ]
+              }
               transform="translate(0 300) scale(0.1 -0.1)"
               id="kanji"
             >

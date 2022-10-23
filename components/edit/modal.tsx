@@ -1,6 +1,12 @@
 import { Card } from '@mantine/core';
 import { useModals } from '@mantine/modals';
-import { cloneElement, FC, isValidElement, PropsWithChildren } from 'react';
+import {
+  cloneElement,
+  FC,
+  isValidElement,
+  PropsWithChildren,
+  ReactElement
+} from 'react';
 import { useEntry } from '../../lib/hooks/provider/entryProvider';
 import { useMedia } from '../../lib/hooks/provider/mediaProvider';
 import Form from './form';
@@ -40,7 +46,9 @@ const EditModal: FC<PropsWithChildren<unknown>> = ({ children = null }) => {
 
   return (
     (isValidElement(children) &&
-      cloneElement(children, { onClick: openEditModal })) ||
+      cloneElement(children as ReactElement<any>, {
+        onClick: openEditModal
+      })) ||
     null
   );
 };
