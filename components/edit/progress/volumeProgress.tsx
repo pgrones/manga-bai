@@ -1,14 +1,14 @@
 import { useMantineTheme } from '@mantine/core';
 import { useMediaQuery } from '@mantine/hooks';
-import { FC } from 'react';
-import { useEntry } from '../../../lib/hooks/provider/entryProvider';
-import useNotification from '../../../lib/hooks/useNotification';
-import Progress from './progress';
 import {
   resetNavigationProgress,
   setNavigationProgress,
   startNavigationProgress
 } from '@mantine/nprogress';
+import { FC } from 'react';
+import { useEntry } from '../../../lib/hooks/provider/entryProvider';
+import useNotification from '../../../lib/hooks/useNotification';
+import Progress from './progress';
 
 let timeout: NodeJS.Timeout;
 

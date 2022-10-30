@@ -1,14 +1,20 @@
-import { Avatar, Badge, Button, Menu } from '@mantine/core';
+import { Avatar, Badge, Box, Button, Menu } from '@mantine/core';
 import { NextLink } from '@mantine/next';
 import { Unsubscribe } from 'firebase/database';
 import dynamic from 'next/dynamic';
 import { useEffect, useState } from 'react';
 import { CgPlayListRemove } from 'react-icons/cg';
-import { IoChevronDownOutline, IoLogOutOutline } from 'react-icons/io5';
+import {
+  IoCheckmarkCircleOutline,
+  IoChevronDownOutline,
+  IoCloseCircleOutline,
+  IoLogOutOutline
+} from 'react-icons/io5';
 import { VscHistory } from 'react-icons/vsc';
 import {
   hasRemovedMediaData,
-  setLastChangesCheck
+  setLastChangesCheck,
+  setUserData
 } from '../../lib/firebase/db';
 import { LAST_CHANGE } from '../../lib/helper/constants';
 import { useUser } from '../../lib/hooks/provider/userProvider';
@@ -45,7 +51,10 @@ const User = () => {
   }, [firebaseUser]);
 
   return fullyAuthenticated === true ? (
-    <Menu closeOnClickOutside={closeOnClickOutside}>
+    <Menu
+      closeOnClickOutside={closeOnClickOutside}
+      styles={{ item: { height: 36 } }}
+    >
       <Menu.Target>
         <Button
           variant="subtle"
@@ -57,8 +66,7 @@ const User = () => {
         >
           {userData?.onboardingDone &&
             (!userData.lastChangesCheck ||
-              userData.lastChangesCheck <=
-                new Date(LAST_CHANGE).getMilliseconds()) && (
+              userData.lastChangesCheck <= new Date(LAST_CHANGE).getTime()) && (
               <Badge
                 variant="filled"
                 size="sm"
@@ -85,11 +93,61 @@ const User = () => {
           <Menu.Item
             component={NextLink}
             href="/removedEntries"
-            icon={<CgPlayListRemove size={20} />}
+            icon={<CgPlayListRemove size={20} style={{ marginRight: -3 }} />}
           >
             Removed entries
           </Menu.Item>
         )}
+        <Box>
+          <Button
+            onClick={() =>
+              setUserData(firebaseUser!.uid, {
+                volumeCheckDisabled: !userData?.volumeCheckDisabled
+              })
+            }
+            leftIcon={
+              userData?.volumeCheckDisabled ? (
+                <IoCheckmarkCircleOutline
+                  size={17}
+                  style={{ marginRight: -1 }}
+                />
+              ) : (
+                <IoCloseCircleOutline size={17} style={{ marginRight: -1 }} />
+              )
+            }
+            styles={theme => ({
+              root: {
+                'width': '100%',
+                'backgroundColor': 'transparent ',
+                '&:hover': {
+                  backgroundColor:
+                    theme.colorScheme === 'dark'
+                      ? theme.fn.rgba(theme.colors.dark[3], 0.35)
+                      : theme.colors.gray[0]
+                }
+              },
+              inner: {
+                'justifyContent': 'flex-start',
+                'fontWeight': 400,
+                'color':
+                  theme.colorScheme === 'dark'
+                    ? theme.colors.dark[0]
+                    : theme.black,
+                '&:disabled': {
+                  color:
+                    theme.colorScheme === 'dark'
+                      ? theme.colors.dark[3]
+                      : theme.colors.gray[5],
+                  pointerEvents: 'none',
+                  userSelect: 'none'
+                }
+              }
+            })}
+          >
+            {userData?.volumeCheckDisabled ? 'En' : 'Dis'}able checking for new
+            volumes
+          </Button>
+        </Box>
         <ColorPickerPopover setCloseOnClickOutside={setCloseOnClickOutside} />
         <Menu.Item
           component={NextLink}
@@ -100,8 +158,7 @@ const User = () => {
           Changelog{' '}
           {userData?.onboardingDone &&
             (!userData.lastChangesCheck ||
-              userData.lastChangesCheck <=
-                new Date(LAST_CHANGE).getMilliseconds()) && (
+              userData.lastChangesCheck <= new Date(LAST_CHANGE).getTime()) && (
               <Badge variant="filled" size="sm">
                 new
               </Badge>

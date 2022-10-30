@@ -2,11 +2,6 @@ import axios, { AxiosResponse } from 'axios';
 import { delay } from '../helper/onboardingHelper';
 import { IMediaData } from '../types/entry';
 
-let rateLimit = 0;
-setInterval(() => {
-  rateLimit = 0;
-}, 1000 * 60);
-
 const japaneseNumbers = new Map<string, string>(
   Array.from(Array(10).keys()).map(i => [
     i.toString(),
@@ -14,16 +9,45 @@ const japaneseNumbers = new Map<string, string>(
   ])
 );
 
+let queue: IMediaData[] = [];
+let started = false;
+
+const enqueueNewVolumeCheck = async (
+  entries: IMediaData[],
+  setEntry: (mediaId: number, result: boolean) => void
+) => {
+  queue = [
+    ...queue.filter(q => !entries.some(e => e.mediaId === q.mediaId)),
+    ...entries.filter(e => e.media.title[e.preorderLanguage ?? 'english'])
+  ].sort((a, b) => (a.lastVolumeCheck ?? 0) - (b.lastVolumeCheck ?? 0));
+
+  if (started) return;
+
+  started = true;
+  let delayBy = 0;
+
+  while (started) {
+    const entry = queue.shift();
+    if (!entry) {
+      started = false;
+      break;
+    }
+
+    await delay(delayBy);
+    delayBy = await hasNewVolume(entry, setEntry);
+  }
+};
+
 /**
  * Check if we can find new volumes through the google books API
  * The API is not great, so we try a few different queries
  */
-const hasNewerVolume = async (entry: IMediaData) => {
+const hasNewVolume = async (
+  entry: IMediaData,
+  setEntry: (mediaId: number, result: boolean) => void
+) => {
   const title = entry.media.title[entry.preorderLanguage ?? 'english'];
-  if (!title) return false;
-
-  rateLimit++;
-  if (rateLimit > 70) await delay(1000 * (rateLimit - 70) * 2);
+  let count = 0;
 
   let res = await axios.get<Data>(
     `https://www.googleapis.com/books/v1/volumes?q=intitle:${title} ${
@@ -31,10 +55,12 @@ const hasNewerVolume = async (entry: IMediaData) => {
     }&maxResults=40&fields=items(volumeInfo/title,selfLink)`
   );
 
-  if (isPresent(res, entry, title)) return true;
+  count++;
 
-  rateLimit++;
-  if (rateLimit > 70) await delay(1000 * (rateLimit - 70) * 2);
+  if (isPresent(res, entry, title)) {
+    setEntry(entry.mediaId, true);
+    return count * 0.6;
+  }
 
   // Order by newest helps sometimes
   res = await axios.get<Data>(
@@ -43,7 +69,12 @@ const hasNewerVolume = async (entry: IMediaData) => {
     }&maxResults=40&orderBy=newest&fields=items(volumeInfo/title,selfLink)`
   );
 
-  if (isPresent(res, entry, title)) return true;
+  count++;
+
+  if (isPresent(res, entry, title)) {
+    setEntry(entry.mediaId, true);
+    return count * 0.6;
+  }
 
   // Sometimes the search doesn't include the volume number, but the volume itself does
   // therefore we're gonna look up the first few entries directly
@@ -58,10 +89,9 @@ const hasNewerVolume = async (entry: IMediaData) => {
       .map(i => i.selfLink) ?? [];
 
   for (const link of selfLinks) {
-    rateLimit++;
-    if (rateLimit > 70) await delay(1000 * (rateLimit - 70) * 2);
-
     const directRes = await axios.get<Item>(link + '?projection=lite');
+
+    count++;
 
     if (
       isPresent(
@@ -69,12 +99,11 @@ const hasNewerVolume = async (entry: IMediaData) => {
         entry,
         title
       )
-    )
-      return true;
+    ) {
+      setEntry(entry.mediaId, true);
+      return count * 0.6;
+    }
   }
-
-  rateLimit++;
-  if (rateLimit > 70) await delay(1000 * (rateLimit - 70) * 2);
 
   // Shorten the title to the first Kanji after 5 characters
   // The API works better with full words and Kanji usually indicate the start of a new word
@@ -100,12 +129,14 @@ const hasNewerVolume = async (entry: IMediaData) => {
         (entry.preordered ?? entry.progressVolumes) + 1
       }&maxResults=40&fields=items(volumeInfo/title,selfLink)`
     );
-    if (isPresent(res, entry, title)) return true;
+
+    count++;
+
+    if (isPresent(res, entry, title)) {
+      setEntry(entry.mediaId, true);
+      return count * 0.6;
+    }
   }
-
-  rateLimit++;
-  if (rateLimit > 70) await delay(1000 * (rateLimit - 70) * 2);
-
   // Remove particles
   if (shortTitleLastIndex - 1 >= 0) {
     res = await axios.get<Data>(
@@ -116,11 +147,14 @@ const hasNewerVolume = async (entry: IMediaData) => {
         (entry.preordered ?? entry.progressVolumes) + 1
       }&maxResults=40&fields=items(volumeInfo/title,selfLink)`
     );
-    if (isPresent(res, entry, title)) return true;
-  }
 
-  rateLimit++;
-  if (rateLimit > 70) await delay(1000 * (rateLimit - 70) * 2);
+    count++;
+
+    if (isPresent(res, entry, title)) {
+      setEntry(entry.mediaId, true);
+      return count * 0.6;
+    }
+  }
 
   // Fuck it, just search everything, maybe we're lucky
   res = await axios.get<Data>(
@@ -128,12 +162,19 @@ const hasNewerVolume = async (entry: IMediaData) => {
       (entry.preordered ?? entry.progressVolumes) + 1
     }&maxResults=40&fields=items(volumeInfo/title,selfLink)`
   );
-  if (isPresent(res, entry, title)) return true;
 
-  return false;
+  count++;
+
+  if (isPresent(res, entry, title)) {
+    setEntry(entry.mediaId, true);
+    return count * 0.6;
+  }
+
+  setEntry(entry.mediaId, false);
+  return count * 0.6;
 };
 
-export default hasNewerVolume;
+export default enqueueNewVolumeCheck;
 
 // A new volume is available when...
 const isPresent = (

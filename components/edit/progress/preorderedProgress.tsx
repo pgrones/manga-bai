@@ -9,11 +9,13 @@ import {
   setNavigationProgress,
   startNavigationProgress
 } from '@mantine/nprogress';
+import { useUser } from '../../../lib/hooks/provider/userProvider';
 
 let timeout: NodeJS.Timeout;
 
 const PreorderedProgress: FC<{ buttonVisible: boolean }> = props => {
   const { aniListData, firebaseData, updateFirebaseData } = useEntry();
+  const { userData } = useUser();
   const theme = useMantineTheme();
   const matches = useMediaQuery(`(min-width: ${theme.breakpoints.xs}px)`);
   const { showSuccess } = useNotification();
@@ -24,7 +26,10 @@ const PreorderedProgress: FC<{ buttonVisible: boolean }> = props => {
 
       startNavigationProgress();
 
-      await updateFirebaseData({ preordered: progress });
+      await updateFirebaseData(
+        { preordered: progress },
+        !userData?.volumeCheckDisabled
+      );
 
       timeout = setTimeout(() => {
         showSuccess(`${aniListData.media.title.userPreferred} entry updated`);

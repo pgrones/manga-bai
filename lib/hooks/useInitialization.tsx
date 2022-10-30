@@ -13,8 +13,8 @@ import mediaListQuery, {
   MediaListQueryData,
   MediaListQueryVariables
 } from '../../apollo/queries/mediaListQuery';
-import { getMediaData, setLastVolumeCheck, setMediaData } from '../firebase/db';
-import hasNewerVolume from '../googleBooks/api';
+import { getMediaData, setMediaData } from '../firebase/db';
+import enqueueNewVolumeCheck from '../googleBooks/api';
 import { createMediaLists } from '../helper/mediaHelper';
 import { IMediaLists } from '../types/entry';
 import { useUser } from './provider/userProvider';
@@ -84,79 +84,79 @@ const useInitialization = () => {
           firebaseData
         );
 
-        if (
-          !userData.lastVolumeCheck ||
-          new Date(userData.lastVolumeCheck).toDateString() !==
-            new Date().toDateString() ||
-          (userData.lastVolumeCheck &&
-            (lists.waiting?.some(
-              w => w.hasNewVolume === undefined || w.hasNewVolume === null
-            ) ||
-              lists.current?.some(
-                c => c.hasNewVolume === undefined || c.hasNewVolume === null
-              )))
-        ) {
-          await Promise.allSettled([
-            ...(lists.waiting
-              ?.filter(
-                w =>
-                  w.hasNewVolume === undefined ||
-                  (userData.lastVolumeCheck &&
-                    new Date(userData.lastVolumeCheck).toDateString() !==
-                      new Date().toDateString() &&
-                    !w.hasNewVolume)
-              )
-              .map(w =>
-                (async () => {
-                  lists.waiting![
-                    lists.waiting!.findIndex(w2 => w2.mediaId === w.mediaId)!
-                  ].hasNewVolume = await hasNewerVolume(w);
-                  await setMediaData(firebaseUser!.uid, w.mediaId, {
-                    hasNewVolume:
-                      lists.waiting![
-                        lists.waiting!.findIndex(
-                          w2 => w2.mediaId === w.mediaId
-                        )!
-                      ].hasNewVolume
-                  });
-                })()
-              ) ?? []),
-            ...(lists.current
-              ?.filter(
-                c =>
-                  c.hasNewVolume === undefined ||
-                  (userData.lastVolumeCheck &&
-                    new Date(userData.lastVolumeCheck).toDateString() !==
-                      new Date().toDateString() &&
-                    !c.hasNewVolume)
-              )
-              .map(c =>
-                (async () => {
-                  lists.current![
-                    lists.current!.findIndex(c2 => c2.mediaId === c.mediaId)!
-                  ].hasNewVolume = await hasNewerVolume(c);
-                  await setMediaData(firebaseUser!.uid, c.mediaId, {
-                    hasNewVolume:
-                      lists.current![
-                        lists.current!.findIndex(
-                          c2 => c2.mediaId === c.mediaId
-                        )!
-                      ].hasNewVolume
-                  });
-                })()
-              ) ?? [])
-          ]);
+        if (!userData.volumeCheckDisabled) {
+          enqueueNewVolumeCheck(
+            lists.waiting?.filter(
+              w =>
+                w.hasNewVolume === undefined ||
+                !w.lastVolumeCheck ||
+                (new Date(w.lastVolumeCheck).toDateString() !==
+                  new Date().toDateString() &&
+                  !w.hasNewVolume)
+            ) ?? [],
+            (mediaId, result) => {
+              setMediaLists(prev => {
+                if (!prev?.waiting) return prev;
 
-          await setLastVolumeCheck(firebaseUser!.uid);
+                const copy = { ...prev };
+
+                copy.waiting![
+                  copy.waiting!.findIndex(c => c.mediaId === mediaId)!
+                ].hasNewVolume = result;
+
+                return copy;
+              });
+
+              setMediaData(
+                firebaseUser!.uid,
+                mediaId,
+                {
+                  hasNewVolume: result
+                },
+                true
+              );
+            }
+          );
+
+          enqueueNewVolumeCheck(
+            lists.current?.filter(
+              c =>
+                c.hasNewVolume === undefined ||
+                !c.lastVolumeCheck ||
+                (new Date(c.lastVolumeCheck).toDateString() !==
+                  new Date().toDateString() &&
+                  !c.hasNewVolume)
+            ) ?? [],
+            (mediaId, result) => {
+              setMediaLists(prev => {
+                if (!prev?.current) return prev;
+
+                const copy = { ...prev };
+
+                copy.current![
+                  copy.current!.findIndex(c => c.mediaId === mediaId)!
+                ].hasNewVolume = result;
+
+                return copy;
+              });
+              setMediaData(
+                firebaseUser!.uid,
+                mediaId,
+                {
+                  hasNewVolume: result
+                },
+                true
+              );
+            }
+          );
         }
 
         setMediaLists(lists);
-
         setNavigationProgress(100);
         setTimeout(() => resetNavigationProgress(), 400);
       })();
     }
-  }, [userData?.onboardingDone, isVisible]);
+  }, [userData?.onboardingDone, isVisible, userData?.volumeCheckDisabled]);
 
   return {
     firebaseUser,

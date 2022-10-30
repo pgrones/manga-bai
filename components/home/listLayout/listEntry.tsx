@@ -15,6 +15,7 @@ import { IoEllipsisHorizontal } from 'react-icons/io5';
 import { formatMap } from '../../../lib/helper/constants';
 import { getBorderRadius } from '../../../lib/helper/radius';
 import EntryProvider from '../../../lib/hooks/provider/entryProvider';
+import { useUser } from '../../../lib/hooks/provider/userProvider';
 import EditModal from '../../edit/modal';
 import PreorderedProgress from '../../edit/progress/preorderedProgress';
 import VolumeProgress from '../../edit/progress/volumeProgress';
@@ -23,6 +24,7 @@ import { ListEntryProps } from './listEntryTypes';
 const ListEntry: FC<ListEntryProps> = props => {
   const { topRadius, bottomRadius } = props;
   const { title, coverImage, format } = props.media;
+  const { userData } = useUser();
   const { hovered, ref } = useHover();
   const { hovered: imgHovered, ref: imgRef } = useHover();
   const theme = useMantineTheme();
@@ -151,7 +153,7 @@ const ListEntry: FC<ListEntryProps> = props => {
                       </Text>
                     </MediaQuery>
                   </div>
-                  {props.hasNewVolume && (
+                  {!userData?.volumeCheckDisabled && props.hasNewVolume && (
                     <div style={{ width: 170 }}>
                       <Badge fullWidth>New Volume Available</Badge>
                     </div>

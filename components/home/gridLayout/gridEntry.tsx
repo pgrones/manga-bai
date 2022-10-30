@@ -15,6 +15,7 @@ import { FC, memo } from 'react';
 import { IoEllipsisHorizontal } from 'react-icons/io5';
 import { getBorderRadius } from '../../../lib/helper/radius';
 import EntryProvider from '../../../lib/hooks/provider/entryProvider';
+import { useUser } from '../../../lib/hooks/provider/userProvider';
 import { IMediaData } from '../../../lib/types/entry';
 import EditModal from '../../edit/modal';
 import PreorderedProgress from '../../edit/progress/preorderedProgress';
@@ -22,6 +23,7 @@ import VolumeProgress from '../../edit/progress/volumeProgress';
 
 const GridEntry: FC<IMediaData> = memo(props => {
   const { coverImage, title } = props.media;
+  const { userData } = useUser();
   const { hovered, ref } = useHover();
   const { hovered: imgHovered, ref: imgRef } = useHover();
   const theme = useMantineTheme();
@@ -60,7 +62,7 @@ const GridEntry: FC<IMediaData> = memo(props => {
                 style={getBorderRadius(theme)}
                 sizes="120px"
               />
-              {props.hasNewVolume && (
+              {!userData?.volumeCheckDisabled && props.hasNewVolume && (
                 <Box
                   pl={8}
                   py={5}

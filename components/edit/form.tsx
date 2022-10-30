@@ -31,6 +31,7 @@ const Form: FC<FormProps> = props => {
     updateFirebaseData,
     removeFromList,
     removeEntry,
+    volumeCheckDisabled,
     close
   } = props;
   const { openConfirmModal, closeAll, closeModal } = useModals();
@@ -68,23 +69,26 @@ const Form: FC<FormProps> = props => {
           status:
             values.status === aniListData.status ? undefined : values.status
         }),
-        updateFirebaseData({
-          notes:
-            values.notes === firebaseData?.notes ? undefined : values.notes,
-          preordered:
-            values.preordered === firebaseData?.preordered
-              ? undefined
-              : values.preordered,
-          preorderLanguage:
-            values.preorderLanguage === firebaseData?.preorderLanguage
-              ? undefined
-              : values.preorderLanguage,
-          hasNewVolume:
-            values.preorderLanguage !== firebaseData?.preorderLanguage ||
-            values.preordered !== firebaseData?.preordered
-              ? null
-              : firebaseData.hasNewVolume
-        })
+        updateFirebaseData(
+          {
+            notes:
+              values.notes === firebaseData?.notes ? undefined : values.notes,
+            preordered:
+              values.preordered === firebaseData?.preordered
+                ? undefined
+                : values.preordered,
+            preorderLanguage:
+              values.preorderLanguage === firebaseData?.preorderLanguage
+                ? undefined
+                : values.preorderLanguage,
+            hasNewVolume:
+              values.preorderLanguage !== firebaseData?.preorderLanguage ||
+              values.preordered !== firebaseData?.preordered
+                ? null
+                : firebaseData.hasNewVolume
+          },
+          !volumeCheckDisabled
+        )
       ]);
 
       setNavigationProgress(100);
@@ -186,18 +190,20 @@ const Form: FC<FormProps> = props => {
             rightSection={<NumberInputControls handlers={preorderedHandlers} />}
           />
         </Grid.Col>
-        <Grid.Col xs={6} sm={4}>
-          <Select
-            {...form.getInputProps('preorderLanguage')}
-            variant="filled"
-            label="Language"
-            description="Look for new volumes in this language"
-            data={[
-              { label: 'English', value: 'english' },
-              { label: 'Native', value: 'native' }
-            ]}
-          />
-        </Grid.Col>
+        {!volumeCheckDisabled && (
+          <Grid.Col xs={6} sm={4}>
+            <Select
+              {...form.getInputProps('preorderLanguage')}
+              variant="filled"
+              label="Language"
+              description="Look for new volumes in this language"
+              data={[
+                { label: 'English', value: 'english' },
+                { label: 'Native', value: 'native' }
+              ]}
+            />
+          </Grid.Col>
+        )}
         <Grid.Col xs={6} sm={4}>
           <Textarea
             {...form.getInputProps('notes')}

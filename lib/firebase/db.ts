@@ -21,10 +21,6 @@ export const setUserData = async (
   update(ref(db, uid + '/user'), userData);
 };
 
-export const setLastVolumeCheck = async (uid: string) => {
-  update(ref(db, uid + '/user'), { lastVolumeCheck: serverTimestamp() });
-};
-
 export const setLastChangesCheck = async (uid: string) => {
   update(ref(db, uid + '/user'), { lastChangesCheck: serverTimestamp() });
 };
@@ -40,12 +36,22 @@ export const getUserData = (uid: string, onChange: (data: any) => void) => {
   });
 };
 
+export const setLastVolumeCheck = async (uid: string, mediaId: number) => {
+  update(ref(db, uid + '/media/' + mediaId), {
+    lastVolumeCheck: serverTimestamp()
+  });
+};
+
 export const setMediaData = async (
   uid: string,
   mediaId: number,
-  values: IFirebaseValues
+  values: IFirebaseValues,
+  volumeCheck?: boolean
 ) => {
-  return update(ref(db, uid + '/media/' + mediaId), values);
+  return update(ref(db, uid + '/media/' + mediaId), {
+    ...values,
+    ...(volumeCheck ? { lastVolumeCheck: serverTimestamp() } : {})
+  });
 };
 
 export const getMediaData = async (

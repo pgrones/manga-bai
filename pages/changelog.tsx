@@ -46,6 +46,41 @@ const ChangeLog: NextPage = () => {
       </Group>
       <Stack spacing="xl">
         <Stack>
+          <Title order={5}>October 30 2022</Title>
+          <Title order={6}>Disable the check for new volumes</Title>
+          <List
+            withPadding
+            styles={{ item: { maxWidth: 'calc(100% - 20px)' } }}
+          >
+            <List.Item>
+              <Text size="sm">
+                It is now possible to disable the check for new volumes in the
+                settings in the top right corner
+              </Text>
+            </List.Item>
+            <List.Item>
+              <Text size="sm">
+                Doing so will remove the labels on each entry as well as the
+                option for setting the preferred language of an entry
+              </Text>
+            </List.Item>
+          </List>
+          <Title order={6}>Bugfixes</Title>
+          <List
+            withPadding
+            styles={{ item: { maxWidth: 'calc(100% - 20px)' } }}
+          >
+            <List.Item>
+              <Text size="sm">
+                The check for new entries is now performed in the background,
+                which should drastically decrease loading times
+              </Text>
+            </List.Item>
+          </List>
+          <Divider style={{ width: 'auto' }} />
+        </Stack>
+
+        <Stack>
           <Title order={5}>October 23 2022</Title>
           <Title order={6}>
             BETA - Notifications about new available volumes
@@ -93,6 +128,7 @@ const ChangeLog: NextPage = () => {
           </List>
           <Divider style={{ width: 'auto' }} />
         </Stack>
+
         <Stack>
           <Title order={5}>October 20 2022</Title>
           <Title order={6}>Bugfixes</Title>

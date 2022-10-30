@@ -9,6 +9,7 @@ import {
 } from 'react';
 import { useEntry } from '../../lib/hooks/provider/entryProvider';
 import { useMedia } from '../../lib/hooks/provider/mediaProvider';
+import { useUser } from '../../lib/hooks/provider/userProvider';
 import Form from './form';
 import Header from './header';
 
@@ -16,6 +17,7 @@ const EditModal: FC<PropsWithChildren<unknown>> = ({ children = null }) => {
   const { openModal, closeModal } = useModals();
   const entry = useEntry();
   const media = useMedia();
+  const { userData } = useUser();
 
   const openEditModal = () => {
     const id = openModal({
@@ -38,7 +40,12 @@ const EditModal: FC<PropsWithChildren<unknown>> = ({ children = null }) => {
           >
             <Header {...entry.aniListData.media} close={() => closeModal(id)} />
           </Card.Section>
-          <Form {...entry} {...media} close={() => closeModal(id)} />
+          <Form
+            {...entry}
+            {...media}
+            {...userData!}
+            close={() => closeModal(id)}
+          />
         </Card>
       )
     });

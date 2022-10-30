@@ -3,5 +3,6 @@ export interface IFirebaseValues {
   preordered?: number;
   removed?: boolean;
   hasNewVolume?: boolean | null;
+  lastVolumeCheck?: number;
   preorderLanguage?: 'english' | 'native';
 }

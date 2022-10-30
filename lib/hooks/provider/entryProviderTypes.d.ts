@@ -6,6 +6,9 @@ export interface IEntryContext {
   aniListData: MediaList;
   updateAniListData: (values: IAniListValues) => Promise<void>;
   firebaseData?: IFirebaseValues;
-  updateFirebaseData: (values: IFirebaseValues) => Promise<void>;
+  updateFirebaseData: (
+    values: IFirebaseValues,
+    checkForNewVolumes?: boolean
+  ) => Promise<void>;
   removeFromList: () => Promise<void>;
 }

@@ -4,6 +4,7 @@ import { IFirebaseValues } from './firebase';
 export interface IMediaData extends MediaList, IFirebaseValues {
   hidden?: boolean;
   hasNewVolume?: boolean | null;
+  lastVolumeCheck?: number;
   preorderLanguage?: 'english' | 'native';
 }
 
