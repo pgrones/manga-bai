@@ -96,13 +96,14 @@ const useInitialization = () => {
             ) ?? [],
             (mediaId, result) => {
               setMediaLists(prev => {
-                if (!prev?.waiting) return prev;
+                if (!prev?.waiting || !prev.waiting.length) return prev;
 
                 const copy = { ...prev };
 
-                copy.waiting![
-                  copy.waiting!.findIndex(c => c.mediaId === mediaId)!
-                ].hasNewVolume = result;
+                const index = copy.waiting!.findIndex(
+                  c => c.mediaId === mediaId
+                );
+                if (index !== -1) copy.waiting![index].hasNewVolume = result;
 
                 return copy;
               });
@@ -129,13 +130,14 @@ const useInitialization = () => {
             ) ?? [],
             (mediaId, result) => {
               setMediaLists(prev => {
-                if (!prev?.current) return prev;
+                if (!prev?.current || !prev.current.length) return prev;
 
                 const copy = { ...prev };
 
-                copy.current![
-                  copy.current!.findIndex(c => c.mediaId === mediaId)!
-                ].hasNewVolume = result;
+                const index = copy.current!.findIndex(
+                  c => c.mediaId === mediaId
+                );
+                if (index !== -1) copy.current![index].hasNewVolume = result;
 
                 return copy;
               });
