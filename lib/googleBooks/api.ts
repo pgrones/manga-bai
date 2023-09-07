@@ -46,11 +46,12 @@ const hasNewVolume = async (
   entry: IMediaData,
   setEntry: (mediaId: number, result: boolean) => void
 ) => {
+  const apiKey = `key=${process.env.NEXT_PUBLIC_apiKey}`;
   const title = entry.media.title[entry.preorderLanguage ?? 'english'];
   let count = 0;
 
   let res = await axios.get<Data>(
-    `https://www.googleapis.com/books/v1/volumes?q=intitle:${title} ${
+    `https://www.googleapis.com/books/v1/volumes?${apiKey}&q=intitle:${title} ${
       (entry.preordered ?? entry.progressVolumes) + 1
     }&maxResults=40&fields=items(volumeInfo/title,selfLink)`
   );
@@ -64,7 +65,7 @@ const hasNewVolume = async (
 
   // Order by newest helps sometimes
   res = await axios.get<Data>(
-    `https://www.googleapis.com/books/v1/volumes?q=intitle:${title} ${
+    `https://www.googleapis.com/books/v1/volumes?${apiKey}&q=intitle:${title} ${
       (entry.preordered ?? entry.progressVolumes) + 1
     }&maxResults=40&orderBy=newest&fields=items(volumeInfo/title,selfLink)`
   );
@@ -89,7 +90,9 @@ const hasNewVolume = async (
       .map(i => i.selfLink) ?? [];
 
   for (const link of selfLinks) {
-    const directRes = await axios.get<Item>(link + '?projection=lite');
+    const directRes = await axios.get<Item>(
+      `${link}?${apiKey}&projection=lite`
+    );
 
     count++;
 
@@ -122,7 +125,7 @@ const hasNewVolume = async (
   // Sometimes the right results come back when the search term is shorter
   if (shortTitleLastIndex >= 0) {
     res = await axios.get<Data>(
-      `https://www.googleapis.com/books/v1/volumes?q=intitle:${title.substring(
+      `https://www.googleapis.com/books/v1/volumes?${apiKey}&q=intitle:${title.substring(
         0,
         shortTitleLastIndex
       )} ${
@@ -140,7 +143,7 @@ const hasNewVolume = async (
   // Remove particles
   if (shortTitleLastIndex - 1 >= 0) {
     res = await axios.get<Data>(
-      `https://www.googleapis.com/books/v1/volumes?q=intitle:${title.substring(
+      `https://www.googleapis.com/books/v1/volumes?${apiKey}&q=intitle:${title.substring(
         0,
         shortTitleLastIndex - 1
       )} ${
@@ -158,7 +161,7 @@ const hasNewVolume = async (
 
   // Fuck it, just search everything, maybe we're lucky
   res = await axios.get<Data>(
-    `https://www.googleapis.com/books/v1/volumes?q=${title} ${
+    `https://www.googleapis.com/books/v1/volumes?${apiKey}&q=${title} ${
       (entry.preordered ?? entry.progressVolumes) + 1
     }&maxResults=40&fields=items(volumeInfo/title,selfLink)`
   );
