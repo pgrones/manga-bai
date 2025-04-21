@@ -1,5 +1,5 @@
 import { MediaQuery } from '@mantine/core';
-import Image from 'next/image';
+import Image from "next/legacy/image";
 import kanna from '../../public/kanna.png';
 
 const Kanna = () => {

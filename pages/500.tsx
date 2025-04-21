@@ -47,7 +47,7 @@ const ServerError: NextPage = () => {
           </Anchor>
           . Thanks!
         </Text>
-        <Link href="/home" passHref>
+        <Link href="/home" passHref legacyBehavior>
           <Button component="a">Let&apos;s get you back home</Button>
         </Link>
       </Stack>

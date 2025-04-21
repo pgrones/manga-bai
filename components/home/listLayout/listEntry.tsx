@@ -9,7 +9,7 @@ import {
   useMantineTheme
 } from '@mantine/core';
 import { useHover } from '@mantine/hooks';
-import Image from 'next/image';
+import Image from "next/legacy/image";
 import { FC } from 'react';
 import { IoEllipsisHorizontal } from 'react-icons/io5';
 import { formatMap } from '../../../lib/helper/constants';

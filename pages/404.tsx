@@ -36,7 +36,7 @@ const NotFound: NextPage = () => {
         })}
       >
         <Title>404 - Not Found {kaomoji}</Title>
-        <Link href="/home" passHref>
+        <Link href="/home" passHref legacyBehavior>
           <Button component="a">Let&apos;s get you back home</Button>
         </Link>
       </Stack>

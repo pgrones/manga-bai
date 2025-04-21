@@ -9,7 +9,7 @@ const LoginButton: FC<LoginButtonProps> = ({ size, fullWidth }) => {
   const phone = useDevice() === 'phone';
 
   return phone ? (
-    <Link href="/signin" passHref>
+    <Link href="/signin" passHref legacyBehavior>
       <Button
         size={size}
         component="a"

@@ -29,7 +29,7 @@ const Toolbar: FC<{ searchFn: (value: string) => void }> = ({ searchFn }) => {
     >
       <MediaQuery query="(max-width: 526px)" styles={{ display: 'none' }}>
         <Group>
-          <Link href="/home" passHref>
+          <Link href="/home" passHref legacyBehavior>
             <Button component="a" size="xs" variant="default">
               <Center inline>
                 <IoArrowBackOutline />

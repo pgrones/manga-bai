@@ -1,7 +1,7 @@
 import { useQuery } from '@apollo/client';
 import { Overlay, useMantineTheme } from '@mantine/core';
 import { useScrollLock } from '@mantine/hooks';
-import Image from 'next/image';
+import Image from "next/legacy/image";
 import popularMangaQuery, {
   PopularMangaQueryData
 } from '../../apollo/queries/popularManga';

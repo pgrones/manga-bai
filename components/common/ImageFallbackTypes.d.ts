@@ -1,4 +1,4 @@
-import { ImageProps, StaticImageData } from 'next/image';
+import { ImageProps, StaticImageData } from "next/legacy/image";
 
 export type StaticImport = { default: StaticImageData } | StaticImageData;
 

@@ -6,7 +6,7 @@ import {
   Title,
   useMantineTheme
 } from '@mantine/core';
-import Image from 'next/image';
+import Image from "next/legacy/image";
 import { FC } from 'react';
 import { getBorderRadius } from '../../lib/helper/radius';
 import { HeadingProps } from './headingTypes';

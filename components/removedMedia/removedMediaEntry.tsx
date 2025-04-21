@@ -9,7 +9,7 @@ import {
   useMantineTheme
 } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
-import Image from 'next/image';
+import Image from "next/legacy/image";
 import { FC } from 'react';
 import { IoChevronDownOutline } from 'react-icons/io5';
 import { CURRENT, formatMap, WAITING } from '../../lib/helper/constants';

@@ -52,10 +52,7 @@ const User = () => {
   }, [firebaseUser]);
 
   return fullyAuthenticated === true ? (
-    <Menu
-      closeOnClickOutside={closeOnClickOutside}
-      // styles={{ item: { height: 36 } }}
-    >
+    <Menu closeOnClickOutside={closeOnClickOutside}>
       <Menu.Target>
         <Button
           variant="subtle"
@@ -93,6 +90,7 @@ const User = () => {
         {removedMediaData && (
           <Menu.Item
             component={NextLink}
+            legacyBehavior
             href="/removedEntries"
             icon={<CgPlayListRemove size={20} style={{ marginRight: -3 }} />}
           >
@@ -152,6 +150,7 @@ const User = () => {
         <ColorPickerPopover setCloseOnClickOutside={setCloseOnClickOutside} />
         <Menu.Item
           component={NextLink}
+          legacyBehavior
           href="/changelog"
           icon={<VscHistory size={16} />}
           onClick={() => firebaseUser && setLastChangesCheck(firebaseUser.uid)}

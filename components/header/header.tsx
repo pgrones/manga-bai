@@ -6,7 +6,7 @@ import {
   Group,
   MediaQuery
 } from '@mantine/core';
-import Image from 'next/image';
+import Image from "next/legacy/image";
 import MangaMart from '../../public/mangamart.webp';
 import Logo from './logo';
 import ThemeToggle from './themeToggle';

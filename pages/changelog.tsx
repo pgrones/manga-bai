@@ -27,7 +27,7 @@ const ChangeLog: NextPage = () => {
           backgroundColor: theme.other.getThemeBg(theme)
         })}
       >
-        <Link href="/home" passHref>
+        <Link href="/home" passHref legacyBehavior>
           <Button component="a" size="xs" variant="default">
             <Center inline>
               <IoArrowBackOutline />
