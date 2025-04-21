@@ -1,4 +1,4 @@
-import { Group, MediaQuery, Text, Title, useMantineTheme } from '@mantine/core';
+import { Group, MediaQuery, Title, useMantineTheme } from '@mantine/core';
 import Link from 'next/link';
 
 const Logo = () => {
