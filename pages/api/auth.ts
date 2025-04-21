@@ -5,9 +5,9 @@ import { logError } from '../../lib/firebase/db';
 admin.apps[0] ??
   admin.initializeApp({
     credential: admin.credential.cert({
-      projectId: process.env.NEXT_PUBLIC_projectId,
-      clientEmail: process.env.clientEmail,
-      privateKey: process.env.privateKey!.replace(/\\n/g, '\n')
+      projectId: process.env.NEXT_PUBLIC_PROJECT_ID,
+      clientEmail: process.env.CLIENT_EMAIL,
+      privateKey: process.env.PRIVATE_KEY!.replace(/\\n/g, '\n')
     })
   });
 

@@ -46,7 +46,7 @@ const hasNewVolume = async (
   entry: IMediaData,
   setEntry: (mediaId: number, result: boolean) => void
 ) => {
-  const apiKey = `key=${process.env.NEXT_PUBLIC_apiKey}`;
+  const apiKey = `key=${process.env.NEXT_PUBLIC_API_KEY}`;
   const title = entry.media.title[entry.preorderLanguage ?? 'english'];
   let count = 0;
 

@@ -1,0 +1,23 @@
+env:
+  - variable: CLIENT_EMAIL
+    secret: clientEmail
+  - variable: PRIVATE_KEY
+    secret: PRIVATE_KEY
+  - variable: NEXT_PUBLIC_PROJECT_ID
+    secret: NEXT_PUBLIC_projectId
+  - variable: NEXT_PUBLIC_API_KEY
+    secret: NEXT_PUBLIC_apiKey
+  - variable: NEXT_PUBLIC_AUTH_DOMAIN
+    secret: NEXT_PUBLIC_authDomain
+  - variable: NEXT_PUBLIC_STORAGE_BUCKET
+    secret: NEXT_PUBLIC_storageBucket
+  - variable: NEXT_PUBLIC_MESSAGING_SENDER_ID
+    secret: NEXT_PUBLIC_messagingSenderId
+  - variable: NEXT_PUBLIC_APP_ID
+    secret: NEXT_PUBLIC_appId
+  - variable: NEXT_PUBLIC_MEASUREMENT_ID
+    secret: NEXT_PUBLIC_measurementId
+  - variable: NEXT_PUBLIC_DATABASE_URL
+    secret: NEXT_PUBLIC_databaseURL
+  - variable: NEXT_PUBLIC_CLIENTI_ID
+    secret: NEXT_PUBLIC_clientiId
