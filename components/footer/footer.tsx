@@ -6,7 +6,6 @@ import {
   Stack,
   Text
 } from '@mantine/core';
-import AmazonLink from '../common/amazonLink';
 import Logo from '../header/logo';
 import ExternalLink from './externalLink';
 
@@ -32,8 +31,9 @@ const Footer = () => {
               <ExternalLink href="https://www.buymeacoffee.com/alzariel">
                 Buy me a coffee
               </ExternalLink>
-              <AmazonLink title="Amazon.com" href="https://amzn.to/3lEKHwX" />
-              <AmazonLink title="Amazon.co.jp" href="https://amzn.to/3QGxmmi" />
+              <ExternalLink href="https://mangamart.com/mangabai">
+                MangaMart
+              </ExternalLink>
             </Stack>
             <MediaQuery smallerThan="xs" styles={{ display: 'none' }}>
               <Stack spacing={8}>
@@ -72,7 +72,7 @@ const Footer = () => {
         <div>
           <Divider mb={5} />
           <Text size="sm">
-            As an Amazon Associate I earn from qualifying purchases.
+            As a MangaMart Associate I earn from qualifying purchases
           </Text>
         </div>
       </Stack>

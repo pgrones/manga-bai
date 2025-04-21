@@ -2,7 +2,6 @@ import { AppShell, Container, Footer, Header } from '@mantine/core';
 import { FC, PropsWithChildren } from 'react';
 import AppFooter from '../footer/footer';
 import AppHeader from '../header/header';
-import BurgerButton from './burgerButton';
 
 const Layout: FC<PropsWithChildren<{ is404?: boolean }>> = props => {
   const { children, is404 } = props;
@@ -11,7 +10,7 @@ const Layout: FC<PropsWithChildren<{ is404?: boolean }>> = props => {
     <AppShell
       header={
         <Header
-          height={55}
+          height={65}
           sx={theme => ({
             paddingRight: `calc(var(--removed-scroll-width, 0px) + ${theme.spacing.md}px)`,
             paddingLeft: theme.spacing.md
@@ -44,7 +43,6 @@ const Layout: FC<PropsWithChildren<{ is404?: boolean }>> = props => {
     >
       <Container size="xl" p={0}>
         {children}
-        <BurgerButton />
       </Container>
     </AppShell>
   );

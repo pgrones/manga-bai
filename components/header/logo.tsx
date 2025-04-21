@@ -61,7 +61,7 @@ const Logo = () => {
               />
             </g>
           </svg>
-          <MediaQuery query="(max-width: 425px)" styles={{ display: 'none' }}>
+          <MediaQuery smallerThan="sm" styles={{ display: 'none' }}>
             <Title
               sx={theme => ({
                 color: theme.colorScheme === 'dark' ? theme.white : theme.black

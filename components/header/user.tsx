@@ -33,7 +33,8 @@ const User = () => {
   const { showError } = useNotification();
 
   useEffect(() => {
-    let unsubscribe: Unsubscribe | void;
+    let unsubscribe: Unsubscribe | undefined;
+
     if (firebaseUser) {
       try {
         unsubscribe = hasRemovedMediaData(
@@ -53,7 +54,7 @@ const User = () => {
   return fullyAuthenticated === true ? (
     <Menu
       closeOnClickOutside={closeOnClickOutside}
-      styles={{ item: { height: 36 } }}
+      // styles={{ item: { height: 36 } }}
     >
       <Menu.Target>
         <Button
@@ -170,7 +171,7 @@ const User = () => {
       </Menu.Dropdown>
     </Menu>
   ) : (
-    <LoginButton size="xs" />
+    <LoginButton />
   );
 };
 

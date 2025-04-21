@@ -46,6 +46,23 @@ const ChangeLog: NextPage = () => {
       </Group>
       <Stack spacing="xl">
         <Stack>
+          <Title order={5}>April 21 2025</Title>
+          <Title order={6}>MangaMart Affiliation</Title>
+          <List
+            withPadding
+            styles={{ item: { maxWidth: 'calc(100% - 20px)' } }}
+          >
+            <List.Item>
+              <Text size="sm">
+                The Amazon links have been removed and in their place a link to
+                MangaMart has been added
+              </Text>
+            </List.Item>
+          </List>
+          <Divider style={{ width: 'auto' }} />
+        </Stack>
+
+        <Stack>
           <Title order={5}>October 30 2022</Title>
           <Title order={6}>Disable the check for new volumes</Title>
           <List
